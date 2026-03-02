@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Repair #{{ repair.id }}</h2>
+        <div>
+            <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-primary">Edit</a>
+            <a href="{% url 'repair_list' %}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+
+    <!-- Vineetha Information -->
+        <div class="card mb-3">
+            <div class="card-header">Device Information</div>
+            <div class="card-body">
+                <p><strong>Vineetha Checked:</strong>
+                    {% if repair.vineetha_checked %} 
+                    <img src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" alt="True"> {% else %} 
+                    <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> {% endif %}
+                
+                    <strong> Vineetha Closed: </strong>
+                    {% if repair.vineetha_closed %}
+                    <img src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" alt="True"> {% else %} 
+                    <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> {% endif %}
+
+                </p>
+            
+                <p><strong> Vineetha Comments: </strong>   {{ repair.vineetha_repair_comments }}
+                </p>
+            </div>
+        </div>
+
+    
+    <!-- Device Information -->
+    <div class="card mb-3">
+        <div class="card-header">Device Information</div>
+        <div class="card-body">
+            <p><strong>DAM ID:</strong> {{ repair.device_DAM_ID|default:"N/A" }}</p>
+            <p><strong>Serial:</strong> {{ repair.device_serial }}</p>
+        </div>
+    </div>
+    
+    <!-- Student Information (conditional) -->
+    {% if can_view_student_info %}
+    <div class="card mb-3">
+        <div class="card-header">Student Information</div>
+        <div class="card-body">
+            <p><strong>Name:</strong> {{ repair.student_name }}</p>
+            <p><strong>ID:</strong> {{ repair.student_id }}</p>
+            <p><strong>Grade:</strong> {{ repair.get_student_grade_display }}</p>
+        </div>
+    </div>
+    {% else %}
+    <div class="card mb-3">
+        <div class="card-body text-muted">
+            Student information hidden - insufficient permissions
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Repair Details -->
+    <div class="card mb-3">
+        <div class="card-header">Repair Details</div>
+        <div class="card-body">
+            <p><strong>Service Now INC:</strong> {{ repair.service_now_inc_number}}
+            <p><strong>Issue:</strong></p>
+            <p>{{ repair.issue_description|linebreaks }}</p>
+            
+            {% if repair.resolution_notes %}
+            <p><strong>Resolution:</strong></p>
+            <p>{{ repair.resolution_notes|linebreaks }}</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Dell Repair Information -->
+
+    <div class="card mb-3">
+        <div class="card-header"> Dell Repair Shipment <strong> Sent: </strong>{% if repair.sent_to_dell_check %} 
+                <img src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" alt="True"> {% else %} 
+                <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> Repaired on Site{% endif %} </div>
+        <div class="card-body">
+            {% if repair.sent_todell_check %}
+            <p><strong> Sent: </strong> {{repair.sent_to_dell_check}}</p>
+            <p><strong> Dell Service Number: </strong> {{repair.dell_service_number}}
+            <p><strong> 
+            {% else %}
+            {% endif %}
+
+
+        </div>
+    </div>
+
+
+    <!-- Status & Assignment -->
+    <div class="card mb-3">
+        <div class="card-header">Status & Assignment</div>
+        <div class="card-body">
+            <p><strong>Status:</strong> 
+                <span class="badge bg-info">{{ repair.get_status_display }}</span>
+            </p>
+            <p><strong>Assigned To:</strong> {{ repair.assigned_to|default:"Unassigned" }}</p>
+            <p><strong>Loaner:</strong> {{ repair.loaner|default:"None" }}</p>
+            <p><strong>Created:</strong> {{ repair.created_at }}</p>
+            <p><strong>Updated:</strong> {{ repair.updated_at }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

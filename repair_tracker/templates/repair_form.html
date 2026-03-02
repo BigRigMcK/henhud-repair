@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ action }} Repair</h2>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <!-- Display form-wide errors -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Vineetha Comments -->
+{% if user.is_superuser %}
+<div class="card mb-3">
+    <div class="card-header">Vineetha Comments</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2 mb-3">
+                <div class="form-group">
+                    {{ form.vineetha_checked.label_tag }}
+                    {{ form.vineetha_checked }}
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <div class="form-groupd-flex align-items-center gap-2">
+                    {{ form.vineetha_repair_comments.label_tag }}
+                    {{ form.vineetha_repair_comments }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+        <!-- Device Information Section -->
+        <div class="card mb-3">
+            <div class="card-header">Device Information</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-2"> 
+                        <div class="form-group">
+
+                            {{ form.device_DAM_ID.label_tag }}
+                            {{ form.device_DAM_ID }}
+                            {% if form.device_DAM_ID.errors %}
+                                <div class="text-danger small">{{ form.device_DAM_ID.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                        
+                    
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            {{ form.device_serial.label_tag }}
+                            {{ form.device_serial }}
+                            {% if form.device_serial.errors %}
+                                <div class="text-danger small">{{ form.device_serial.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>                            
+                </div>
+            </div>
+        </div>
+        
+        <!-- Student Information Section (conditional) -->
+        {% if form.student_name %}
+        <div class="card mb-3">
+            <div class="card-header">
+                Student Information 
+                <small class="text-muted">(Encrypted - FERPA Protected)</small>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form.student_name.label_tag }}
+                        {{ form.student_name }}
+                        {% if form.student_name.errors %}
+                            <div class="text-danger">{{ form.student_name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.student_id.label_tag }}
+                        {{ form.student_id }}
+                        {% if form.student_id.errors %}
+                            <div class="text-danger">{{ form.student_id.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-5">
+                        {{ form.student_school.label_tag }}
+                        {{ form.student_school }}
+                        {% if form.student_school.erros %}
+                        <div class="text-danger">{{ form.student_email.errors }}</div>
+                        {% endif %}
+                    
+                    </div>
+                    
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-5">
+                        {{ form.student_email.label_tag }}
+                        {{ form.student_email }}
+                        {% if form.student_email.errors %}
+                        <div class="text-danger">{{ form.student_email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.student_grade.label_tag }}
+                        <br>
+                        {{ form.student_grade }}
+                        {% if form.student_grade.errors %}
+                            <div class="text-danger">{{ form.student_grade.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Repair Details Section -->
+        <div class="card mb-3">
+            <div class="card-header">Repair Details</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ form.issue_description.label_tag }}
+                    {{ form.issue_description }}
+                    {% if form.issue_description.errors %}
+                        <div class="text-danger">{{ form.issue_description.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.resolution_notes.label_tag }}
+                    {{ form.resolution_notes }}
+                    {% if form.resolution_notes.errors %}
+                        <div class="text-danger">{{ form.resolution_notes.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status & Assignment Section -->
+        <div class="card mb-3">
+            <div class="card-header">Status & Assignment</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.status.label_tag }}
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                            <div class="text-danger">{{ form.status.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.assigned_to.label_tag }}
+                        {{ form.assigned_to }}
+                        {% if form.assigned_to.errors %}
+                            <div class="text-danger">{{ form.assigned_to.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form.loaner.label_tag }}
+                        {{ form.loaner }}
+                        {% if form.loaner.errors %}
+                            <div class="text-danger">{{ form.loaner.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Set up Dell Form Informaiton-->
+        <!-- Privacy & Compliance Section -->
+        <div class="card mb-3">
+            <div class="card-header">Privacy & Compliance</div>
+            <div class="card-body">
+                <div class="form-check mb-2">
+                    {{ form.contains_student_data }}
+                    {{ form.contains_student_data.label_tag }}
+                </div>
+                <div class="form-check mb-2">
+                    {{ form.third_party_access }}
+                    {{ form.third_party_access.label_tag }}
+                    <small class="form-text text-muted">{{ form.third_party_access.help_text }}</small>
+                </div>
+                <div class="form-check mb-2">
+                    {{ form.consent_on_file }}
+                    {{ form.consent_on_file.label_tag }}
+                    <small class="form-text text-muted">{{ form.consent_on_file.help_text }}</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Buttons -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Repair</button>
+            <a href="{% url 'repair_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
