@@ -60,7 +60,7 @@ def edit_repair(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Repair updated successfully!')
-            return redirect('repair_detail', pk=repair.pk)
+            return redirect('repair_list')
     else:
         form = RepairForm(instance=repair, user=request.user)
     
@@ -76,14 +76,15 @@ def repair_detail(request, pk):
     
     # Check if user can view student info
     can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')
-
-
-
+    is_technician = request.user.groups.filter(name="Technicians").exists()
     
-    return render(request, 'repair_detail.html', {
+    context = {
         'repair': repair,
-        'can_view_student_info': can_view_student_info
-    })
+        'can_view_student_info': can_view_student_info,
+        'is_technician': is_technician,
+    }
+    
+    return render(request, 'repair_detail.html', context)
 
 
 from django.core.paginator import Paginator

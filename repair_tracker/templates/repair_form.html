@@ -8,11 +8,21 @@
         {% csrf_token %}
         
         <!-- Display form-wide errors -->
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
-            </div>
-        {% endif %}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Please fix the following errors:</strong>
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
         <!-- Vineetha Comments -->
 {% if user.is_superuser %}
@@ -41,6 +51,18 @@
             <div class="card-header">Device Information</div>
             <div class="card-body">
                 <div class="row">
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="form-group">
+                            {{ form.device_name.label_tag }}
+                            {{ form.device_name }}
+                            {% if form.device_name.errors %}
+                                <div class="text-danger small">{{ form.device_name.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+
                     <div class="col-md-4 mb-2"> 
                         <div class="form-group">
 
@@ -122,11 +144,15 @@
             </div>
         </div>
         {% endif %}
-        
-        <!-- Repair Details Section -->
+
+<!-- Repair Details Section -->
         <div class="card mb-3">
             <div class="card-header">Repair Details</div>
             <div class="card-body">
+                <div class="mb-3">
+                    {{ form.service_now_inc_number.label_tag}}
+                    {{ form.service_now_inc_number }}
+                        </div>
                 <div class="mb-3">
                     {{ form.issue_description.label_tag }}
                     {{ form.issue_description }}
@@ -143,6 +169,26 @@
                 </div>
             </div>
         </div>
+
+<!-- Dell Repair Information -->
+
+    <div class="card mb-3">
+        <div class="card-header"> Dell Repair Shipment </div>
+            <div class="card-body">
+                <div class="row">                
+                    <div class="col-md-6">
+                    <p><strong> Sent: </strong> {{form.sent_to_dell_check}}</p>
+                    <p><strong> Dell Service Number: </strong> {{form.dell_service_number}}</p>
+                    <strong>{{form.submitted_under.label_tag}}</strong> {{form.submitted_under}}
+                    
+                    </div>
+
+                </div>
+            </div>
+            
+        </div>
+
+
         
         <!-- Status & Assignment Section -->
         <div class="card mb-3">

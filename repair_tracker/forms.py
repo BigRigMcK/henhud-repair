@@ -5,7 +5,7 @@ class RepairForm(forms.ModelForm):
     class Meta:
         model = Repair
         fields = [
-            'device_DAM_ID', 'device_serial',
+            'device_name','device_DAM_ID', 'device_serial',
             'student_name', 'student_id', 'student_grade','student_email','student_school',
             'issue_description', 'resolution_notes','service_now_inc_number',
             'status', 'loaner', 'assigned_to',
@@ -15,6 +15,21 @@ class RepairForm(forms.ModelForm):
             'vineetha_checked', 'vineetha_repair_comments','vineetha_closed',
         ]
         widgets = {
+            'service_now_inc_number' : forms.Textarea(attrs={
+                'class' : 'form-control',
+                'rows' : 1,
+                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
+                }),
+             'submitted_under' : forms.Textarea(attrs={
+                'class' : 'form-control',
+                'rows' : 1,
+                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
+                }),
+            'dell_service_number' : forms.Textarea(attrs={
+                'class' : 'form-control',
+                'rows' : 1,
+                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
+                }),
             'issue_description': forms.Textarea(attrs={
                 'class': 'form-control', 
                 'rows': 4,  # This sets the height by number of lines

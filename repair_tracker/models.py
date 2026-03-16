@@ -5,6 +5,17 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django_cryptography.fields import encrypt
 
+
+
+class DeviceModel(models.Model):
+    Model_Type = models.CharField(unique=True)
+
+    def __str__(self):
+        return f"{self.Model_Type}"
+    class Meta:
+        verbose_name = "Device Model"
+        verbose_name_plural = "Device Models"
+
 class Repair(models.Model):
     # Device information
     device_name = models.CharField(max_length=200, null=True, blank=True)
@@ -45,6 +56,7 @@ class Repair(models.Model):
     
     # Status
     status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
         ('need_to_assess', 'Need To Assess'),
         ('waiting_on_box', 'Waiting On Box'),
         ('sent_to_dell', 'Sent To Dell'),
@@ -53,6 +65,7 @@ class Repair(models.Model):
         ('fixed_by_tech', 'Fixed By Tech'),
         ('returned', 'Returned to Student'),
         ('completed', 'Completed'),
+        ('vineetha_completed', 'Vineetha Completed'),
     ], default='pending')
 
 
@@ -110,6 +123,13 @@ class Repair(models.Model):
         """Safe representation for audit logs (no PII)"""
         return f"Repair #{self.id} - {self.device_name}"
 
+#Repair Ticket Note*
+
+# class RepairTicketNote(models.Model):
+
+#     device_name = 
+#     building =
+    
 
 class LongTermLoaner(models.Model):
     """
@@ -388,3 +408,43 @@ class LoanerCheckoutHistory(models.Model):
     def get_audit_representation(self):
         """Safe representation for audit logs (no PII)"""
         return f"Checkout #{self.id} - {self.loaner.device_name}"
+
+class Classroom_Device_Purpose(models.Model):
+        name = models.CharField(max_length=100, unique=True)
+
+        def __str__(self):
+            return self.name
+        class Meta:
+            verbose_name = "Classroom Device Purpose"
+            verbose_name_plural = "Classroom Device Purposes"
+            ordering = ['name']
+
+
+
+class ClassroomDevices(models.Model):
+    classroom = models.CharField(blank=True)
+    classroom_device_model = models.ForeignKey(
+        DeviceModel,
+        on_delete=models.PROTECT,
+        related_name='devices'
+        )
+    classroom_dam_id = models.CharField(blank=True, null=True)
+    classroom_device_serial_number = models.CharField(blank=True,null=True)
+    classroom_device_checkout = models.DateTimeField(blank=True, null=True)
+    classroom_device_checkin = models.DateTimeField(blank=True, null=True)
+    classroom_device_purpose = models.ForeignKey(
+        Classroom_Device_Purpose,
+        on_delete=models.PROTECT,  # Prevents deleting a purpose that is in use
+        related_name='devices'
+        )
+    classroom_teacher = models.CharField(null=True)
+    
+    def __str__(self):
+        return f" {self.classroom_device_purpose} - {self.classroom} - {self.classroom_device_serial_number}"
+
+    class Meta:
+        verbose_name = "Classroom Device"
+        verbose_name_plural = "Classroom Devices"
+        ordering = ['classroom_device_purpose']
+
+

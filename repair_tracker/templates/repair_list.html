@@ -90,7 +90,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Device</th>
+                            <th>Device Name</th>
                             <th>Serial/DAM ID</th>
                             {% if can_view_student_info %}
                             <th>Student</th>
@@ -119,8 +119,8 @@
                             </td>
                             {% if can_view_student_info %}
                             <td>
-                                <small>
-                                    <a href="{% url 'repair_detail' repair.student_id %}">{{ repair.student_name|default:"N/A" }} </a><br>
+                                <small><!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets-->
+                                    <a href="">{{ repair.student_name|default:"N/A" }} </a><br>
                                     <span class="text-muted">{{ repair.get_student_grade_display }}</span>
                                 </small>
                             </td>
@@ -131,14 +131,16 @@
                             <td>
                                 {% if repair.status == 'pending' %}
                                     <span class="badge bg-warning text-dark">{{ repair.get_status_display }}</span>
+                                {% elif repair.status == 'waiting_on_box' %}
+                                    <span class="badge bg-warning">{{ repair.get_status_display}} </span>
                                 {% elif repair.status == 'sent_to_dell' %}
                                     <span class="badge bg-info">{{ repair.get_status_display }}</span>
                                 {% elif repair.status == 'on_site_repair' %}
-                                    <span class="badge bg-primary">{{ repair.get_status_display }}</span>
+                                    <span class="badge bg-danger">{{ repair.get_status_display }}</span>
                                 {% elif repair.status == 'awaiting_parts' %}
                                     <span class="badge bg-secondary">{{ repair.get_status_display }}</span>
                                 {% elif repair.status == 'returned_from_dell' %}
-                                    <span class="badge bg-info">{{ repair.get_status_display }}</span>
+                                    <span class="badge bg-success">{{ repair.get_status_display }}</span>
                                 {% elif repair.status == 'fixed_by_tech' %}
                                     <span class="badge bg-success">{{ repair.get_status_display }}</span>
                                 {% elif repair.status == 'returned' %}

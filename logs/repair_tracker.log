@@ -3526,3 +3526,1703 @@ INFO 2026-03-02 20:36:26,328 autoreload /app/repair_tracker/forms.py changed, re
 INFO 2026-03-02 20:36:27,839 autoreload Watching for file changes with StatReloader
 INFO 2026-03-02 20:37:12,169 basehttp "GET /repairs/3/ HTTP/1.1" 200 7143
 INFO 2026-03-02 20:37:29,364 basehttp "GET /repairs/3/ HTTP/1.1" 200 7147
+INFO 2026-03-02 20:55:01,927 basehttp "GET / HTTP/1.1" 200 5315
+WARNING 2026-03-02 20:55:02,029 log Not Found: /favicon.ico
+WARNING 2026-03-02 20:55:02,029 basehttp "GET /favicon.ico HTTP/1.1" 404 3856
+INFO 2026-03-02 20:55:58,355 basehttp "GET /repairs/3/ HTTP/1.1" 200 7130
+INFO 2026-03-02 20:56:11,828 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-02 20:57:15,775 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 9195
+INFO 2026-03-02 20:57:15,807 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:15,816 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:15,876 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:22,869 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 20:57:28,336 basehttp "GET /admin/ HTTP/1.1" 200 7937
+INFO 2026-03-02 20:57:29,912 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 20:57:29,947 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:29,956 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:35,256 basehttp "GET /admin/auth/user/1/change/ HTTP/1.1" 200 23450
+INFO 2026-03-02 20:57:35,287 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:35,287 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:35,317 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 20:57:35,615 basehttp "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:35,617 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 304 0
+INFO 2026-03-02 20:57:35,618 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-03-02 20:57:58,593 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 20:57:59,669 basehttp "GET /admin/ HTTP/1.1" 200 7937
+INFO 2026-03-02 20:58:02,385 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 20:58:05,421 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 20:58:08,898 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 20:58:09,894 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 20:58:11,560 basehttp "GET /admin/ HTTP/1.1" 200 7937
+INFO 2026-03-02 20:58:12,994 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 20:58:15,239 basehttp "GET /admin/auth/user/1/change/ HTTP/1.1" 200 23450
+INFO 2026-03-02 20:58:15,303 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 20:59:55,071 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 20:59:55,783 basehttp "GET /admin/ HTTP/1.1" 200 7937
+ERROR 2026-03-02 20:59:57,790 log Internal Server Error: /repairs/3/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/template/smartif.py", line 179, in translate_token
+    op = OPERATORS[token]
+         ~~~~~~~~~^^^^^^^
+KeyError: 'user|in_group:"Technicians"'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 83, in repair_detail
+    return render(request, 'repair_detail.html', {
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 952, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 885, in __init__
+    super().__init__(*args, **kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/template/smartif.py", line 170, in __init__
+    mapped_tokens.append(self.translate_token(token))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/smartif.py", line 181, in translate_token
+    return self.create_var(token)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 888, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 600, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 698, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 606, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'in_group'
+ERROR 2026-03-02 20:59:57,802 basehttp "GET /repairs/3/ HTTP/1.1" 500 260285
+INFO 2026-03-02 21:00:26,800 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 21:00:27,918 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 9195
+INFO 2026-03-02 21:00:31,814 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 11235
+INFO 2026-03-02 21:00:31,879 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:00:44,703 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 21:00:53,168 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 21:04:19,078 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:04:20,308 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:04:55,031 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:04:55,973 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:04:58,055 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:04:58,977 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:05:09,130 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:05:10,211 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:06:46,326 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:06:47,725 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:07:50,483 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:07:51,812 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:08:17,405 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:08:18,951 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:08:40,267 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:08:41,524 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:08:41,935 basehttp "GET / HTTP/1.1" 200 4422
+INFO 2026-03-02 21:08:45,383 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-02 21:08:47,667 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 21:09:56,485 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 21:09:57,976 basehttp "GET /admin/auth/user/4/change/ HTTP/1.1" 200 23401
+INFO 2026-03-02 21:09:58,038 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:10:06,670 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 9195
+INFO 2026-03-02 21:10:08,055 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 11235
+INFO 2026-03-02 21:10:08,124 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:10:46,545 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-02 21:10:46,610 basehttp "GET / HTTP/1.1" 200 5315
+INFO 2026-03-02 21:10:47,560 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-02 21:10:47,567 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-02 21:10:47,637 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-03-02 21:10:47,676 basehttp "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2026-03-02 21:10:51,705 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4349
+INFO 2026-03-02 21:10:56,668 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-03-02 21:10:56,768 basehttp "GET /admin/ HTTP/1.1" 200 10945
+INFO 2026-03-02 21:10:59,324 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10388
+INFO 2026-03-02 21:10:59,387 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:10:59,399 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-03-02 21:11:00,736 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 14967
+INFO 2026-03-02 21:11:00,804 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:11:45,512 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-02 21:11:46,503 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:11:59,951 basehttp "POST /admin/auth/group/2/change/ HTTP/1.1" 302 0
+INFO 2026-03-02 21:12:00,105 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10589
+INFO 2026-03-02 21:12:00,182 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:13:09,724 basehttp "GET / HTTP/1.1" 200 4513
+INFO 2026-03-02 21:13:13,150 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-02 21:13:13,222 basehttp "GET / HTTP/1.1" 200 5404
+INFO 2026-03-02 21:13:18,047 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-02 21:13:18,198 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-02 21:13:19,817 basehttp "GET / HTTP/1.1" 200 4537
+INFO 2026-03-02 21:15:01,031 autoreload Watching for file changes with StatReloader
+INFO 2026-03-02 21:15:01,588 basehttp "GET / HTTP/1.1" 200 4537
+INFO 2026-03-02 21:15:02,866 basehttp "GET / HTTP/1.1" 200 4537
+INFO 2026-03-02 21:15:37,636 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 21:15:39,075 basehttp "GET /admin/auth/user/1/change/ HTTP/1.1" 200 23450
+INFO 2026-03-02 21:15:39,145 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:15:43,826 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-02 21:15:45,138 basehttp "GET /admin/auth/user/4/change/ HTTP/1.1" 200 23401
+INFO 2026-03-02 21:15:45,200 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-02 21:20:45,691 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-02 21:20:45,798 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-02 21:20:49,718 basehttp "GET /repairs/3/ HTTP/1.1" 200 7019
+INFO 2026-03-02 21:21:24,164 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-04 15:12:59,668 basehttp "GET /admin/auth/user/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-04 15:12:59,737 basehttp "GET /admin/login/?next=/admin/auth/user/4/change/ HTTP/1.1" 200 4219
+INFO 2026-03-04 15:13:10,143 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-04 15:13:10,232 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-04 15:13:10,328 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-03-04 15:13:15,465 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-04 15:13:15,550 basehttp "GET /repairs/ HTTP/1.1" 302 0
+INFO 2026-03-04 15:13:15,648 basehttp "GET /accounts/login/?next=/repairs/ HTTP/1.1" 200 882
+INFO 2026-03-04 15:13:20,029 basehttp "POST /accounts/login/?next=/repairs/ HTTP/1.1" 302 0
+INFO 2026-03-04 15:13:20,146 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-04 15:13:22,390 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-04 15:13:22,447 basehttp "GET /static/red_x.png HTTP/1.1" 304 0
+INFO 2026-03-04 15:14:42,174 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 12578
+INFO 2026-03-04 15:27:41,626 basehttp "POST /repairs/3/edit/ HTTP/1.1" 200 12578
+INFO 2026-03-04 15:27:45,005 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-04 15:27:45,106 basehttp "GET /admin/ HTTP/1.1" 200 7937
+INFO 2026-03-04 15:27:48,014 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 14250
+INFO 2026-03-04 15:27:48,159 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-04 15:27:49,491 basehttp "GET /admin/repair_tracker/longtermloaner/1/change/ HTTP/1.1" 200 26013
+INFO 2026-03-04 15:27:49,522 basehttp "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+INFO 2026-03-04 15:27:49,524 basehttp "GET /static/admin/js/inlines.js HTTP/1.1" 200 15526
+INFO 2026-03-04 15:27:49,556 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:46:34,938 basehttp "GET / HTTP/1.1" 200 5404
+WARNING 2026-03-05 16:46:37,328 log Not Found: /favicon.ico
+WARNING 2026-03-05 16:46:37,328 basehttp "GET /favicon.ico HTTP/1.1" 404 3856
+INFO 2026-03-05 16:47:01,177 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-05 16:47:05,771 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-05 16:47:05,897 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-05 16:47:13,366 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-05 16:47:13,444 basehttp "GET /admin/ HTTP/1.1" 200 7937
+INFO 2026-03-05 16:47:13,469 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,472 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,473 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,475 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,476 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,476 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,529 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,532 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,533 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:13,533 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,066 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 14250
+INFO 2026-03-05 16:47:15,094 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,094 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,096 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,096 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,097 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,128 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:47:15,132 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,145 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,145 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,145 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,147 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,195 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,199 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:15,199 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,851 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23400
+INFO 2026-03-05 16:47:16,878 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,884 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,885 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,885 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,916 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:47:16,939 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,940 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:16,985 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-03-05 16:47:17,277 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:48:17,874 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:48:18,024 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23686
+INFO 2026-03-05 16:48:18,088 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:48:18,101 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-03-05 16:48:34,929 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:48:35,096 basehttp "GET /admin/repair_tracker/longtermloaner/3/change/ HTTP/1.1" 200 24000
+INFO 2026-03-05 16:48:35,156 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:48:36,095 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 15509
+INFO 2026-03-05 16:48:36,154 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:48:38,873 basehttp "GET /admin/repair_tracker/longtermloaner/1/change/ HTTP/1.1" 200 26013
+INFO 2026-03-05 16:48:38,936 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:48:48,764 basehttp "POST /admin/repair_tracker/longtermloaner/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:48:48,909 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 15754
+INFO 2026-03-05 16:48:48,972 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:49:01,938 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23400
+INFO 2026-03-05 16:49:02,004 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:50:28,603 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:50:28,748 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 16381
+INFO 2026-03-05 16:50:28,817 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:50:31,603 basehttp "GET /admin/repair_tracker/longtermloaner/4/change/ HTTP/1.1" 200 23729
+INFO 2026-03-05 16:50:31,669 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:50:36,460 basehttp "POST /admin/repair_tracker/longtermloaner/4/change/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:50:36,603 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 16383
+INFO 2026-03-05 16:50:36,666 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:50:39,573 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23400
+INFO 2026-03-05 16:50:39,634 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:50:54,089 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-05 16:50:54,232 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 17010
+INFO 2026-03-05 16:50:54,292 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-05 16:54:48,456 basehttp "GET /admin/ HTTP/1.1" 200 9944
+INFO 2026-03-05 16:54:49,913 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-05 16:54:51,986 basehttp "GET /repairs/create HTTP/1.1" 301 0
+INFO 2026-03-05 16:54:52,073 basehttp "GET /repairs/create/ HTTP/1.1" 200 12645
+ERROR 2026-03-05 16:56:57,047 log Internal Server Error: /repairs/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 505, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'static'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 52, in create_repair
+    return render(request, 'repair_form.html', {'form': form, 'action': 'Create'})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 33, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 175, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/engine.py", line 157, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 200, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 293, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 232, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 513, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 511, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 953, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 507, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 558, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 151: 'static', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2026-03-05 16:56:57,057 basehttp "GET /repairs/create/ HTTP/1.1" 500 247489
+INFO 2026-03-05 16:58:06,386 basehttp "GET /repairs/create/ HTTP/1.1" 200 12904
+INFO 2026-03-05 16:59:11,481 basehttp "GET /repairs/create/ HTTP/1.1" 200 12952
+INFO 2026-03-05 17:01:28,895 basehttp "GET /repairs/create/ HTTP/1.1" 200 13037
+INFO 2026-03-05 17:01:30,659 basehttp "GET /repairs/create/ HTTP/1.1" 200 13037
+INFO 2026-03-05 17:01:32,914 basehttp "GET /repairs/create/ HTTP/1.1" 200 13037
+INFO 2026-03-05 17:01:49,233 basehttp "GET /repairs/create/ HTTP/1.1" 200 13037
+INFO 2026-03-05 17:02:07,977 basehttp "GET /repairs/create/ HTTP/1.1" 200 13045
+INFO 2026-03-05 17:02:20,116 basehttp "GET /repairs/create/ HTTP/1.1" 200 13187
+INFO 2026-03-05 17:02:32,347 basehttp "GET /repairs/create/ HTTP/1.1" 200 13162
+INFO 2026-03-05 17:02:43,028 basehttp "GET /repairs/create/ HTTP/1.1" 200 13169
+INFO 2026-03-05 17:02:57,656 basehttp "GET /repairs/create/ HTTP/1.1" 200 13159
+INFO 2026-03-05 17:08:43,655 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-06 18:38:55,510 autoreload Watching for file changes with StatReloader
+INFO 2026-03-06 18:46:17,076 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-06 18:46:17,938 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:39:34,713 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-09 17:39:35,763 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:40:57,581 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-09 17:40:58,506 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:41:01,716 basehttp code 400, message Bad request version ('úú\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x93ªª\x00\x00\x00')
+INFO 2026-03-09 17:41:01,716 basehttp code 400, message Bad request syntax ('\x16\x03\x01\x06À\x01\x00\x06¼\x03\x03»\x80×\x92\x864\x92ìKÖ\x12òüý}gÐÖ\x06~ý%áº\x15')
+ERROR 2026-03-09 17:41:01,716 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-03-09 17:41:01,717 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+INFO 2026-03-09 17:41:01,719 basehttp code 400, message Bad request version ('jj\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x93zz\x00\x00\x00')
+INFO 2026-03-09 17:41:01,720 basehttp code 400, message Bad request version ('úú\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06\x93')
+ERROR 2026-03-09 17:41:01,720 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-03-09 17:41:01,721 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+INFO 2026-03-09 17:41:03,601 basehttp code 400, message Bad request version ('É\xadI\x8aBöæÆy0ÊÛq¹\x87þ\x02\x91§Q\x1b\x10Ñ©\x92³\x0f')
+ERROR 2026-03-09 17:41:03,602 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+INFO 2026-03-09 17:41:03,604 basehttp code 400, message Bad request version ('ÊÊ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x063ÚÚ\x00\x00\x00')
+ERROR 2026-03-09 17:41:03,604 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+INFO 2026-03-09 17:41:03,605 basehttp code 400, message Bad request version ('ZZ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06Sªª\x00\x00\x00')
+INFO 2026-03-09 17:41:03,606 basehttp code 400, message Bad request version ('zz\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06sºº\x00\x00\x00')
+ERROR 2026-03-09 17:41:03,607 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+ERROR 2026-03-09 17:41:03,607 basehttp You're accessing the development server over HTTPS, but it only supports HTTP.
+INFO 2026-03-09 17:41:18,093 basehttp "GET / HTTP/1.1" 200 5314
+WARNING 2026-03-09 17:41:18,748 log Not Found: /favicon.ico
+WARNING 2026-03-09 17:41:18,748 basehttp "GET /favicon.ico HTTP/1.1" 404 3856
+INFO 2026-03-09 17:45:09,271 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-09 17:45:09,420 basehttp "GET /repairs/ HTTP/1.1" 200 15126
+INFO 2026-03-09 17:45:10,824 basehttp "GET /repairs/create/ HTTP/1.1" 200 13159
+INFO 2026-03-09 17:48:10,746 basehttp "GET /repairs/create HTTP/1.1" 301 0
+INFO 2026-03-09 17:48:10,839 basehttp "GET /repairs/create/ HTTP/1.1" 200 13207
+INFO 2026-03-09 17:49:18,289 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 17:49:19,713 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:49:20,814 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 17:49:22,031 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:49:22,559 basehttp "GET /repairs/create/ HTTP/1.1" 200 13207
+INFO 2026-03-09 17:49:34,455 basehttp "GET /repairs/create/ HTTP/1.1" 200 13324
+INFO 2026-03-09 17:50:11,911 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 17:50:13,448 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:50:15,961 basehttp "GET /repairs/create/ HTTP/1.1" 200 13346
+INFO 2026-03-09 17:50:34,117 basehttp "GET /repairs/create/ HTTP/1.1" 200 13346
+INFO 2026-03-09 17:50:35,482 basehttp "GET /repairs/create/ HTTP/1.1" 200 13346
+INFO 2026-03-09 17:52:01,268 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:02,681 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:14,957 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:18,367 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:30,570 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 17:52:31,540 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:52:32,007 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:48,624 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:52:54,612 basehttp "GET /repairs/create/ HTTP/1.1" 200 13340
+INFO 2026-03-09 17:54:33,316 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 17:54:34,725 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 17:54:35,615 basehttp "GET /repairs/create/ HTTP/1.1" 200 13388
+INFO 2026-03-09 17:55:20,425 basehttp "GET /repairs/create/ HTTP/1.1" 200 13388
+INFO 2026-03-09 18:00:21,294 basehttp "GET /repairs/create/ HTTP/1.1" 200 13586
+INFO 2026-03-09 18:00:55,752 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:00:56,973 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:00:59,247 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:01:00,352 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:01:00,716 basehttp "GET /repairs/create/ HTTP/1.1" 200 13690
+INFO 2026-03-09 18:01:07,646 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:01:08,755 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:01:09,206 basehttp "GET /repairs/create/ HTTP/1.1" 200 13690
+INFO 2026-03-09 18:01:15,040 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:01:16,116 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:01:33,444 basehttp "GET /repairs/create/ HTTP/1.1" 200 13707
+INFO 2026-03-09 18:02:52,792 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-09 18:02:52,896 basehttp "GET /admin/ HTTP/1.1" 200 9944
+INFO 2026-03-09 18:02:52,912 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+INFO 2026-03-09 18:02:52,915 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2026-03-09 18:02:52,915 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2026-03-09 18:02:52,918 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-03-09 18:02:52,922 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2026-03-09 18:02:52,923 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+INFO 2026-03-09 18:02:52,929 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-03-09 18:02:52,977 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-03-09 18:02:52,977 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-03-09 18:02:52,978 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-03-09 18:02:55,515 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 16768
+INFO 2026-03-09 18:02:55,546 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+INFO 2026-03-09 18:02:55,547 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-03-09 18:02:55,549 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2026-03-09 18:02:55,550 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2026-03-09 18:02:55,552 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-03-09 18:02:55,552 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2026-03-09 18:02:55,554 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-03-09 18:02:55,558 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-03-09 18:02:55,560 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2026-03-09 18:02:55,562 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2026-03-09 18:02:55,578 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 18:02:55,599 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-03-09 18:02:55,606 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-03-09 18:02:55,606 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2026-03-09 18:03:24,701 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23400
+INFO 2026-03-09 18:03:24,736 basehttp "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+INFO 2026-03-09 18:03:24,737 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+INFO 2026-03-09 18:03:24,738 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 9090
+INFO 2026-03-09 18:03:24,738 basehttp "GET /static/admin/js/inlines.js HTTP/1.1" 200 15526
+INFO 2026-03-09 18:03:24,739 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-03-09 18:03:24,741 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-03-09 18:03:24,768 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 18:03:24,785 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11921
+INFO 2026-03-09 18:03:24,790 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2026-03-09 18:03:24,799 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-03-09 18:03:25,099 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-03-09 18:03:54,943 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:03:55,105 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 17686
+INFO 2026-03-09 18:03:55,174 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 18:03:55,186 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-03-09 18:04:01,333 basehttp "GET /admin/repair_tracker/longtermloaner/6/change/ HTTP/1.1" 200 23730
+INFO 2026-03-09 18:04:01,394 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 18:04:05,537 basehttp "POST /admin/repair_tracker/longtermloaner/6/change/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:04:05,694 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 17642
+INFO 2026-03-09 18:04:05,755 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 18:04:13,629 basehttp "POST /repairs/create/ HTTP/1.1" 200 13860
+INFO 2026-03-09 18:04:18,087 basehttp "POST /repairs/create/ HTTP/1.1" 200 13860
+INFO 2026-03-09 18:08:13,904 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:08:15,470 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:09:38,644 basehttp "POST /repairs/create/ HTTP/1.1" 200 15269
+INFO 2026-03-09 18:11:37,458 basehttp "POST /repairs/create/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:11:37,588 basehttp "GET /repairs/4/ HTTP/1.1" 200 7486
+INFO 2026-03-09 18:11:37,667 basehttp "GET /static/red_x.png HTTP/1.1" 200 6838725
+INFO 2026-03-09 18:11:54,345 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-09 18:11:57,663 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-09 18:11:57,761 basehttp "GET /repairs/ HTTP/1.1" 200 17365
+INFO 2026-03-09 18:12:02,231 basehttp "GET /repairs/4/ HTTP/1.1" 200 7024
+INFO 2026-03-09 18:12:04,850 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-09 18:12:06,272 basehttp "GET /repairs/ HTTP/1.1" 200 17365
+INFO 2026-03-09 18:12:42,385 basehttp "GET /repairs/4/ HTTP/1.1" 200 7024
+INFO 2026-03-09 18:14:43,506 basehttp "GET /repairs/ HTTP/1.1" 200 17485
+INFO 2026-03-09 18:14:52,593 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-09 18:16:24,298 basehttp "GET /repairs/ HTTP/1.1" 200 17493
+INFO 2026-03-09 18:16:42,035 basehttp "GET /repairs/ HTTP/1.1" 200 17500
+INFO 2026-03-09 18:16:52,354 basehttp "GET /repairs/ HTTP/1.1" 200 17510
+INFO 2026-03-09 18:17:24,305 basehttp "GET /repairs/ HTTP/1.1" 200 17501
+INFO 2026-03-09 18:17:27,064 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-09 18:17:58,853 basehttp "GET /repairs/ HTTP/1.1" 200 17491
+INFO 2026-03-09 18:18:02,961 basehttp "GET /repairs/1/edit/ HTTP/1.1" 200 14256
+INFO 2026-03-09 18:18:07,732 basehttp "POST /repairs/1/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:18:07,864 basehttp "GET /repairs/1/ HTTP/1.1" 200 7605
+INFO 2026-03-09 18:18:07,897 basehttp "GET /static/green_checkmark.png HTTP/1.1" 200 646514
+INFO 2026-03-09 18:18:52,333 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-09 18:18:53,814 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:18:55,135 basehttp "GET /repairs/1/edit/ HTTP/1.1" 200 14256
+ERROR 2026-03-09 18:18:57,132 log Internal Server Error: /repairs/1/edit/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 63, in edit_repair
+    return redirect('repair_list', pk=repair.pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 48, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 145, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'repair_list' with keyword arguments '{'pk': 1}' not found. 1 pattern(s) tried: ['repairs/\\Z']
+ERROR 2026-03-09 18:18:57,139 basehttp "POST /repairs/1/edit/ HTTP/1.1" 500 89542
+INFO 2026-03-09 18:19:13,521 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-09 18:19:14,471 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:19:14,925 basehttp "GET /repairs/1/edit/ HTTP/1.1" 200 14718
+INFO 2026-03-09 18:19:16,694 basehttp "POST /repairs/1/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:19:16,896 basehttp "GET /repairs/ HTTP/1.1" 200 17949
+INFO 2026-03-09 18:19:23,655 basehttp "GET /repairs/3/ HTTP/1.1" 200 7154
+INFO 2026-03-09 18:20:04,322 basehttp "GET /repairs/ HTTP/1.1" 200 17486
+INFO 2026-03-09 18:21:09,436 basehttp "GET /repairs/4/ HTTP/1.1" 200 7024
+INFO 2026-03-09 18:22:49,316 basehttp "GET /repairs/4/ HTTP/1.1" 200 7004
+INFO 2026-03-09 18:24:03,428 basehttp "GET /repairs/4/ HTTP/1.1" 200 6996
+INFO 2026-03-09 18:24:21,559 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 14273
+INFO 2026-03-09 18:24:25,976 basehttp "POST /repairs/4/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:24:26,116 basehttp "GET /repairs/ HTTP/1.1" 200 17948
+INFO 2026-03-09 18:24:27,668 basehttp "GET /repairs/4/ HTTP/1.1" 200 7003
+INFO 2026-03-09 18:24:37,004 basehttp "GET /repairs/4/ HTTP/1.1" 200 7142
+INFO 2026-03-09 18:25:21,418 basehttp "GET /repairs/4/ HTTP/1.1" 200 7204
+INFO 2026-03-09 18:26:11,495 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:27:35,324 basehttp "GET /repairs/4/ HTTP/1.1" 200 7228
+INFO 2026-03-09 18:27:48,705 basehttp "GET /repairs/4/ HTTP/1.1" 200 7228
+INFO 2026-03-09 18:28:13,677 basehttp "GET /repairs/4/ HTTP/1.1" 200 7228
+INFO 2026-03-09 18:28:22,548 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:24,265 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:26,673 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:30,744 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:32,011 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:38,262 basehttp "GET /repairs/4/ HTTP/1.1" 200 7228
+INFO 2026-03-09 18:28:51,103 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:28:52,495 basehttp "GET /repairs/4/ HTTP/1.1" 200 7227
+INFO 2026-03-09 18:29:26,621 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 14281
+INFO 2026-03-09 18:29:31,666 basehttp "POST /repairs/4/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:29:31,800 basehttp "GET /repairs/ HTTP/1.1" 200 17948
+INFO 2026-03-09 18:29:34,323 basehttp "GET /repairs/4/ HTTP/1.1" 200 7247
+INFO 2026-03-09 18:29:55,034 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 14281
+INFO 2026-03-09 18:41:08,328 basehttp "GET /admin/ HTTP/1.1" 200 10603
+INFO 2026-03-09 18:41:13,045 basehttp "POST /repairs/4/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:41:13,184 basehttp "GET /repairs/ HTTP/1.1" 200 17960
+INFO 2026-03-09 18:41:14,939 basehttp "GET /repairs/create/ HTTP/1.1" 200 14141
+INFO 2026-03-09 18:42:04,147 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-09 18:42:05,371 autoreload Watching for file changes with StatReloader
+INFO 2026-03-09 18:43:04,960 basehttp "GET /repairs/create/ HTTP/1.1" 200 14370
+INFO 2026-03-09 18:43:17,562 basehttp "GET /repairs/create/ HTTP/1.1" 200 14399
+INFO 2026-03-09 18:43:24,262 basehttp "GET /repairs/create/ HTTP/1.1" 200 14405
+INFO 2026-03-09 18:43:52,382 basehttp "GET /repairs/create/ HTTP/1.1" 200 14405
+INFO 2026-03-09 18:44:00,452 basehttp "GET /repairs/create/ HTTP/1.1" 200 14405
+INFO 2026-03-09 18:44:12,075 basehttp "GET /repairs/create/ HTTP/1.1" 200 14405
+INFO 2026-03-09 18:44:26,921 basehttp "GET /repairs/create/ HTTP/1.1" 200 14433
+INFO 2026-03-09 18:44:27,977 basehttp "GET /repairs/create/ HTTP/1.1" 200 14433
+INFO 2026-03-09 18:45:28,434 basehttp "GET /repairs/create/ HTTP/1.1" 200 14488
+INFO 2026-03-09 18:45:31,212 basehttp "GET /repairs/ HTTP/1.1" 200 17498
+INFO 2026-03-09 18:45:48,421 basehttp "GET /repairs/create/ HTTP/1.1" 200 14166
+INFO 2026-03-09 18:46:23,449 basehttp "GET /repairs/create/ HTTP/1.1" 200 14544
+INFO 2026-03-09 18:46:45,931 basehttp "GET /repairs/create/ HTTP/1.1" 200 14528
+INFO 2026-03-09 18:48:54,643 basehttp "POST /repairs/create/ HTTP/1.1" 200 15808
+INFO 2026-03-09 18:49:08,266 basehttp "POST /repairs/create/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:49:08,399 basehttp "GET /repairs/5/ HTTP/1.1" 200 7610
+ERROR 2026-03-09 18:49:13,877 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 156, in repair_list
+    return render(request, 'repair_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'repair_detail' with arguments '('Teacher',)' not found. 1 pattern(s) tried: ['repairs/(?P<pk>[0-9]+)/\\Z']
+ERROR 2026-03-09 18:49:13,888 basehttp "GET /repairs/ HTTP/1.1" 500 230982
+INFO 2026-03-09 18:49:32,325 basehttp "GET / HTTP/1.1" 200 4421
+ERROR 2026-03-09 18:49:33,410 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 156, in repair_list
+    return render(request, 'repair_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'repair_detail' with arguments '('Teacher',)' not found. 1 pattern(s) tried: ['repairs/(?P<pk>[0-9]+)/\\Z']
+ERROR 2026-03-09 18:49:33,417 basehttp "GET /repairs/ HTTP/1.1" 500 230972
+INFO 2026-03-09 18:49:47,541 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 14736
+INFO 2026-03-09 18:49:53,368 basehttp "POST /repairs/5/edit/ HTTP/1.1" 302 0
+ERROR 2026-03-09 18:49:53,565 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 156, in repair_list
+    return render(request, 'repair_list.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader_tags.py", line 63, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 238, in render
+    nodelist.append(node.render_annotated(context))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'repair_detail' with arguments '('',)' not found. 1 pattern(s) tried: ['repairs/(?P<pk>[0-9]+)/\\Z']
+ERROR 2026-03-09 18:49:53,571 basehttp "GET /repairs/ HTTP/1.1" 500 231284
+INFO 2026-03-09 18:50:06,957 basehttp "POST /repairs/5/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 18:50:07,089 basehttp "GET /repairs/ HTTP/1.1" 200 20346
+WARNING 2026-03-09 18:50:18,279 log Not Found: /repairs/52254/
+WARNING 2026-03-09 18:50:18,280 basehttp "GET /repairs/52254/ HTTP/1.1" 404 3733
+INFO 2026-03-09 18:51:33,530 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:51:34,564 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:51:35,255 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:51:36,295 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:51:37,386 basehttp "GET /repairs/3/ HTTP/1.1" 200 7135
+INFO 2026-03-09 18:51:41,102 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:52:09,061 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13022
+INFO 2026-03-09 18:52:11,150 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:52:12,687 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13022
+INFO 2026-03-09 18:52:14,219 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:52:29,373 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10486
+INFO 2026-03-09 18:52:30,035 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13022
+INFO 2026-03-09 18:52:30,670 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:52:56,695 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13022
+INFO 2026-03-09 18:52:57,844 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:53:15,613 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20154
+INFO 2026-03-09 18:53:22,721 basehttp "GET /repairs/?search=&status=pending&assigned= HTTP/1.1" 200 7753
+INFO 2026-03-09 18:53:24,376 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 18:54:26,832 basehttp "GET /repairs/3/ HTTP/1.1" 200 7135
+INFO 2026-03-09 18:54:56,506 basehttp "GET /repairs/3/ HTTP/1.1" 200 7383
+INFO 2026-03-09 18:55:17,267 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 14682
+INFO 2026-03-09 19:12:37,665 basehttp "GET /accounts/login HTTP/1.1" 301 0
+INFO 2026-03-09 19:12:37,830 basehttp "GET /accounts/login/ HTTP/1.1" 200 882
+INFO 2026-03-09 19:12:59,237 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-09 19:13:00,857 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 19:13:02,614 basehttp "GET /admin/ HTTP/1.1" 200 10603
+INFO 2026-03-09 19:13:05,014 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-09 19:13:06,915 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 19:13:14,971 basehttp "GET /repairs/3/ HTTP/1.1" 200 7383
+INFO 2026-03-09 19:13:19,091 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 14682
+INFO 2026-03-09 19:13:20,959 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-09 19:13:23,135 basehttp "GET /repairs/4/ HTTP/1.1" 200 7287
+INFO 2026-03-09 19:13:25,726 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 14680
+INFO 2026-03-09 19:14:21,434 basehttp "POST /repairs/4/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 19:14:21,573 basehttp "GET /repairs/ HTTP/1.1" 200 20616
+INFO 2026-03-09 19:14:24,273 basehttp "GET /repairs/3/ HTTP/1.1" 200 7383
+INFO 2026-03-09 19:14:25,585 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 14682
+INFO 2026-03-09 19:15:04,545 basehttp "POST /repairs/3/edit/ HTTP/1.1" 200 15766
+INFO 2026-03-09 19:16:21,922 basehttp "POST /repairs/3/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 19:16:22,060 basehttp "GET /repairs/ HTTP/1.1" 200 20616
+INFO 2026-03-09 19:16:25,559 basehttp "GET /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 200 23400
+INFO 2026-03-09 19:16:25,626 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 19:17:18,259 basehttp "POST /admin/repair_tracker/longtermloaner/add/ HTTP/1.1" 302 0
+INFO 2026-03-09 19:17:18,425 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 18269
+INFO 2026-03-09 19:17:18,490 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 19:17:22,738 basehttp "GET /repairs/3/ HTTP/1.1" 200 7392
+INFO 2026-03-09 19:17:24,901 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 14761
+INFO 2026-03-09 19:17:29,624 basehttp "POST /repairs/3/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 19:17:29,758 basehttp "GET /repairs/ HTTP/1.1" 200 20616
+INFO 2026-03-09 19:17:32,270 basehttp "GET /repairs/4/ HTTP/1.1" 200 7287
+INFO 2026-03-09 19:18:18,505 basehttp "GET /repairs/4/ HTTP/1.1" 200 7296
+INFO 2026-03-09 19:18:41,963 basehttp "GET /repairs/3/ HTTP/1.1" 200 7421
+INFO 2026-03-09 19:21:49,824 basehttp "GET /repairs/3/edit/ HTTP/1.1" 200 14761
+INFO 2026-03-09 19:22:48,663 basehttp "POST /repairs/3/edit/ HTTP/1.1" 302 0
+INFO 2026-03-09 19:22:48,801 basehttp "GET /repairs/ HTTP/1.1" 200 20616
+INFO 2026-03-09 19:27:13,905 basehttp "GET /admin/repair_tracker/longtermloaner/7/change/ HTTP/1.1" 200 23729
+INFO 2026-03-09 19:27:13,971 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-09 19:27:18,017 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 18027
+INFO 2026-03-09 19:27:28,371 basehttp "GET /repairs/3/ HTTP/1.1" 200 7421
+INFO 2026-03-12 17:16:44,583 basehttp "GET / HTTP/1.1" 200 5314
+WARNING 2026-03-12 17:16:45,105 log Not Found: /favicon.ico
+WARNING 2026-03-12 17:16:45,106 basehttp "GET /favicon.ico HTTP/1.1" 404 3856
+INFO 2026-03-16 14:21:36,454 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 14:22:38,565 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 14:22:49,878 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 14:22:50,013 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-16 14:22:53,659 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-16 14:22:56,596 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-16 14:22:56,764 basehttp "GET /repairs/ HTTP/1.1" 200 20154
+INFO 2026-03-16 14:24:17,600 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 14:24:24,097 basehttp "GET /repairs/5/ HTTP/1.1" 200 7411
+INFO 2026-03-16 14:24:24,635 basehttp "GET /static/red_x.png HTTP/1.1" 200 6838725
+INFO 2026-03-16 14:27:50,797 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 14785
+INFO 2026-03-16 14:28:52,258 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 14:28:54,841 basehttp "GET /repairs/5/ HTTP/1.1" 200 7428
+INFO 2026-03-16 14:29:35,642 basehttp "GET /repairs/5/ HTTP/1.1" 200 7428
+INFO 2026-03-16 14:30:15,365 basehttp "GET /repairs/5/ HTTP/1.1" 200 7480
+INFO 2026-03-16 14:30:41,689 basehttp "GET /repairs/5/ HTTP/1.1" 200 7474
+INFO 2026-03-16 14:31:14,912 basehttp "GET /repairs/5/ HTTP/1.1" 200 7495
+INFO 2026-03-16 14:31:32,086 basehttp "GET /repairs/5/ HTTP/1.1" 200 7474
+INFO 2026-03-16 14:33:24,194 basehttp "GET /repairs/5/ HTTP/1.1" 200 7496
+INFO 2026-03-16 14:33:46,599 basehttp "GET /repairs/5/ HTTP/1.1" 200 7513
+INFO 2026-03-16 14:33:56,917 basehttp "GET /repairs/5/ HTTP/1.1" 200 7505
+INFO 2026-03-16 14:34:22,938 basehttp "GET /repairs/5/ HTTP/1.1" 200 7510
+INFO 2026-03-16 14:34:39,486 basehttp "GET /repairs/5/ HTTP/1.1" 200 7497
+INFO 2026-03-16 14:34:50,725 basehttp "GET /repairs/5/ HTTP/1.1" 200 7511
+INFO 2026-03-16 14:34:59,783 basehttp "GET /repairs/5/ HTTP/1.1" 200 7511
+INFO 2026-03-16 14:35:08,882 basehttp "GET /repairs/5/ HTTP/1.1" 200 7516
+INFO 2026-03-16 14:35:14,901 basehttp "GET /repairs/5/ HTTP/1.1" 200 7517
+INFO 2026-03-16 14:35:37,624 basehttp "GET /repairs/5/ HTTP/1.1" 200 7518
+INFO 2026-03-16 14:35:46,193 basehttp "GET /repairs/5/ HTTP/1.1" 200 7517
+INFO 2026-03-16 14:36:19,038 basehttp "GET /repairs/5/ HTTP/1.1" 200 7548
+INFO 2026-03-16 14:36:57,439 basehttp "GET /repairs/5/ HTTP/1.1" 200 7559
+INFO 2026-03-16 14:37:12,800 basehttp "GET /repairs/5/ HTTP/1.1" 200 7559
+INFO 2026-03-16 14:37:33,830 basehttp "GET /repairs/5/ HTTP/1.1" 200 7579
+INFO 2026-03-16 14:37:46,435 basehttp "GET /repairs/5/ HTTP/1.1" 200 7559
+INFO 2026-03-16 14:38:02,803 basehttp "GET /repairs/5/ HTTP/1.1" 200 7579
+INFO 2026-03-16 14:38:23,402 basehttp "GET /repairs/5/ HTTP/1.1" 200 7621
+INFO 2026-03-16 14:40:56,779 basehttp "GET /repairs/5/ HTTP/1.1" 200 7579
+INFO 2026-03-16 14:41:44,093 basehttp "GET /repairs/5/ HTTP/1.1" 200 7538
+INFO 2026-03-16 14:43:29,874 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-16 14:43:31,481 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 15:51:26,184 basehttp "GET /repairs/5/ HTTP/1.1" 302 0
+INFO 2026-03-16 15:51:26,361 basehttp "GET /accounts/login/?next=/repairs/5/ HTTP/1.1" 200 882
+INFO 2026-03-16 15:51:31,851 basehttp "POST /accounts/login/?next=/repairs/5/ HTTP/1.1" 302 0
+INFO 2026-03-16 15:51:31,994 basehttp "GET /repairs/5/ HTTP/1.1" 200 7538
+INFO 2026-03-16 16:31:22,363 basehttp "GET /repairs/5/ HTTP/1.1" 200 7574
+INFO 2026-03-16 16:31:31,277 basehttp "GET /repairs/5/ HTTP/1.1" 200 7574
+INFO 2026-03-16 16:31:36,045 basehttp "GET /repairs/5/ HTTP/1.1" 200 7574
+INFO 2026-03-16 16:33:02,454 basehttp "GET /repairs/5/ HTTP/1.1" 200 7587
+INFO 2026-03-16 16:33:27,944 basehttp "GET /repairs/5/ HTTP/1.1" 200 7587
+INFO 2026-03-16 16:34:21,045 basehttp "GET /repairs/5/ HTTP/1.1" 200 7759
+INFO 2026-03-16 16:34:30,156 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 14785
+INFO 2026-03-16 16:37:30,851 basehttp "GET /repairs/5/ HTTP/1.1" 200 8037
+INFO 2026-03-16 16:37:44,102 basehttp "GET /repairs/5/ HTTP/1.1" 200 8044
+INFO 2026-03-16 16:37:53,954 basehttp "GET /repairs/5/ HTTP/1.1" 200 8051
+INFO 2026-03-16 16:38:00,822 basehttp "GET /repairs/5/ HTTP/1.1" 200 8051
+INFO 2026-03-16 16:38:52,276 basehttp "GET /repairs/5/ HTTP/1.1" 200 8142
+INFO 2026-03-16 16:39:39,793 basehttp "GET /repairs/5/ HTTP/1.1" 200 8149
+INFO 2026-03-16 16:40:19,479 basehttp "GET /repairs/5/ HTTP/1.1" 200 6785
+INFO 2026-03-16 16:40:26,851 basehttp "GET /repairs/5/ HTTP/1.1" 200 6785
+INFO 2026-03-16 16:40:29,161 basehttp "GET /repairs/5/ HTTP/1.1" 200 8149
+INFO 2026-03-16 16:40:43,907 basehttp "GET /repairs/5/ HTTP/1.1" 200 8050
+INFO 2026-03-16 16:40:51,236 basehttp "GET /repairs/5/ HTTP/1.1" 200 8050
+INFO 2026-03-16 16:40:58,910 basehttp "GET /repairs/5/ HTTP/1.1" 200 7751
+INFO 2026-03-16 16:41:25,744 basehttp "GET /repairs/5/ HTTP/1.1" 200 7751
+INFO 2026-03-16 16:41:42,457 basehttp "GET /repairs/5/ HTTP/1.1" 200 7751
+INFO 2026-03-16 16:42:09,305 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:42:13,665 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:42:19,794 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:42:26,409 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:42:56,016 basehttp "GET /repairs/5/ HTTP/1.1" 200 7977
+INFO 2026-03-16 16:43:11,102 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:44:05,424 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:57:20,563 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:57:27,308 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:57:35,014 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:57:41,057 basehttp "GET /repairs/5/ HTTP/1.1" 200 7777
+INFO 2026-03-16 16:58:44,309 basehttp "GET /repairs/5/ HTTP/1.1" 200 7845
+INFO 2026-03-16 16:59:18,973 basehttp "GET /repairs/5/ HTTP/1.1" 200 7890
+INFO 2026-03-16 16:59:35,798 basehttp "GET /repairs/5/ HTTP/1.1" 200 7922
+INFO 2026-03-16 16:59:49,202 basehttp "GET /repairs/5/ HTTP/1.1" 200 7901
+INFO 2026-03-16 16:59:53,963 basehttp "GET /repairs/5/ HTTP/1.1" 200 7901
+INFO 2026-03-16 17:00:17,161 basehttp "GET /repairs/5/ HTTP/1.1" 200 7924
+INFO 2026-03-16 17:01:01,282 basehttp "GET /repairs/5/ HTTP/1.1" 200 7929
+INFO 2026-03-16 17:02:31,998 basehttp "GET /repairs/5/ HTTP/1.1" 200 7930
+INFO 2026-03-16 17:03:17,314 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:03:31,303 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:03:41,198 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:04:08,210 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:04:18,744 basehttp "GET /repairs/5/ HTTP/1.1" 200 7959
+INFO 2026-03-16 17:04:28,623 basehttp "GET /repairs/5/ HTTP/1.1" 200 7965
+INFO 2026-03-16 17:05:14,126 basehttp "GET /repairs/5/ HTTP/1.1" 200 7965
+INFO 2026-03-16 17:06:29,284 basehttp "GET /repairs/5/ HTTP/1.1" 200 7964
+INFO 2026-03-16 17:09:02,644 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:09:50,149 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:10:12,729 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 14785
+INFO 2026-03-16 17:10:24,300 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-16 17:10:25,491 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-16 17:10:25,636 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 17:10:28,422 basehttp "GET /repairs/5/ HTTP/1.1" 200 7966
+INFO 2026-03-16 17:12:07,850 basehttp "GET / HTTP/1.1" 200 4421
+INFO 2026-03-16 17:12:09,685 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:12:09,755 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:12:23,563 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 17:12:23,677 basehttp "GET /repairs/ HTTP/1.1" 200 18137
+INFO 2026-03-16 17:12:29,628 basehttp "GET /repairs/5/ HTTP/1.1" 200 7824
+INFO 2026-03-16 17:12:56,318 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 11955
+INFO 2026-03-16 17:13:32,299 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:13:33,268 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:13:42,559 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:13:43,965 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:13:46,431 basehttp "GET / HTTP/1.1" 200 4426
+INFO 2026-03-16 17:14:18,683 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:14:19,660 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:16:01,045 basehttp "GET /repairs/5/edit/ HTTP/1.1" 200 12065
+INFO 2026-03-16 17:16:02,884 basehttp "GET / HTTP/1.1" 200 4426
+INFO 2026-03-16 17:19:45,981 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:19:46,932 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:29:38,850 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:29:39,751 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:30:08,311 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:30:09,280 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:30:11,514 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:30:12,628 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:31:00,430 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:31:01,539 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:31:12,895 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:31:13,994 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:32:12,925 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:32:14,017 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:35:33,694 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:35:35,234 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:35:53,704 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:35:55,221 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:36:37,975 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:36:39,110 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:36:40,359 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:36:41,287 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:37:46,281 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:37:47,241 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:37:49,499 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:37:50,634 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:38:06,042 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:38:07,208 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:38:41,670 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:38:43,112 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:38:56,387 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:38:57,270 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:39:20,614 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:39:21,837 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:39:55,310 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:39:56,193 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:40:07,428 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:40:08,316 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:40:39,732 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:40:41,185 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:40:56,464 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:40:57,536 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:48:35,187 basehttp "GET / HTTP/1.1" 200 4426
+INFO 2026-03-16 17:48:37,286 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 17:48:37,617 basehttp "GET /admin/ HTTP/1.1" 200 7367
+INFO 2026-03-16 17:48:37,644 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 21310
+INFO 2026-03-16 17:48:37,650 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2694
+INFO 2026-03-16 17:48:37,650 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-03-16 17:48:37,650 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2929
+INFO 2026-03-16 17:48:37,653 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1943
+INFO 2026-03-16 17:48:37,653 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 18559
+INFO 2026-03-16 17:48:37,654 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-03-16 17:48:37,703 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2026-03-16 17:48:37,703 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2026-03-16 17:48:37,703 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-03-16 17:48:46,008 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:48:47,166 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:49:20,631 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:49:21,869 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:50:14,507 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:50:15,653 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:50:19,839 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:50:20,718 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:50:21,875 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:50:22,776 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:51:02,284 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:51:03,213 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:51:17,518 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:51:18,611 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:51:21,543 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-16 17:51:21,651 basehttp "GET /repairs/ HTTP/1.1" 200 18137
+INFO 2026-03-16 17:51:23,567 basehttp "GET /admin/ HTTP/1.1" 200 7367
+INFO 2026-03-16 17:51:28,184 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:51:28,258 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:51:29,452 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:51:29,517 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:51:31,104 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:51:31,156 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:51:40,855 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 17:51:40,985 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 17:51:42,800 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 17:51:42,876 basehttp "GET /admin/ HTTP/1.1" 200 10931
+INFO 2026-03-16 17:52:51,139 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:52:52,599 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:53:08,035 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 17:53:09,135 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:57:04,575 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:57:10,555 basehttp "GET /admin/ HTTP/1.1" 200 10931
+INFO 2026-03-16 17:57:13,630 basehttp "GET /admin/repair_tracker/ HTTP/1.1" 200 6939
+INFO 2026-03-16 17:57:15,273 basehttp "GET /admin/ HTTP/1.1" 200 10931
+INFO 2026-03-16 17:57:36,710 basehttp "GET /admin/repair_tracker/repair/ HTTP/1.1" 200 14368
+INFO 2026-03-16 17:57:36,745 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2026-03-16 17:57:36,745 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 5682
+INFO 2026-03-16 17:57:36,745 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6566
+INFO 2026-03-16 17:57:36,747 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 7872
+INFO 2026-03-16 17:57:36,747 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 8943
+INFO 2026-03-16 17:57:36,750 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2026-03-16 17:57:36,751 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2026-03-16 17:57:36,754 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 232381
+INFO 2026-03-16 17:57:36,755 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2026-03-16 17:57:36,756 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2026-03-16 17:57:36,758 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 292458
+INFO 2026-03-16 17:57:36,802 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2026-03-16 17:57:36,804 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2026-03-16 17:58:16,758 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 17:58:17,728 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 17:58:22,927 basehttp "GET /admin/repair_tracker/repair/ HTTP/1.1" 200 14368
+INFO 2026-03-16 17:58:24,960 basehttp "GET /admin/ HTTP/1.1" 200 10931
+INFO 2026-03-16 17:58:26,606 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:58:26,687 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:58:37,921 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 17:58:38,044 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 17:58:39,849 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 17:58:39,912 basehttp "GET /admin/ HTTP/1.1" 200 11446
+INFO 2026-03-16 17:58:43,595 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 9664
+INFO 2026-03-16 17:58:43,685 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 17:59:08,627 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 17:59:08,686 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 17:59:15,133 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 17:59:15,247 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 17:59:20,877 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 17:59:20,953 basehttp "GET /admin/ HTTP/1.1" 200 10931
+INFO 2026-03-16 17:59:44,228 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-16 17:59:44,285 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2026-03-16 17:59:45,894 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 9195
+INFO 2026-03-16 17:59:47,134 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 12388
+INFO 2026-03-16 17:59:49,714 basehttp "GET /admin/auth/user/4/change/ HTTP/1.1" 200 24135
+INFO 2026-03-16 17:59:49,745 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 9090
+INFO 2026-03-16 17:59:49,755 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 8466
+INFO 2026-03-16 17:59:49,756 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2026-03-16 17:59:49,757 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-03-16 17:59:49,759 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-03-16 17:59:49,759 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15292
+INFO 2026-03-16 17:59:49,760 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11921
+INFO 2026-03-16 17:59:49,778 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 17:59:49,815 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-03-16 17:59:50,118 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-03-16 17:59:50,118 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2026-03-16 17:59:50,118 basehttp "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
+INFO 2026-03-16 17:59:50,119 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-03-16 17:59:50,119 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2026-03-16 17:59:54,034 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 9195
+INFO 2026-03-16 17:59:55,568 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 11235
+INFO 2026-03-16 17:59:55,635 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:00:00,837 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:00:00,892 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 18:00:06,985 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 18:00:07,088 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 18:00:08,992 basehttp "GET /repairs/5/ HTTP/1.1" 200 7824
+INFO 2026-03-16 18:00:10,631 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 18:00:10,682 basehttp "GET /admin/ HTTP/1.1" 200 11446
+INFO 2026-03-16 18:00:14,454 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10734
+INFO 2026-03-16 18:00:14,520 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:00:16,169 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 16047
+INFO 2026-03-16 18:00:16,236 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:00:42,518 basehttp "POST /admin/auth/group/2/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:00:42,627 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10935
+INFO 2026-03-16 18:00:42,681 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:00:46,163 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10734
+INFO 2026-03-16 18:00:46,225 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:00:47,001 basehttp "GET /admin/auth/group/1/change/ HTTP/1.1" 200 15916
+INFO 2026-03-16 18:00:47,075 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:01:02,451 basehttp "POST /admin/auth/group/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:01:02,563 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10936
+INFO 2026-03-16 18:01:02,634 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:01:04,455 basehttp "GET /admin/auth/group/1/change/ HTTP/1.1" 200 15916
+INFO 2026-03-16 18:01:04,540 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:01:16,056 basehttp "POST /admin/auth/group/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:01:16,176 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 10936
+INFO 2026-03-16 18:01:16,240 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:01:18,431 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 9664
+INFO 2026-03-16 18:01:18,495 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:02:18,023 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:02:19,227 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:02:59,720 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:03:01,193 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:03:03,374 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:03:04,272 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:03:30,645 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:03:31,925 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:03:43,182 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:03:44,466 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:03:56,731 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:03:58,223 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:04:00,879 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10032
+INFO 2026-03-16 18:04:00,935 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:04:07,903 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10032
+INFO 2026-03-16 18:04:07,973 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:04:09,609 basehttp "GET /admin/ HTTP/1.1" 200 11975
+INFO 2026-03-16 18:04:13,529 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10032
+INFO 2026-03-16 18:04:13,590 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:04:16,598 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 9530
+INFO 2026-03-16 18:04:16,699 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:04:18,334 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10320
+INFO 2026-03-16 18:04:18,418 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:05:25,316 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10320
+INFO 2026-03-16 18:05:25,382 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:05:42,775 basehttp "GET /admin/ HTTP/1.1" 200 11975
+INFO 2026-03-16 18:07:10,032 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:07:11,280 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:07:12,522 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:07:13,414 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:07:42,650 basehttp "GET /admin/ HTTP/1.1" 200 11985
+INFO 2026-03-16 18:07:47,873 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10042
+INFO 2026-03-16 18:07:47,938 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:07:49,561 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 9590
+INFO 2026-03-16 18:07:49,622 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:07:50,732 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10370
+INFO 2026-03-16 18:07:50,798 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:07:56,807 basehttp "POST /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:07:56,927 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 11267
+INFO 2026-03-16 18:07:56,994 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:07:59,873 basehttp "GET /admin/repair_tracker/classroom_device_purpose/1/change/ HTTP/1.1" 200 10618
+INFO 2026-03-16 18:08:00,015 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:05,055 basehttp "POST /admin/repair_tracker/classroom_device_purpose/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:08:05,176 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 11279
+INFO 2026-03-16 18:08:05,241 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:07,684 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10370
+INFO 2026-03-16 18:08:07,748 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:16,445 basehttp "POST /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:08:16,556 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 11515
+INFO 2026-03-16 18:08:16,620 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:18,038 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10370
+INFO 2026-03-16 18:08:18,099 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:25,270 basehttp "POST /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:08:25,390 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 11766
+INFO 2026-03-16 18:08:25,452 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:27,074 basehttp "GET /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 200 10370
+INFO 2026-03-16 18:08:27,160 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:31,791 basehttp "POST /admin/repair_tracker/classroom_device_purpose/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:08:31,906 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 12010
+INFO 2026-03-16 18:08:31,976 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:33,728 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10042
+INFO 2026-03-16 18:08:33,795 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:08:35,432 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 16497
+INFO 2026-03-16 18:08:35,526 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2026-03-16 18:08:35,553 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:09:35,409 basehttp "GET /admin/repair_tracker/consentrecord/ HTTP/1.1" 200 11310
+INFO 2026-03-16 18:09:35,491 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:09:36,906 basehttp "GET /admin/repair_tracker/consentrecord/add/ HTTP/1.1" 200 15288
+INFO 2026-03-16 18:09:37,003 basehttp "GET /static/admin/js/collapse.js HTTP/1.1" 200 1803
+INFO 2026-03-16 18:09:37,038 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:09:46,415 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10042
+INFO 2026-03-16 18:09:46,481 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:09:48,294 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 16497
+INFO 2026-03-16 18:09:48,357 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:13:42,794 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:13:44,348 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:15:01,521 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:15:02,625 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:15:06,798 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:15:08,242 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:15:33,610 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:15:34,661 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:15:37,833 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:15:39,274 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:16:41,987 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:16:42,876 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:19:51,633 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:19:52,692 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:21:04,451 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:21:05,332 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:22:28,178 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:22:29,371 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:22:39,609 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:22:40,655 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:22:53,909 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:22:54,833 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:23:12,076 basehttp "GET /admin/ HTTP/1.1" 200 12716
+INFO 2026-03-16 18:23:19,682 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 10138
+INFO 2026-03-16 18:23:19,955 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:23:21,786 basehttp "GET /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 200 10611
+INFO 2026-03-16 18:23:21,872 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:00,438 basehttp "POST /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:24:00,557 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 11682
+INFO 2026-03-16 18:24:00,620 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:02,186 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10166
+INFO 2026-03-16 18:24:02,250 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:04,381 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 18317
+INFO 2026-03-16 18:24:04,450 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:49,055 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 11446
+INFO 2026-03-16 18:24:49,129 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:50,485 basehttp "GET /admin/repair_tracker/devicemodel/?o=1 HTTP/1.1" 200 11741
+INFO 2026-03-16 18:24:50,543 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:24:52,864 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 12080
+INFO 2026-03-16 18:24:52,930 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:30:47,748 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10166
+INFO 2026-03-16 18:30:47,816 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:33:06,189 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:33:07,496 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:33:43,105 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:33:44,202 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:34:06,592 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:34:07,695 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:34:08,780 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 16564
+INFO 2026-03-16 18:34:08,847 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:35:46,178 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:35:47,466 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:35:56,830 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:35:58,347 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:35:58,648 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 18429
+INFO 2026-03-16 18:35:58,714 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:36:22,261 basehttp "GET /admin/repair_tracker/devicemodel/add/?_to_field=id&_popup=1 HTTP/1.1" 200 4447
+INFO 2026-03-16 18:36:22,321 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:36:46,180 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:36:47,427 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:36:47,772 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 18429
+INFO 2026-03-16 18:36:47,825 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:37:44,409 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 11446
+INFO 2026-03-16 18:37:44,484 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:37:45,692 basehttp "GET /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 200 10611
+INFO 2026-03-16 18:37:45,755 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:01,802 basehttp "POST /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:38:01,922 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 11983
+INFO 2026-03-16 18:38:01,988 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:03,947 basehttp "GET /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 200 10611
+INFO 2026-03-16 18:38:04,012 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:21,478 basehttp "POST /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:38:21,581 basehttp "GET /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 200 10884
+INFO 2026-03-16 18:38:21,642 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:30,734 basehttp "POST /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:38:30,857 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 12624
+INFO 2026-03-16 18:38:30,924 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:32,578 basehttp "GET /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 200 10611
+INFO 2026-03-16 18:38:32,642 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:38:39,135 basehttp "POST /admin/repair_tracker/devicemodel/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 18:38:39,261 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 12962
+INFO 2026-03-16 18:38:39,329 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:40:44,067 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 12080
+INFO 2026-03-16 18:40:44,131 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:43:31,612 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 12080
+INFO 2026-03-16 18:43:31,692 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:43:38,798 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 19192
+INFO 2026-03-16 18:43:38,862 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:55:37,849 basehttp "GET /admin/repair_tracker/consentrecord/ HTTP/1.1" 200 11637
+INFO 2026-03-16 18:55:38,125 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:55:38,652 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10833
+INFO 2026-03-16 18:55:38,721 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:55:40,035 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 18627
+INFO 2026-03-16 18:55:40,102 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:56:50,216 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:56:51,534 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 18:56:51,799 log Internal Server Error: /admin/repair_tracker/classroomdevices/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 809, in get_form
+    return modelform_factory(self.model, **defaults)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 642, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/forms/models.py", line 321, in __new__
+    raise FieldError(message)
+django.core.exceptions.FieldError: Unknown field(s) (classroom_device_serial_numberclassroom) specified for ClassroomDevices
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1886, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1782, in _changeform_view
+    ModelForm = self.get_form(
+                ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 811, in get_form
+    raise FieldError(
+django.core.exceptions.FieldError: Unknown field(s) (classroom_device_serial_numberclassroom) specified for ClassroomDevices. Check fields/fieldsets/exclude attributes of class ClassroomDevice.
+ERROR 2026-03-16 18:56:51,808 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 500 129015
+INFO 2026-03-16 18:57:05,950 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:57:06,913 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:57:07,448 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 18627
+INFO 2026-03-16 18:57:07,502 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 18:58:04,785 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 18:58:06,313 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:58:45,129 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:58:46,301 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:59:13,687 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 18:59:14,789 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 18:59:19,523 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 19294
+INFO 2026-03-16 18:59:19,582 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+ERROR 2026-03-16 19:00:21,262 log Internal Server Error: /admin/repair_tracker/classroomdevices/add/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.errors.NotNullViolation: null value in column "classroom_device_checkout" of relation "repair_tracker_classroomdevices" violates not-null constraint
+DETAIL:  Failing row contains (1, 1, 3, 28718317, 9LFMZD3, null, null, 1, Yee).
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 688, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/cache.py", line 62, in _wrapper_view_func
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/sites.py", line 242, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1886, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/decorators.py", line 134, in _wrapper_view
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1747, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1798, in _changeform_view
+    self.save_model(request, new_object, form, not add)
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/admin/options.py", line 1227, in save_model
+    obj.save()
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1810, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 102, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/usr/local/lib/python3.11/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: null value in column "classroom_device_checkout" of relation "repair_tracker_classroomdevices" violates not-null constraint
+DETAIL:  Failing row contains (1, 1, 3, 28718317, 9LFMZD3, null, null, 1, Yee).
+
+ERROR 2026-03-16 19:00:21,275 basehttp "POST /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 500 185492
+INFO 2026-03-16 19:00:58,443 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 19:00:59,417 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:01:26,371 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 19294
+INFO 2026-03-16 19:01:26,425 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:01:47,310 basehttp "POST /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:01:47,446 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 12570
+INFO 2026-03-16 19:01:47,692 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:02:25,837 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 19:02:27,392 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:02:27,746 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 12531
+INFO 2026-03-16 19:02:27,814 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:02:29,942 basehttp "GET /admin/repair_tracker/classroomdevices/?o=3 HTTP/1.1" 200 12873
+INFO 2026-03-16 19:02:30,007 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:02:30,794 basehttp "GET /admin/repair_tracker/classroomdevices/?o=2.3 HTTP/1.1" 200 13261
+INFO 2026-03-16 19:02:30,862 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:02:45,875 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-16 19:02:47,368 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:02:47,801 basehttp "GET /admin/repair_tracker/classroomdevices/?o=2.3 HTTP/1.1" 200 13133
+INFO 2026-03-16 19:02:47,852 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:03:18,012 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:03:21,000 basehttp "GET /admin/ HTTP/1.1" 200 12866
+INFO 2026-03-16 19:03:23,494 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11439
+INFO 2026-03-16 19:03:23,593 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:03:25,037 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 17162
+INFO 2026-03-16 19:03:25,129 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:04:32,731 basehttp "POST /admin/auth/group/2/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:04:32,852 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11640
+INFO 2026-03-16 19:04:32,932 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:04:34,793 basehttp "GET /admin/auth/group/2/change/ HTTP/1.1" 200 17171
+INFO 2026-03-16 19:04:34,857 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:05:20,041 basehttp "POST /admin/auth/group/2/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:20,160 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11640
+INFO 2026-03-16 19:05:20,243 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:05:24,661 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:24,737 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 19:05:31,267 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:31,411 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:05:32,265 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 19:05:32,344 basehttp "GET /admin/ HTTP/1.1" 200 12336
+INFO 2026-03-16 19:05:42,842 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:42,895 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 19:05:43,919 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 19:05:43,926 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:43,993 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-03-16 19:05:44,117 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2026-03-16 19:05:56,156 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:05:56,271 basehttp "GET /admin/ HTTP/1.1" 200 8225
+INFO 2026-03-16 19:06:03,315 basehttp "GET /admin/repair_tracker/classroom_device_purpose/ HTTP/1.1" 200 9694
+INFO 2026-03-16 19:06:05,381 basehttp "GET /admin/ HTTP/1.1" 200 8225
+INFO 2026-03-16 19:06:07,148 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 10402
+INFO 2026-03-16 19:06:08,592 basehttp "GET /admin/ HTTP/1.1" 200 8225
+INFO 2026-03-16 19:06:12,609 basehttp "GET /admin/repair_tracker/repair/ HTTP/1.1" 200 15827
+INFO 2026-03-16 19:06:12,675 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:06:14,607 basehttp "GET /admin/ HTTP/1.1" 200 8225
+INFO 2026-03-16 19:06:17,164 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:06:17,225 basehttp "GET / HTTP/1.1" 200 5314
+INFO 2026-03-16 19:06:25,492 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-16 19:06:25,601 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:06:26,953 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-16 19:06:27,011 basehttp "GET /admin/ HTTP/1.1" 200 12767
+INFO 2026-03-16 19:06:31,304 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11439
+INFO 2026-03-16 19:06:31,364 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:06:33,825 basehttp "GET /admin/auth/group/1/change/ HTTP/1.1" 200 17022
+INFO 2026-03-16 19:06:33,900 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:07:35,199 basehttp "POST /admin/auth/group/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-16 19:07:35,317 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 11641
+INFO 2026-03-16 19:07:35,401 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:07:39,451 basehttp "GET /admin/repair_tracker/devicemodel/ HTTP/1.1" 200 12729
+INFO 2026-03-16 19:07:39,513 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:07:41,104 basehttp "GET /admin/auth/user/ HTTP/1.1" 200 14849
+INFO 2026-03-16 19:07:41,198 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:07:49,243 basehttp "GET /admin/repair_tracker/consentrecord/ HTTP/1.1" 200 11637
+INFO 2026-03-16 19:07:49,304 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-16 19:08:05,958 basehttp "GET /admin/ HTTP/1.1" 200 12713
+INFO 2026-03-16 19:08:07,745 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:08:10,747 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-16 19:08:10,884 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:08:51,231 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10492
+INFO 2026-03-16 19:09:22,172 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:09:25,260 basehttp "GET /repairs/?search=&status=pending&assigned= HTTP/1.1" 200 7753
+INFO 2026-03-16 19:09:27,080 basehttp "GET /repairs/?search=&status=sent_to_dell&assigned= HTTP/1.1" 200 10492
+INFO 2026-03-16 19:09:28,812 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20160
+INFO 2026-03-16 19:09:34,388 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10492
+INFO 2026-03-16 19:09:36,338 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:09:37,497 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10492
+INFO 2026-03-16 19:09:38,274 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:09:38,965 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10492
+INFO 2026-03-16 19:09:39,871 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:09:43,054 basehttp "GET /repairs/?search=&status=on_site_repair&assigned= HTTP/1.1" 200 7753
+INFO 2026-03-16 19:09:44,646 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:14:23,068 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13028
+INFO 2026-03-16 19:14:25,956 basehttp "GET /repairs/ HTTP/1.1" 200 20160
