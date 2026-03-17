@@ -1,6 +1,0 @@
-WARNING 2026-02-10 15:11:42,653 log Forbidden (CSRF cookie not set.): /admin/login/
-WARNING 2026-02-10 15:16:23,671 log Forbidden (CSRF cookie not set.): /admin/login/
-WARNING 2026-02-10 15:17:53,690 log Forbidden (CSRF cookie not set.): /admin/login/
-WARNING 2026-02-10 15:23:32,077 log Forbidden (CSRF cookie not set.): /admin/login/
-WARNING 2026-02-10 15:26:30,383 log Forbidden (CSRF cookie not set.): /admin/login/
-WARNING 2026-02-10 15:30:04,865 log Forbidden (CSRF cookie not set.): /admin/login/
