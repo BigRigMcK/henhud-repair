@@ -46,12 +46,56 @@
     </div>
 </div>
 {% endif %}
+
+
+
+
+<!-- Status & Device Informaiton -->
+    <div class="row g-2">
+
+
+        <!-- Status & Assignment Section -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Status & Assignment</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form.status.label_tag }}
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="text-danger">{{ form.status.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.assigned_to.label_tag }}
+                            {{ form.assigned_to }}
+                            {% if form.assigned_to.errors %}
+                                <div class="text-danger">{{ form.assigned_to.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.loaner.label_tag }}
+                            {{ form.loaner }}
+                            {% if form.loaner.errors %}
+                                <div class="text-danger">{{ form.loaner.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+
+
+       
         <!-- Device Information Section -->
-        <div class="card mb-3">
-            <div class="card-header">Device Information</div>
-            <div class="card-body">
-                <div class="row">
-                    
+        <div class="col-md-6"> 
+            <div class="card mb-3">
+                <div class="card-header">Device Information</div>
+                <div class="card-body">
+                <div class="row">                    
                     <div class="col-md-4 mb-3">
                         <div class="form-group">
                             {{ form.device_name.label_tag }}
@@ -87,9 +131,12 @@
                         </div>
                     </div>                            
                 </div>
+                </div>
             </div>
         </div>
+    </div>
         
+    
         <!-- Student Information Section (conditional) -->
         {% if form.student_name %}
         <div class="card mb-3">
@@ -177,8 +224,8 @@
             <div class="card-body">
                 <div class="row">                
                     <div class="col-md-6">
-                    <p><strong> Sent: </strong> {{form.sent_to_dell_check}}</p>
-                    <p><strong> Dell Service Number: </strong> {{form.dell_service_number}}</p>
+                    <p><strong> Sent to Dell (Y/N) : </strong> {{form.sent_to_dell_check}}</p>
+                    <p><strong> Dell Service Number : </strong> {{form.dell_service_number}}</p>
                     <strong>{{form.submitted_under.label_tag}}</strong> {{form.submitted_under}}
                     
                     </div>
@@ -190,35 +237,7 @@
 
 
         
-        <!-- Status & Assignment Section -->
-        <div class="card mb-3">
-            <div class="card-header">Status & Assignment</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        {{ form.status.label_tag }}
-                        {{ form.status }}
-                        {% if form.status.errors %}
-                            <div class="text-danger">{{ form.status.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form.assigned_to.label_tag }}
-                        {{ form.assigned_to }}
-                        {% if form.assigned_to.errors %}
-                            <div class="text-danger">{{ form.assigned_to.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form.loaner.label_tag }}
-                        {{ form.loaner }}
-                        {% if form.loaner.errors %}
-                            <div class="text-danger">{{ form.loaner.errors }}</div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <!-- Set up Dell Form Informaiton-->
         <!-- Privacy & Compliance Section -->
         <div class="card mb-3">

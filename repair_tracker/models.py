@@ -64,7 +64,7 @@ class Repair(models.Model):
         ('returned_from_dell', 'Returned From Dell'),
         ('fixed_by_tech', 'Fixed By Tech'),
         ('returned', 'Returned to Student'),
-        ('completed', 'Completed'),
+        ('tech_completed', 'Tech Completed'),
         ('vineetha_completed', 'Vineetha Completed'),
     ], default='pending')
 

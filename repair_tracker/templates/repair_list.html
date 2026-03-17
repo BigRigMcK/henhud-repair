@@ -14,8 +14,8 @@
         <li class="nav-item">
             <a class="nav-link {% if not status_filter %}active{% endif %}" 
                href="{% url 'repair_list' %}">
-                All Repairs
-                <span class="badge bg-secondary">{{ total_count }}</span>
+                Current Repairs
+                <span class="badge bg-secondary">{{ current_count }}</span>
             </a>
         </li>
         <li class="nav-item">
@@ -40,6 +40,13 @@
                href="{% url 'repair_list' %}?status=completed">
                 Completed
                 <span class="badge bg-success">{{ completed_count }}</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if status_filter == '' %}active{% endif %}" 
+               href="{% url 'repair_list' %}?status=">
+                Total Repairs
+                <span class="badge bg-secondary">{{ total_count }}</span>
             </a>
         </li>
     </ul>
@@ -91,7 +98,22 @@
                         <tr>
                             <th>ID</th>
                             <th>Device Name</th>
-                            <th>Serial/DAM ID</th>
+                            <th>
+                                {% if sort_by == 'device_serial' %}
+                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=-device_serial">
+                                        Serial/DAM ID ▲
+                                    </a>
+                                {% elif sort_by == '-device_serial' %}
+                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
+                                        Serial/DAM ID ▼
+                                    </a>
+                                {% else %}
+                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
+                                        Serial/DAM ID
+                                    </a>
+                                {% endif %}
+                            </th>
+                            <!--<th>Serial/DAM ID</th>-->
                             {% if can_view_student_info %}
                             <th>Student</th>
                             {% endif %}

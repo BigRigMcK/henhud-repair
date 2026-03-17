@@ -96,12 +96,15 @@ def repair_list(request):
     repairs = Repair.objects.all().select_related('assigned_to', 'loaner', 'created_by')
     
     # Get filter parameters
-    status_filter = request.GET.get('status', '')
+    status_filter = request.GET.get('status', 'exclude_completed')
     search_query = request.GET.get('search', '')
     assigned_filter = request.GET.get('assigned', '')
+    sort_by = request.GET.get('sort', '-created_at')  # default sort
     
     # Apply status filter
-    if status_filter:
+    if status_filter == 'exclude_completed':
+        repairs = repairs.exclude(status__in=['completed', 'vineetha_completed'])
+    elif status_filter:
         repairs = repairs.filter(status=status_filter)
     
     # Apply search filter
@@ -119,17 +122,21 @@ def repair_list(request):
         repairs = repairs.filter(assigned_to=request.user)
     
     # Order by most recent
-    repairs = repairs.order_by('-created_at')
-    
+    VALID_SORTS = ['device_serial', '-device_serial', 'created_at', '-created_at']
+    if sort_by not in VALID_SORTS:
+        sort_by = '-created_at'
+    repairs = repairs.order_by(sort_by)
+
     # Get counts for badges
-    total_count = Repair.objects.count()
+    current_count = Repair.objects.exclude(status__in=['completed', 'vineetha_completed']).count()
     sent_to_dell_count = Repair.objects.filter(status='sent_to_dell').count()
     in_progress_count = Repair.objects.filter(
         status__in=['sent_to_dell', 'on_site_repair', 'awaiting_parts', 'returned_from_dell']
     ).count()
     completed_count = Repair.objects.filter(
-        status__in=['fixed_by_tech', 'returned']
+        status__in=['completed', 'vineetha_completed']
     ).count()
+    total_count = Repair.objects.count()
     
     # Pagination
     paginator = Paginator(repairs, 25)  # Show 25 repairs per page
@@ -147,10 +154,16 @@ def repair_list(request):
         'search_query': search_query,
         'assigned_filter': assigned_filter,
         'can_view_student_info': can_view_student_info,
-        'total_count': total_count,
+        'current_count': current_count,
         'sent_to_dell_count': sent_to_dell_count,
         'in_progress_count': in_progress_count,
         'completed_count': completed_count,
+        'total_count' : total_count,
+        'sort_by' : sort_by,
     }
     
     return render(request, 'repair_list.html', context)
+
+
+def video_page(request):
+    return render(request, 'videos/test_video.html')

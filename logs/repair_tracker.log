@@ -5226,3 +5226,330 @@ INFO 2026-03-16 19:09:43,054 basehttp "GET /repairs/?search=&status=on_site_repa
 INFO 2026-03-16 19:09:44,646 basehttp "GET /repairs/ HTTP/1.1" 200 20160
 INFO 2026-03-16 19:14:23,068 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13028
 INFO 2026-03-16 19:14:25,956 basehttp "GET /repairs/ HTTP/1.1" 200 20160
+INFO 2026-03-16 19:18:05,490 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:18:06,552 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:18:48,022 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:18:48,937 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:18:49,439 basehttp "GET /repairs/ HTTP/1.1" 200 15309
+INFO 2026-03-16 19:18:51,877 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13028
+INFO 2026-03-16 19:18:52,701 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10492
+INFO 2026-03-16 19:18:53,315 basehttp "GET /repairs/ HTTP/1.1" 200 15309
+INFO 2026-03-16 19:18:55,799 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20160
+INFO 2026-03-16 19:18:57,369 basehttp "GET /repairs/ HTTP/1.1" 200 15309
+INFO 2026-03-16 19:21:49,376 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:21:50,915 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:21:58,065 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:21:58,982 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 19:22:00,624 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 152, in repair_list
+    'total_count': total_count,
+                   ^^^^^^^^^^^
+NameError: name 'total_count' is not defined
+ERROR 2026-03-16 19:22:00,631 basehttp "GET /repairs/ HTTP/1.1" 500 67588
+ERROR 2026-03-16 19:22:15,233 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 152, in repair_list
+    'total_count': total_count,
+                   ^^^^^^^^^^^
+NameError: name 'total_count' is not defined
+ERROR 2026-03-16 19:22:15,239 basehttp "GET /repairs/ HTTP/1.1" 500 67588
+INFO 2026-03-16 19:22:46,863 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:22:48,388 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:22:48,769 basehttp "GET /repairs/ HTTP/1.1" 200 15313
+INFO 2026-03-16 19:22:53,154 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20164
+INFO 2026-03-16 19:23:20,051 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:23:21,268 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:23:48,833 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:23:50,210 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 19:23:50,510 log Internal Server Error: /repairs/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapper_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 156, in repair_list
+    'total_count' : total_count,
+                    ^^^^^^^^^^^
+NameError: name 'total_count' is not defined
+ERROR 2026-03-16 19:23:50,515 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 500 67903
+INFO 2026-03-16 19:24:13,727 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:24:14,861 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:24:15,111 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20164
+INFO 2026-03-16 19:24:17,370 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10496
+INFO 2026-03-16 19:24:18,127 basehttp "GET /repairs/ HTTP/1.1" 200 15313
+INFO 2026-03-16 19:24:56,154 basehttp "GET /repairs/ HTTP/1.1" 200 15528
+INFO 2026-03-16 19:25:02,567 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:04,054 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:06,027 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:23,058 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13248
+INFO 2026-03-16 19:25:26,141 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:45,678 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13248
+INFO 2026-03-16 19:25:46,272 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:47,271 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13248
+INFO 2026-03-16 19:25:47,732 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:25:51,816 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20386
+INFO 2026-03-16 19:26:24,008 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20386
+INFO 2026-03-16 19:26:26,998 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10712
+INFO 2026-03-16 19:26:27,902 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:26:28,980 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:26:29,559 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:26:30,088 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:27:13,802 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:27:15,270 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:27:16,402 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13248
+INFO 2026-03-16 19:27:17,180 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:27:18,056 basehttp "GET /repairs/ HTTP/1.1" 200 15529
+INFO 2026-03-16 19:27:37,744 basehttp "GET /repairs/ HTTP/1.1" 200 15540
+INFO 2026-03-16 19:27:38,649 basehttp "GET /repairs/?status=all HTTP/1.1" 200 7982
+INFO 2026-03-16 19:27:40,426 basehttp "GET /repairs/ HTTP/1.1" 200 15540
+INFO 2026-03-16 19:27:41,905 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10723
+INFO 2026-03-16 19:27:42,721 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13259
+INFO 2026-03-16 19:27:43,631 basehttp "GET /repairs/?status=all HTTP/1.1" 200 7982
+INFO 2026-03-16 19:27:49,760 basehttp "GET /repairs/?status=all HTTP/1.1" 200 7979
+INFO 2026-03-16 19:27:51,212 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:27:53,502 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:27:54,677 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:27:55,320 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:27:55,669 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:27:56,715 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:28:00,075 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:28:08,731 basehttp "GET /repairs/?status= HTTP/1.1" 200 20388
+INFO 2026-03-16 19:28:17,845 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:28:19,053 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10720
+INFO 2026-03-16 19:28:20,107 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:28:20,805 basehttp "GET /repairs/?status= HTTP/1.1" 200 20394
+INFO 2026-03-16 19:28:24,558 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:28:26,090 basehttp "GET /repairs/?status= HTTP/1.1" 200 20394
+INFO 2026-03-16 19:29:02,887 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:29:10,316 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:29:13,071 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10720
+INFO 2026-03-16 19:29:14,408 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:30:01,997 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:30:04,233 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:30:04,990 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:30:05,680 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:30:21,805 basehttp "GET /repairs/?status= HTTP/1.1" 200 20394
+INFO 2026-03-16 19:30:22,915 basehttp "GET /repairs/ HTTP/1.1" 200 15537
+INFO 2026-03-16 19:30:24,121 basehttp "GET /repairs/?status= HTTP/1.1" 200 20394
+INFO 2026-03-16 19:31:21,938 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:31:22,762 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 10720
+INFO 2026-03-16 19:31:23,626 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:31:24,459 basehttp "GET /repairs/?status= HTTP/1.1" 200 20394
+INFO 2026-03-16 19:31:25,230 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:31:47,793 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-16 19:31:49,132 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:32:05,681 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13256
+INFO 2026-03-16 19:38:35,747 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:38:36,953 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:38:40,904 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13593
+INFO 2026-03-16 19:38:42,511 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 13598
+INFO 2026-03-16 19:38:44,468 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=-device_serial HTTP/1.1" 200 13597
+INFO 2026-03-16 19:38:45,336 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 13598
+INFO 2026-03-16 19:38:46,123 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=-device_serial HTTP/1.1" 200 13597
+INFO 2026-03-16 19:38:46,771 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 13598
+INFO 2026-03-16 19:38:47,309 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=-device_serial HTTP/1.1" 200 13597
+INFO 2026-03-16 19:38:47,875 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 13598
+INFO 2026-03-16 19:38:48,813 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=-device_serial HTTP/1.1" 200 13597
+INFO 2026-03-16 19:38:49,414 basehttp "GET /repairs/?status=completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 13598
+INFO 2026-03-16 19:38:50,475 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:38:51,504 basehttp "GET /repairs/?status= HTTP/1.1" 200 20722
+INFO 2026-03-16 19:38:52,791 basehttp "GET /repairs/?status=&search=&assigned=&sort=device_serial HTTP/1.1" 200 20727
+INFO 2026-03-16 19:38:53,908 basehttp "GET /repairs/?status=&search=&assigned=&sort=-device_serial HTTP/1.1" 200 20726
+INFO 2026-03-16 19:38:55,425 basehttp "GET /repairs/?status=&search=&assigned=&sort=device_serial HTTP/1.1" 200 20727
+INFO 2026-03-16 19:39:12,980 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:39:15,122 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:39:16,350 basehttp "GET /repairs/create/ HTTP/1.1" 200 15606
+INFO 2026-03-16 19:40:03,088 basehttp "GET /repairs/create/ HTTP/1.1" 200 15616
+INFO 2026-03-16 19:40:16,769 basehttp "GET /repairs/create/ HTTP/1.1" 200 15620
+INFO 2026-03-16 19:40:25,222 basehttp "GET /repairs/create/ HTTP/1.1" 200 15622
+INFO 2026-03-16 19:41:00,693 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:41:02,539 basehttp "GET /repairs/4/ HTTP/1.1" 200 7707
+INFO 2026-03-16 19:41:02,606 basehttp "GET /static/green_checkmark.png HTTP/1.1" 200 646514
+INFO 2026-03-16 19:41:08,554 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:41:12,683 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:41:14,539 basehttp "GET /repairs/4/ HTTP/1.1" 200 7707
+INFO 2026-03-16 19:41:55,753 basehttp "GET /repairs/4/ HTTP/1.1" 200 7851
+INFO 2026-03-16 19:42:10,909 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15765
+INFO 2026-03-16 19:43:45,443 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15840
+INFO 2026-03-16 19:44:03,888 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15876
+INFO 2026-03-16 19:44:12,242 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:44:19,974 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:44:34,007 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:44:38,957 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:44:51,006 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:44:56,811 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:45:06,084 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15887
+INFO 2026-03-16 19:45:57,683 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15893
+INFO 2026-03-16 19:46:43,289 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 15907
+INFO 2026-03-16 19:47:07,304 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 16000
+INFO 2026-03-16 19:48:00,586 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 16051
+INFO 2026-03-16 19:48:58,273 basehttp "GET / HTTP/1.1" 200 4424
+INFO 2026-03-16 19:49:02,276 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:49:04,675 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:49:05,651 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 11060
+INFO 2026-03-16 19:49:06,839 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13593
+INFO 2026-03-16 19:49:07,814 basehttp "GET /repairs/?status=sent_to_dell HTTP/1.1" 200 11060
+INFO 2026-03-16 19:49:17,433 basehttp "GET /repairs/?status=completed HTTP/1.1" 200 13593
+INFO 2026-03-16 19:49:20,117 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 19:57:15,293 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 19:57:16,561 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 19:58:05,417 autoreload /app/repair_tracker/urls.py changed, reloading.
+INFO 2026-03-16 19:58:06,961 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 20:04:28,257 basehttp "GET /repairs/ HTTP/1.1" 200 15882
+INFO 2026-03-16 20:05:28,645 basehttp "GET /repairs/ HTTP/1.1" 200 15973
+WARNING 2026-03-16 20:05:29,710 log Not Found: /videos/test_video
+WARNING 2026-03-16 20:05:29,711 basehttp "GET /videos/test_video HTTP/1.1" 404 4051
+WARNING 2026-03-16 20:05:44,597 log Not Found: /videos/test_video
+WARNING 2026-03-16 20:05:44,598 basehttp "GET /videos/test_video HTTP/1.1" 404 4051
+ERROR 2026-03-16 20:05:46,693 log Internal Server Error: /videos/test
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 169, in video_page
+    return render(request, 'test_video.hmtl')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: test_video.hmtl
+ERROR 2026-03-16 20:05:46,696 basehttp "GET /videos/test HTTP/1.1" 500 73911
+INFO 2026-03-16 20:06:02,248 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 20:06:03,330 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 20:06:04,705 log Internal Server Error: /videos/test
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 169, in video_page
+    return render(request, 'videos/test_video.hmtl')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: videos/test_video.hmtl
+ERROR 2026-03-16 20:06:04,707 basehttp "GET /videos/test HTTP/1.1" 500 74188
+INFO 2026-03-16 20:06:51,154 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 20:06:52,270 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 20:07:05,849 log Internal Server Error: /videos/test
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 169, in video_page
+    return render(request, 'videos/test_video.hmtl')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: videos/test_video.hmtl
+ERROR 2026-03-16 20:07:05,850 basehttp "GET /videos/test HTTP/1.1" 500 74188
+INFO 2026-03-16 20:07:58,858 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 20:08:00,750 log Internal Server Error: /videos/test
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 169, in video_page
+    return render(request, 'videos/test_video.hmtl')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: videos/test_video.hmtl
+ERROR 2026-03-16 20:08:00,752 basehttp "GET /videos/test HTTP/1.1" 500 74188
+INFO 2026-03-16 20:08:03,772 basehttp "GET / HTTP/1.1" 200 4509
+INFO 2026-03-16 20:08:10,372 autoreload /app/repair_tracker/urls.py changed, reloading.
+INFO 2026-03-16 20:08:11,874 autoreload Watching for file changes with StatReloader
+ERROR 2026-03-16 20:08:23,923 log Internal Server Error: /videos/test
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/repair_tracker/views.py", line 169, in video_page
+    return render(request, 'videos/test_video.hmtl')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: videos/test_video.hmtl
+ERROR 2026-03-16 20:08:23,924 basehttp "GET /videos/test HTTP/1.1" 500 74051
+INFO 2026-03-16 20:08:51,713 autoreload /app/repair_tracker/views.py changed, reloading.
+INFO 2026-03-16 20:08:52,861 autoreload Watching for file changes with StatReloader
+INFO 2026-03-16 20:08:53,305 basehttp "GET /videos/test HTTP/1.1" 200 4757
+WARNING 2026-03-16 20:08:56,381 log Not Found: /favicon.ico
+WARNING 2026-03-16 20:08:56,382 basehttp "GET /favicon.ico HTTP/1.1" 404 4033
+INFO 2026-03-16 20:09:10,879 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-16 20:09:12,928 basehttp "GET / HTTP/1.1" 200 4509
+INFO 2026-03-16 20:09:13,754 basehttp "GET /videos/test HTTP/1.1" 200 4757
+WARNING 2026-03-16 20:09:14,643 log Not Found: /favicon.ico
+WARNING 2026-03-16 20:09:14,644 basehttp "GET /favicon.ico HTTP/1.1" 404 4033
+INFO 2026-03-16 20:09:39,628 basehttp "GET / HTTP/1.1" 200 4509
+INFO 2026-03-17 11:45:39,376 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 11:49:40,453 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 11:50:04,678 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 11:50:10,676 basehttp "GET /videos/test HTTP/1.1" 200 4757

@@ -67,7 +67,7 @@
     
     <!-- Student Information (conditional) -->
     <div class="col-md-4">
-    {% if is_technician %}
+    {% if is_technician or can_view_student_info %}
         <div class="card mb-4">
             <div class="card-header">Student Information</div>
             <div class="card-body">

@@ -1,0 +1,8 @@
+.env
+static/
+node_modules/
+dist/
+build/
+venv/
+target/
+__pycache__/
