@@ -6,3 +6,8 @@ build/
 venv/
 target/
 __pycache__/
+logs\
+/logs
+mediafiles/
+logs/
+logs/repair_tracker.log

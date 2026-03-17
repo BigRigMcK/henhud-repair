@@ -1,5 +1,5 @@
 from django import forms
-from .models import Repair
+from .models import Repair, Video
 
 class RepairForm(forms.ModelForm):
     class Meta:
@@ -64,3 +64,9 @@ class RepairForm(forms.ModelForm):
             del self.fields['vineetha_checked']
             del self.fields['vineetha_closed']
             del self.fields['vineetha_repair_comments']
+
+
+class VideoUploadForm(forms.ModelForm):
+    class Meta:
+        model = Video
+        fields = ['title', 'description', 'video_file']

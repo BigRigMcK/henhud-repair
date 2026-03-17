@@ -11,7 +11,11 @@ urlpatterns = [
     path('repairs/create/', views.create_repair, name='create_repair'),
     path('repairs/<int:pk>/', views.repair_detail, name='repair_detail'),
     path('repairs/<int:pk>/edit/', views.edit_repair, name='edit_repair'),
-    path('videos/test', views.video_page, name='test_Video')
+    path('videos/test', views.video_page, name='test_Video'),
+    path('videos/test', views.video_page, name='IT_Tool_Video'),
+    path('videos/', views.video_list, name='video_list'),
+	path('videos/upload/', views.video_upload, name='video_upload'),
+	path('videos/<int:pk>/', views.video_detail, name='video_detail'),
 	
 
 ]
