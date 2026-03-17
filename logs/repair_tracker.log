@@ -5553,3 +5553,134 @@ INFO 2026-03-17 11:45:39,376 basehttp "GET /videos/test HTTP/1.1" 200 4757
 INFO 2026-03-17 11:49:40,453 basehttp "GET /videos/test HTTP/1.1" 200 4757
 INFO 2026-03-17 11:50:04,678 basehttp "GET /videos/test HTTP/1.1" 200 4757
 INFO 2026-03-17 11:50:10,676 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 12:00:14,473 basehttp "GET / HTTP/1.1" 200 5399
+INFO 2026-03-17 15:17:22,065 basehttp "GET / HTTP/1.1" 200 5399
+INFO 2026-03-17 15:18:32,550 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 15:18:32,659 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-17 15:18:32,776 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-03-17 15:18:32,884 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 958
+INFO 2026-03-17 15:18:40,858 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-03-17 15:18:40,979 basehttp "GET /admin/ HTTP/1.1" 200 12336
+INFO 2026-03-17 15:18:45,964 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 11357
+INFO 2026-03-17 15:18:48,056 basehttp "GET /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 200 17334
+INFO 2026-03-17 15:18:48,122 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 15:19:12,700 basehttp "POST /admin/repair_tracker/classroomdevices/add/ HTTP/1.1" 302 0
+INFO 2026-03-17 15:19:12,833 basehttp "GET /admin/repair_tracker/classroomdevices/ HTTP/1.1" 200 12037
+INFO 2026-03-17 15:34:24,603 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 15:34:27,240 basehttp "GET / HTTP/1.1" 200 4506
+INFO 2026-03-17 15:34:28,335 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 15:35:48,607 autoreload /app/henhud_repair_tracker/settings.py changed, reloading.
+INFO 2026-03-17 15:35:49,768 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:36:12,299 autoreload /app/henhud_repair_tracker/settings.py changed, reloading.
+INFO 2026-03-17 15:36:13,654 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:36:36,204 autoreload /app/henhud_repair_tracker/settings.py changed, reloading.
+INFO 2026-03-17 15:36:37,327 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:36:56,779 autoreload /app/henhud_repair_tracker/urls.py changed, reloading.
+INFO 2026-03-17 15:36:58,285 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:37:21,603 autoreload /app/repair_tracker/models.py changed, reloading.
+INFO 2026-03-17 15:37:22,685 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:38:21,362 autoreload /app/henhud_repair_tracker/urls.py changed, reloading.
+INFO 2026-03-17 15:38:22,501 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 15:39:04,319 autoreload /app/repair_tracker/urls.py changed, reloading.
+INFO 2026-03-17 15:39:05,817 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 16:37:59,220 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-17 16:38:00,311 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 16:41:25,533 autoreload /app/repair_tracker/forms.py changed, reloading.
+INFO 2026-03-17 16:41:26,487 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 16:41:37,758 basehttp "GET / HTTP/1.1" 200 5399
+INFO 2026-03-17 16:41:40,137 basehttp "GET /videos/test HTTP/1.1" 200 4757
+INFO 2026-03-17 16:41:42,058 basehttp "GET / HTTP/1.1" 200 5399
+INFO 2026-03-17 16:42:02,939 basehttp "GET / HTTP/1.1" 200 5394
+INFO 2026-03-17 16:42:03,951 basehttp "GET /videos HTTP/1.1" 301 0
+INFO 2026-03-17 16:42:04,046 basehttp "GET /videos/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:42:04,156 basehttp "GET /accounts/login/?next=/videos/ HTTP/1.1" 200 882
+INFO 2026-03-17 16:42:13,762 basehttp "POST /accounts/login/?next=/videos/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:42:13,842 basehttp "GET /videos/ HTTP/1.1" 200 4779
+INFO 2026-03-17 16:42:15,770 basehttp "GET /videos/upload/ HTTP/1.1" 200 5379
+INFO 2026-03-17 16:43:32,243 basehttp "POST /videos/upload/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:43:32,344 basehttp "GET /videos/ HTTP/1.1" 200 5545
+INFO 2026-03-17 16:43:47,691 basehttp "GET /videos/1/ HTTP/1.1" 200 4916
+WARNING 2026-03-17 16:43:50,043 log Not Found: /favicon.ico
+WARNING 2026-03-17 16:43:50,044 basehttp "GET /favicon.ico HTTP/1.1" 404 4884
+INFO 2026-03-17 16:43:58,246 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:44:03,582 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 16:44:03,748 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 16:44:11,157 basehttp "GET / HTTP/1.1" 200 4501
+INFO 2026-03-17 16:44:12,290 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 16:44:13,352 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:44:13,412 basehttp "GET / HTTP/1.1" 200 5394
+INFO 2026-03-17 16:44:14,825 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 16:44:14,834 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:44:14,901 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4181
+INFO 2026-03-17 16:44:23,187 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:44:23,290 basehttp "GET /admin/ HTTP/1.1" 200 12713
+INFO 2026-03-17 16:44:38,081 basehttp "GET / HTTP/1.1" 200 4504
+INFO 2026-03-17 16:44:39,111 basehttp "GET /videos HTTP/1.1" 301 0
+INFO 2026-03-17 16:44:39,164 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:45:19,677 basehttp "GET / HTTP/1.1" 200 4504
+INFO 2026-03-17 16:45:20,490 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:45:22,524 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 16:45:22,591 basehttp "GET /admin/ HTTP/1.1" 200 12713
+INFO 2026-03-17 16:45:23,469 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-17 16:45:23,523 basehttp "GET / HTTP/1.1" 200 5394
+INFO 2026-03-17 16:45:28,896 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-17 16:45:29,025 basehttp "GET /repairs/ HTTP/1.1" 200 14716
+INFO 2026-03-17 16:45:32,660 basehttp "GET /videos HTTP/1.1" 301 0
+INFO 2026-03-17 16:45:32,716 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:45:34,314 basehttp "GET /videos/1/ HTTP/1.1" 200 4916
+INFO 2026-03-17 16:45:36,397 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:46:03,766 basehttp "GET / HTTP/1.1" 200 4506
+INFO 2026-03-17 16:49:37,978 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 16:49:39,122 basehttp "GET / HTTP/1.1" 200 4506
+INFO 2026-03-17 16:49:39,836 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-17 16:49:40,133 basehttp "GET /repairs/ HTTP/1.1" 200 14716
+INFO 2026-03-17 16:49:43,788 basehttp "GET /repairs/?status=exclude_completed&search=&assigned=&sort=device_serial HTTP/1.1" 200 14721
+INFO 2026-03-17 16:49:45,235 basehttp "GET /repairs/?status=exclude_completed&search=&assigned=&sort=-device_serial HTTP/1.1" 200 14720
+INFO 2026-03-17 16:49:47,604 basehttp "GET /repairs/2/ HTTP/1.1" 200 7859
+INFO 2026-03-17 16:49:57,422 basehttp "GET / HTTP/1.1" 200 4506
+INFO 2026-03-17 16:49:58,906 basehttp "GET / HTTP/1.1" 200 4506
+INFO 2026-03-17 17:52:09,803 basehttp "GET /videos/ HTTP/1.1" 302 0
+INFO 2026-03-17 17:52:09,880 basehttp "GET /accounts/login/?next=/videos/ HTTP/1.1" 200 882
+INFO 2026-03-17 17:52:17,361 basehttp "POST /accounts/login/?next=/videos/ HTTP/1.1" 302 0
+INFO 2026-03-17 17:52:17,451 basehttp "GET /videos/ HTTP/1.1" 200 5083
+INFO 2026-03-17 17:52:20,776 basehttp "GET /repairs HTTP/1.1" 301 0
+INFO 2026-03-17 17:52:20,922 basehttp "GET /repairs/ HTTP/1.1" 200 15962
+INFO 2026-03-17 18:03:07,610 basehttp "GET /repairs/?search=J&status=&assigned= HTTP/1.1" 200 11128
+INFO 2026-03-17 18:03:13,280 basehttp "GET /repairs/?search=Josh&status=&assigned= HTTP/1.1" 200 8069
+INFO 2026-03-17 18:03:19,389 basehttp "GET /repairs/?search=&status=&assigned= HTTP/1.1" 200 20802
+INFO 2026-03-17 18:03:26,510 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-17 18:03:26,755 basehttp "GET / HTTP/1.1" 200 5394
+INFO 2026-03-17 18:03:53,643 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-17 18:03:53,775 basehttp "GET /repairs/ HTTP/1.1" 200 14716
+INFO 2026-03-17 18:03:57,008 basehttp "GET /repairs/4/ HTTP/1.1" 200 7787
+INFO 2026-03-17 18:03:58,549 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 12427
+INFO 2026-03-17 18:06:25,020 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 12459
+INFO 2026-03-17 18:06:45,411 basehttp "GET /repairs/4/edit/ HTTP/1.1" 200 12462
+INFO 2026-03-17 18:08:41,693 basehttp "GET / HTTP/1.1" 200 4541
+INFO 2026-03-17 18:10:00,731 basehttp "GET / HTTP/1.1" 200 4545
+INFO 2026-03-17 18:10:12,593 basehttp "GET / HTTP/1.1" 200 4545
+INFO 2026-03-17 18:10:37,692 basehttp "GET / HTTP/1.1" 200 4543
+INFO 2026-03-17 18:10:48,911 basehttp "GET / HTTP/1.1" 200 4545
+INFO 2026-03-17 18:11:39,369 basehttp "GET / HTTP/1.1" 200 4566
+INFO 2026-03-17 18:12:02,864 basehttp "GET / HTTP/1.1" 200 4566
+INFO 2026-03-17 18:12:09,947 basehttp "GET / HTTP/1.1" 200 4566
+INFO 2026-03-17 18:12:10,926 basehttp "GET / HTTP/1.1" 200 4566
+INFO 2026-03-17 18:12:13,802 basehttp "GET / HTTP/1.1" 200 4566
+INFO 2026-03-17 18:12:32,779 basehttp "GET / HTTP/1.1" 200 4572
+INFO 2026-03-17 18:12:39,233 basehttp "GET / HTTP/1.1" 200 4572
+INFO 2026-03-17 18:13:12,090 basehttp "GET / HTTP/1.1" 200 4561
+INFO 2026-03-17 18:13:16,744 basehttp "GET / HTTP/1.1" 200 4561
+INFO 2026-03-17 18:13:57,242 basehttp "GET / HTTP/1.1" 200 4570
+INFO 2026-03-17 18:14:05,857 basehttp "GET / HTTP/1.1" 200 4562
+INFO 2026-03-17 18:14:17,105 basehttp "GET /accounts/logout/ HTTP/1.1" 302 0
+INFO 2026-03-17 18:14:17,158 basehttp "GET / HTTP/1.1" 200 5428
+INFO 2026-03-17 18:14:21,850 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-17 18:14:21,973 basehttp "GET /repairs/ HTTP/1.1" 200 16013
+INFO 2026-03-17 18:14:23,841 basehttp "GET / HTTP/1.1" 200 4552
+INFO 2026-03-17 18:14:26,336 basehttp "GET /videos HTTP/1.1" 301 0
+INFO 2026-03-17 18:14:26,387 basehttp "GET /videos/ HTTP/1.1" 200 5134
+INFO 2026-03-17 18:14:29,777 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 18:14:30,097 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 18:14:33,207 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 18:14:36,123 basehttp "GET / HTTP/1.1" 200 4552
+INFO 2026-03-17 18:14:39,097 basehttp "GET /videos/ HTTP/1.1" 200 5134
