@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
-from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, DeviceModel
+from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, DeviceModel, Video
 from .audit_models import AuditLog, ConsentRecord
 
 # ============================================================================
@@ -727,3 +727,15 @@ class Device_Model(admin.ModelAdmin):
         'Model_Type'
     ]
     list_filter = [ 'Model_Type']
+
+
+@admin.register(Video)
+class Video(admin.ModelAdmin):
+    list_display = [
+        'title',    
+    'description', 
+    'video_file',
+    'uploaded_by', 
+    'uploaded_at',
+    ]
+    list_filter = [ 'title', 'uploaded_at']

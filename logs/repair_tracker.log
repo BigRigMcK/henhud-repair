@@ -5684,3 +5684,29 @@ INFO 2026-03-17 18:14:30,097 basehttp "GET /admin/ HTTP/1.1" 200 12673
 INFO 2026-03-17 18:14:33,207 basehttp "GET /admin/ HTTP/1.1" 200 12673
 INFO 2026-03-17 18:14:36,123 basehttp "GET / HTTP/1.1" 200 4552
 INFO 2026-03-17 18:14:39,097 basehttp "GET /videos/ HTTP/1.1" 200 5134
+INFO 2026-03-17 18:23:04,913 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-17 18:23:06,021 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 18:23:24,330 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-17 18:23:25,227 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 18:23:38,482 autoreload /app/repair_tracker/admin.py changed, reloading.
+INFO 2026-03-17 18:23:39,647 autoreload Watching for file changes with StatReloader
+INFO 2026-03-17 18:23:40,954 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 18:23:41,095 basehttp "GET /admin/ HTTP/1.1" 200 12673
+INFO 2026-03-17 18:23:50,032 basehttp "POST /admin/logout/ HTTP/1.1" 302 0
+INFO 2026-03-17 18:23:50,305 basehttp "GET / HTTP/1.1" 200 5428
+INFO 2026-03-17 18:23:54,803 basehttp "POST / HTTP/1.1" 302 0
+INFO 2026-03-17 18:23:54,930 basehttp "GET /repairs/ HTTP/1.1" 200 16016
+INFO 2026-03-17 18:23:55,759 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2026-03-17 18:23:55,833 basehttp "GET /admin/ HTTP/1.1" 200 13152
+INFO 2026-03-17 18:23:57,781 basehttp "GET /admin/repair_tracker/video/ HTTP/1.1" 200 13356
+INFO 2026-03-17 18:23:57,855 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 18:24:01,296 basehttp "GET /admin/repair_tracker/video/1/change/ HTTP/1.1" 200 14675
+INFO 2026-03-17 18:24:01,376 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 18:24:22,724 basehttp "GET /admin/repair_tracker/repair/ HTTP/1.1" 200 17139
+INFO 2026-03-17 18:24:22,810 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 18:24:34,082 basehttp "GET /admin/repair_tracker/longtermloaner/ HTTP/1.1" 200 19494
+INFO 2026-03-17 18:24:34,146 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 18:24:36,179 basehttp "GET /admin/repair_tracker/loanercheckouthistory/ HTTP/1.1" 200 17479
+INFO 2026-03-17 18:24:36,246 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343
+INFO 2026-03-17 18:24:38,836 basehttp "GET /admin/repair_tracker/video/ HTTP/1.1" 200 13356
+INFO 2026-03-17 18:24:38,903 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3343

@@ -11,3 +11,5 @@ logs\
 mediafiles/
 logs/
 logs/repair_tracker.log
+/logs
+logs/repair_tracker.log
