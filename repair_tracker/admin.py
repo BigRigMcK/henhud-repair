@@ -6,6 +6,12 @@ from django.urls import reverse
 from django.utils import timezone
 from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, DeviceModel, Video
 from .audit_models import AuditLog, ConsentRecord
+from .csv_export_actions import (
+      export_repairs_csv,
+      export_loaners_csv,
+      export_checkout_history_csv,
+      export_audit_log_csv,
+  )
 
 # ============================================================================
 # REPAIR ADMIN
@@ -13,6 +19,7 @@ from .audit_models import AuditLog, ConsentRecord
 
 @admin.register(Repair)
 class RepairAdmin(admin.ModelAdmin):
+    actions = ['export_repairs_csv']
     list_display = [
         'id', 
         'device_name', 
@@ -79,7 +86,7 @@ class RepairAdmin(admin.ModelAdmin):
             object_repr=obj.get_audit_representation(),
             changes=changes if changes else None,
         )
-
+    export_repairs_csv = export_repairs_csv
 
 # ============================================================================
 # LOANER CHECKOUT HISTORY INLINE
@@ -90,6 +97,7 @@ class LoanerCheckoutHistoryInline(admin.TabularInline):
     Shows checkout history directly on the loaner admin page.
     Allows viewing past checkouts without leaving the loaner page.
     """
+    actions = ['checkout_device_action', 'return_device_action', 'export_loaners_csv']
     model = LoanerCheckoutHistory
     extra = 0
     can_delete = False
@@ -140,6 +148,7 @@ class LoanerCheckoutHistoryInline(admin.TabularInline):
     def has_add_permission(self, request, obj=None):
         """Don't allow manual creation - use checkout/return methods"""
         return False
+    export_loaners_csv = export_loaners_csv
 
 
 # ============================================================================
@@ -148,6 +157,7 @@ class LoanerCheckoutHistoryInline(admin.TabularInline):
 
 @admin.register(LongTermLoaner)
 class LongTermLoanerAdmin(admin.ModelAdmin):
+    
     list_display = [
         'device_name_display',
         'device_DAM_ID', 
@@ -204,6 +214,7 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
     inlines = [LoanerCheckoutHistoryInline]
     
     actions = ['checkout_device_action', 'return_device_action']
+     
     
     # ========================================================================
     # CUSTOM LIST DISPLAY METHODS
@@ -510,6 +521,7 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
     Standalone admin for viewing complete checkout history across all devices.
     Useful for reports and audits.
     """
+    actions = ['export_checkout_history_csv']
     list_display = [
         'id',
         'loaner_link',
@@ -619,6 +631,8 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
         """Only superusers can delete history"""
         return request.user.is_superuser
 
+    export_checkout_history_csv = export_checkout_history_csv
+
 
 # ============================================================================
 # AUDIT LOG ADMIN
@@ -626,6 +640,7 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(AuditLog)
 class AuditLogAdmin(admin.ModelAdmin):
+    actions = ['export_audit_log_csv'] 
     list_display = [
         'timestamp',
         'username',
@@ -658,6 +673,7 @@ class AuditLogAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+    export_audit_log_csv = export_audit_log_csv
 
 # ============================================================================
 # CONSENT RECORD ADMIN
