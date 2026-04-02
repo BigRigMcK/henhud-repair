@@ -25,16 +25,11 @@
                 <span class="badge bg-warning text-dark">{{ sent_to_dell_count }}</span>
             </a>
         </li>
+
         <li class="nav-item">
+        </li>
             
-        <!-- 
-        <li class="nav-item">
-            <a class="nav-link {% if status_filter == 'in_progress' %}active{% endif %}" 
-               href="{% url 'repair_list' %}?status=in_progress">
-                In Progress
-                <span class="badge bg-info">{{ in_progress_count }}</span>
-            </a>
-        </li> -->
+        
         <li class="nav-item">
             <a class="nav-link {% if status_filter == 'completed' %}active{% endif %}" 
                href="{% url 'repair_list' %}?status=completed">
@@ -141,7 +136,8 @@
                             </td>
                             {% if can_view_student_info %}
                             <td>
-                                <small><!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets-->
+                                {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
+                                <small>
                                     <a href="">{{ repair.student_name|default:"N/A" }} </a><br>
                                     <span class="text-muted">{{ repair.get_student_grade_display }}</span>
                                 </small>

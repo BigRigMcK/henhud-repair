@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
-from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, DeviceModel, Video
+from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, Device_Model, Video
 from .audit_models import AuditLog, ConsentRecord
 from .csv_export_actions import (
       export_repairs_csv,
@@ -737,7 +737,7 @@ class ClassroomDevicePurpose(admin.ModelAdmin):
         'name'
         ]
 
-@admin.register(DeviceModel)
+@admin.register(Device_Model)
 class Device_Model(admin.ModelAdmin):
     list_display = [
         'Model_Type'

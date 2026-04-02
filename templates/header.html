@@ -42,18 +42,30 @@
             <li><a class="dropdown-item" href="/repairs/create">Create New Ticket</a></li>
           </ul>
         </li>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle text-white px-2" id="ticketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Inventory
+          </a>
+          <ul class="dropdown-menu shadow" aria-labelledby="ticketsDropdown">
+            <li><a class="dropdown-item" href="inventory/"> Inventory</a></li>
+            <!--<li><a class="dropdown-item" href="/tickets/pending"></a></li>
+            <li><a class="dropdown-item" href="/tickets/closed"></a></li>
+            -->
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/repairs/create">Add New Device</a></li>
+          </ul>
         <li><a href="/videos" class="nav-link px-2 text-white">Videos</a></li>
 
       </ul>
-      <span class="fs-4"> {% if user.is_authenticated %} {{user.username}} &nbsp {%endif%} </span>
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-3" role="search">
+      <span class="fs-4"> {% if user.is_authenticated %} Hi, {{user.username}} &nbsp {%endif%} </span>
+      <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-3" role="search">
         <input type="search"
                class="form-control border-white text-white"
                style="background-color: rgba(255,255,255,0.1);"
                placeholder="Search..."
                aria-label="Search">
       </form>
-
+ -->
       <div class="text-end">
         <a href="/admin" class="btn btn-outline-light">ADMIN ONLY</a>
       </div>

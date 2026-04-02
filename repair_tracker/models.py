@@ -7,7 +7,7 @@ from django_cryptography.fields import encrypt
 
 
 
-class DeviceModel(models.Model):
+class Device_Model(models.Model):
     Model_Type = models.CharField(unique=True)
 
     def __str__(self):
@@ -15,6 +15,12 @@ class DeviceModel(models.Model):
     class Meta:
         verbose_name = "Device Model"
         verbose_name_plural = "Device Models"
+
+# class Device_Current_Status(models.Model):
+
+# class District_Location(models.Model):
+
+# class District_Department(models.Model):
 
 class Repair(models.Model):
     # Device information
@@ -123,13 +129,14 @@ class Repair(models.Model):
         """Safe representation for audit logs (no PII)"""
         return f"Repair #{self.id} - {self.device_name}"
 
-#Repair Ticket Note*
+# class Repair_Notes(modesl.Model):
+#     - repair_pk (ForeignKey)
+#     - device_DAM_ID (ForeignKey - device_DAM_ID)
+#     - created_at (DateTimeField)
+#     - user (ForeignKey - user)
+#     - note (TextField)
 
-# class RepairTicketNote(models.Model):
 
-#     device_name = 
-#     building =
-    
 
 class LongTermLoaner(models.Model):
     """
@@ -424,7 +431,7 @@ class Classroom_Device_Purpose(models.Model):
 class ClassroomDevices(models.Model):
     classroom = models.CharField(blank=True)
     classroom_device_model = models.ForeignKey(
-        DeviceModel,
+        Device_Model,
         on_delete=models.PROTECT,
         related_name='devices'
         )
@@ -457,3 +464,5 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+

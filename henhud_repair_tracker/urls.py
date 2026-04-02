@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
 	path('', include('repair_tracker.urls')),
-    path("accounts/", include("django.contrib.auth.urls")),  # new
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("inventory/", include('Inventory.urls')),  # new
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

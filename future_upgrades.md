@@ -7,10 +7,6 @@ Over All Updates
 
 
 
-
-
-
-
 Repair Form Updates
 
 - Give Choices for Basic Issues
@@ -42,8 +38,6 @@ NEW MODEL: Classroom_Devices
 
 NEW MODEL: Classroom_Purpose
 This is list will be updated through webpage/DJadmin Not through Coding Changes.
-
- - pk
  - purpose
 
 
@@ -54,3 +48,33 @@ Device DAM
 Device SN
 Last Known Location
 Last Policy Sync
+
+
+Complete Inventory Management
+	Device Management:
+	- Asset ID
+	- Asset Name
+	- Serial Number
+	- Current Status(own Model)
+	- Location(own Model Room)
+	- Department(own Model)
+	- Current Asset Type
+	- Asset History (Own Model - Audit must be available)
+	- Capacity/Hard Drive Size
+	- MAC Address*
+	- Manufacture/Make
+	- Model type
+	- Vendor
+	- Notes
+	- Source of Funding
+	- Purchase Value
+
+Audit Reporting:
+	Pull From Device Management
+	Organize by Location Pull Asset ID, Serial Number
+	- Button to Mark as Audited - Checkbox
+	- Save Button for Location - Pulls Date and time for submission to Model
+	- "Audited" {AssetID} "on" {Date} "at" {Time}
+
+*	Use Camera Feature to Scan QR Codes for Asset ID Number- Check box for device it finds * 
+

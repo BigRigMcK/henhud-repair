@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cryptography',
 	'repair_tracker',
+    'Inventory'
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ CSRF_COOKIE_SECURE = False  # Only in production with HTTPS
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'http://10.132.4.144:8000',
+    
     'http://10.132.4.133:8000',
 ]
 
@@ -73,7 +74,7 @@ ROOT_URLCONF = 'henhud_repair_tracker.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'], #os.path.join
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
