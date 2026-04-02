@@ -1,52 +1,58 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from django.urls import reverse
-from django.utils import timezone
-from .models import District_Location, District_Department,District_Device_Inventory, Asset_History
-from repair_tracker.audit_models import AuditLog, ConsentRecord
-from repair_tracker.csv_export_actions import (
-      export_repairs_csv,
-      export_loaners_csv,
-      export_checkout_history_csv,
-      export_audit_log_csv,
-  )
-# Register your models here.
-
-
+from .models import District_Device_Inventory, District_Location, District_Department
+from repair_tracker.audit_models import AuditLog
+from Base_Models.models import Current_Status
 
 @admin.register(District_Device_Inventory)
 class District_Device_InventoryAdmin(admin.ModelAdmin):
-      list_display = [
-      'asset_name',
-      'asset_id',
-      'serial_number',
-      ]
+    list_display = ['asset_name', 'asset_id', 'serial_number']
 
+    def save_model(self, request, obj, form, change):
+        # 1. Initialize variables
+        action = 'UPDATE' if change else 'CREATE'
+        changes = {}
 
+        # 2. Capture changes if this is an update
+        if change:
+            for field in form.changed_data:
+                changes[field] = {
+                    'old': str(form.initial.get(field, '')),
+                    'new': str(form.cleaned_data.get(field, ''))
+                }
 
-      def save_model(self, request, obj, form, change):
-            if not change:
-                  obj.created_by = request.user
-                  action = 'CREATE'
-            else:
-                  action = 'UPDATE'
+        # 3. Save the actual object first
+        super().save_model(request, obj, form, change)
 
-                  changes = {}
-            if change:
-                  for field in form.changed_data:
-                      changes[field] = {
-                          'old': str(form.initial.get(field, '')),
-                          'new': str(form.cleaned_data.get(field, ''))
-                      }
-
-            super().save_model(request, obj, form, change)
-
-            # Log the action
-            AuditLog.objects.create(
+        # 4. Log the action to AuditLog
+        AuditLog.objects.create(
             user=request.user,
             username=request.user.username,
             action=action,
             content_object=obj,
             object_repr=obj.get_audit_representation(),
             changes=changes if changes else None,
-            )
+            ip_address=self.get_client_ip(request),
+            user_agent=request.META.get('HTTP_USER_AGENT', '')[:255]
+        )
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+@admin.register(District_Location)
+class District_LocationAdmin(admin.ModelAdmin):
+    list_display = ['school','room']
+
+
+@admin.register(District_Department)
+class District_DepartmentAdmin(admin.ModelAdmin):
+    list_display = ['department']
+
+
+@admin.register(Current_Status)
+class Device_Current_StatusAdmin(admin.ModelAdmin):
+    list_display = ['Status']

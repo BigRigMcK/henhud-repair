@@ -4,19 +4,30 @@ from django.contrib.auth.models import User
 # Assuming these imports are correct based on your file structure
 from repair_tracker.models import Device_Model
 #from Base_Models.base_models import Current_Status 
+from django.contrib.contenttypes.fields import GenericRelation # Add this
+from repair_tracker.audit_models import AuditLog # Add this
 
 class District_Location(models.Model):
     school = models.CharField(max_length=50)
     room = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name_plural = "District Locations"
+
+    audit_logs = GenericRelation(AuditLog)
     def __str__(self):
         return f"{self.school} - {self.room}"
-
+	
 class District_Department(models.Model):
     department = models.CharField(max_length=100)
 
+    audit_logs = GenericRelation(AuditLog)
+    class Meta:
+        verbose_name_plural = "District Departments"
+
     def __str__(self):
         return self.department
+
 
 class District_Device_Inventory(models.Model):
     asset_name = models.CharField(max_length=50)
@@ -59,12 +70,17 @@ class District_Device_Inventory(models.Model):
     po_order = models.CharField(max_length=50, blank=True, null=True)
     purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
 
+    audit_logs = GenericRelation(AuditLog)
+
     class Meta:
 		#verbose_name = "District Device Inventory"
         verbose_name_plural = "District Device Inventory"
 
     def __str__(self):
         return self.asset_name
+
+    def get_audit_representation(self):
+        return f"Asset: {self.asset_name} (ID: {self.asset_id})"
 
 # Simple Audit Log Model
 class Asset_History(models.Model):

@@ -51,7 +51,7 @@ Last Policy Sync
 
 
 Complete Inventory Management
-	Device Management:
+<!-- 	Device Management:
 	- Asset ID
 	- Asset Name
 	- Serial Number
@@ -67,7 +67,7 @@ Complete Inventory Management
 	- Vendor
 	- Notes
 	- Source of Funding
-	- Purchase Value
+	- Purchase Value -->
 
 Audit Reporting:
 	Pull From Device Management
