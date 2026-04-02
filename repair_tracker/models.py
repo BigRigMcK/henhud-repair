@@ -8,7 +8,7 @@ from django_cryptography.fields import encrypt
 
 
 class Device_Model(models.Model):
-    Model_Type = models.CharField(unique=True)
+    Model_Type = models.CharField(unique=True, max_length=50)
 
     def __str__(self):
         return f"{self.Model_Type}"
@@ -429,13 +429,13 @@ class Classroom_Device_Purpose(models.Model):
 
 
 class ClassroomDevices(models.Model):
-    classroom = models.CharField(blank=True)
-    classroom_device_model = models.ForeignKey(
-        Device_Model,
-        on_delete=models.PROTECT,
-        related_name='devices'
-        )
-    classroom_dam_id = models.CharField(blank=True, null=True)
+    classroom = models.CharField(max_length=50, blank=True)
+    # classroom_device_model = models.ForeignKey(
+    #     Device_Model,
+    #     on_delete=models.PROTECT,
+    #     related_name='devices'
+    #     )
+    classroom_dam_id = models.CharField(max_length=50, blank=True, null=True)
     classroom_device_serial_number = models.CharField(blank=True,null=True)
     classroom_device_checkout = models.DateTimeField(blank=True, null=True)
     classroom_device_checkin = models.DateTimeField(blank=True, null=True)
@@ -444,7 +444,7 @@ class ClassroomDevices(models.Model):
         on_delete=models.PROTECT,  # Prevents deleting a purpose that is in use
         related_name='devices'
         )
-    classroom_teacher = models.CharField(null=True)
+    classroom_teacher = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return f" {self.classroom_device_purpose} - {self.classroom} - {self.classroom_device_serial_number}"

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_cryptography',
 	'repair_tracker',
-    'Inventory'
+    'Inventory',
+    'Base_Models',
 ]
 
 MIDDLEWARE = [

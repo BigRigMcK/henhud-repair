@@ -1,27 +1,74 @@
-# from django.db import models
-# from repair_tracker.models import Device_Model
-# # Create your models here.
-# class District_Location(models.Model):
-# 	School=CharField
-# 	Room=CharField
-# class District_Department(models.Model):
-# 		Department=CharField()
-# class District_Device_Inventory(models.Model):
-# 		Asset Name=CharField(max_lenth=50, null=False, blank=False)
-#     	Asset_ID=IntegerField(max_lenth=10)
-#     	Serial_Number=CharField(max_lenth=30, null=True, blank=True)
-#     	Current_Status=ForeignKey(Device_Model)
-#     	Location=ForeignKey(District_Location)
-#     	Department=ForeignKey(District_Department)
-#     	Current_Asset_Type=ForeignKey(Device_Model)
-#     	Asset_History=(Own Model - Audit must be available for Changes Made)
-#     	Capacity_Hard Drive_Size=(CharField)
-#     	MAC Address=(CharField)
-#     	Manufacture_Make=(CharField)
-#     	Model_type=(CharField)
-#    		Vendor=(CharField)
-#     	Notes=(TextField)
-#     	Source_of_Funding=(CharField)
-#     	PO_Order=(CharField)
-#     	Purchase Value (CharField) (default="$")
+from django.db import models
+from django.core.validators import MinValueValidator
+from django.contrib.auth.models import User
+# Assuming these imports are correct based on your file structure
+from repair_tracker.models import Device_Model
+#from Base_Models.base_models import Current_Status 
 
+class District_Location(models.Model):
+    school = models.CharField(max_length=50)
+    room = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.school} - {self.room}"
+
+class District_Department(models.Model):
+    department = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.department
+
+class District_Device_Inventory(models.Model):
+    asset_name = models.CharField(max_length=50)
+    asset_id = models.IntegerField(validators=[MinValueValidator(0)])
+    serial_number = models.CharField(max_length=30, null=True, blank=True)
+    
+    # Corrected ForeignKey logic
+    # Note: default=1 assumes a record with ID 1 exists. 
+    # If not sure, use on_delete=models.SET_NULL and null=True.
+    current_status = models.TextField()#models.ForeignKey(
+    #     Current_Status, 
+    #     on_delete=models.SET_DEFAULT,
+    #     default=1 
+    # )
+    location = models.ForeignKey(
+        District_Location, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True
+    )
+    department = models.ForeignKey(
+        District_Department, 
+        on_delete=models.PROTECT
+    )
+    
+    # Use underscores for variable names, never spaces
+    mac_address = models.CharField(max_length=20, blank=True, null=True)
+    capacity_hard_drive_size = models.CharField(max_length=50, blank=True)
+    manufacture_make = models.CharField(max_length=50, blank=True, null=True)
+    
+    model_type = models.ForeignKey(
+        'repair_tracker.Device_Model', 
+        on_delete=models.SET_DEFAULT,
+        default=1 
+    )
+    
+    vendor = models.CharField(max_length=100, null=True, blank=True)
+    notes = models.TextField(blank=True)
+    source_of_funding = models.CharField(max_length=50, blank=True, null=True)
+    po_order = models.CharField(max_length=50, blank=True, null=True)
+    purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
+
+    class Meta:
+		#verbose_name = "District Device Inventory"
+        verbose_name_plural = "District Device Inventory"
+
+    def __str__(self):
+        return self.asset_name
+
+# Simple Audit Log Model
+class Asset_History(models.Model):
+    asset = models.ForeignKey(District_Device_Inventory, on_delete=models.CASCADE, related_name='history')
+    change_date = models.DateTimeField(auto_now_add=True)
+    description = models.TextField()
+    changed_by = models.CharField(max_length=100) # Or link to User model
