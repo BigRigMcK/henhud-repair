@@ -16,16 +16,16 @@ from .models import District_Device_Inventory
 
 		
 
-class Device_Inventory_Form(fomrs.ModelForm):
-	class Meta:
-		model:
-		fields={
+# class Device_Inventory_Form(forms.ModelForm):
+# 	class Meta:
+# 		model= 
+# 		fields={
 
-		}
-		widgets ={
+# 		}
+# 		widgets ={
 
-		}
+# 		}
 
-	def __init__(self, *args, user=None, **kwargs):
-		super().__init__(*args, **kwargs)
+# 	def __init__(self, *args, user=None, **kwargs):
+# 		super().__init__(*args, **kwargs)
 

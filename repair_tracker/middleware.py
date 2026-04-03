@@ -4,7 +4,7 @@ from .audit_models import AuditLog
 class AuditMiddleware(MiddlewareMixin):
     """Log all requests to sensitive areas for FERPA compliance"""
     
-    SENSITIVE_PATHS = ['repair', 'loaner', 'student', 'tickets']
+    SENSITIVE_PATHS = ['repair', 'loaner', 'student', 'tickets', 'inventory']
     
     def process_request(self, request):
         if request.user.is_authenticated:

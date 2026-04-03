@@ -13,4 +13,4 @@ from django.contrib import messages
 def inventory_home(request):
 
 
-	return render(request, 'inventory_base.html' , {})
+	return render(request, 'inventory_home.html' , {})
