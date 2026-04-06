@@ -37,16 +37,16 @@ class District_Device_Inventory(models.Model):
     # Corrected ForeignKey logic
     # Note: default=1 assumes a record with ID 1 exists. 
     # If not sure, use on_delete=models.SET_NULL and null=True.
-    current_status = models.TextField()#models.ForeignKey(
-    #     Current_Status, 
-    #     on_delete=models.SET_DEFAULT,
-    #     default=1 
-    # )
+    current_status = models.ForeignKey(
+        'Base_Models.Current_Status', 
+        on_delete=models.SET_DEFAULT,
+        default=1 
+    )
     location = models.ForeignKey(
         District_Location, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True
+        on_delete=models.PROTECT,
+
+    
     )
     department = models.ForeignKey(
         District_Department, 

@@ -66,7 +66,7 @@ class District_Device_InventoryAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Asset Identification', {
-            'fields': ('asset_name', 'asset_id', 'serial_number', 'model_type'),
+            'fields': ('asset_name', 'asset_id', 'serial_number', 'model_type','current_status'),
         }),
         ('Location & Department', {
             'fields': ('location', 'department'),
@@ -75,7 +75,7 @@ class District_Device_InventoryAdmin(admin.ModelAdmin):
             'fields': ('mac_address', 'capacity_hard_drive_size', 'manufacture_make', 'vendor'),
         }),
         ('Financial & Administrative', {
-            'fields': ('source_of_funding', 'po_order', 'purchase_value', 'current_status'),
+            'fields': ('source_of_funding', 'po_order', 'purchase_value',),
         }),
         ('Student Info (RESTRICTED - ACCESS LOGGED)', {
             'fields': ('student_id_number',),
