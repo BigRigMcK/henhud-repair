@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Add New Device{% endblock %}
+
+{% block content %}
+    <!-- Add forms or lists for repairs in future expansions -->
+<div style="text-align: center; margin-top: 50px;">
+
+    <h1> Add A New Device To The Fleet </h1>
+
+
+    <div class="container" style="text-align:center;">
+
+            <form method="post" navalidate>
+            {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong> Please Fix The Following Errors:</strong>
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li> <strong> {{ field.label }}: </strong> {{ error }} </li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }} </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+<!-- Device Information -->
+    <div class="row g-2">
+        <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header">Device Information & Status</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{form.asset_name.label_tag}}
+                                    {{form.asset_name}}
+                                </div>
+                                <div class="col-md-3">
+                                    {{form.asset_id.label_tag}}
+                                    {{form.asset_id}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{form.serial_number.label_tag}}
+                                    {{form.serial_number}}
+                                </div>
+                                    {{form.model_type.label_tag}}
+                                    {{form.model_type}}
+                                <div class="col-md-3">
+                                    {{form.current_status.label_tag}}
+                                    {{form.current_status}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Device Location -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Status & Assignment</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                        {{form.location}}
+                        {{form.department}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                <!-- Student Information -->
+        <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header">Status & Assignment</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{form.student_id_number}}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Extra Device Informatino -->
+        <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header">Status & Assignment</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{form.manufacture_make}} 
+                                    {{form.vendor}}
+                                    {{form.po_order}}
+                                    {{form.purchase_value}}
+                                    {{form.source_of_funding}} 
+                                    {{form.mac_address}}
+                                    {{form.capacity_hard_drive_size}}
+                                    {{form.notes}}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}
