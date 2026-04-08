@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 	path('', include('repair_tracker.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("inventory/", include('Inventory.urls')),  # new
+    path("inventory/", include('Inventory.urls')),
+    path("audit/", include('Audit_Inventory.urls')),  # new
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

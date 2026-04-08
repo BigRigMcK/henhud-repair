@@ -45,7 +45,7 @@ class District_Device_Inventory(models.Model):
     location = models.ForeignKey(
         District_Location, 
         on_delete=models.PROTECT,
-
+        
     
     )
     department = models.ForeignKey(
@@ -79,8 +79,8 @@ class District_Device_Inventory(models.Model):
     def __str__(self):
         return self.asset_name
 
-    def get_audit_representation(self):
-        return f"Asset: {self.asset_name} (ID: {self.asset_id})"
+def get_audit_representation(self):
+        return f"{self.asset_name} (Asset ID: {self.asset_id} | Serial: {self.serial_number or 'N/A'})"
 
 # Simple Audit Log Model
 class Asset_History(models.Model):

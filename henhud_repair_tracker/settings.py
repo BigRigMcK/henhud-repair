@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 	'repair_tracker',
     'Inventory',
     'Base_Models',
+    'Audit_Inventory',
 ]
 
 MIDDLEWARE = [
