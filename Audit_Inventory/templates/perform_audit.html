@@ -8,6 +8,18 @@
 
     <form method="post">
     {% csrf_token %}
+    {% if no_devices %}
+        <div class="alert alert-warning">
+            <h4>No Devices Found</h4>
+            <p>There are no devices registered for this location. 
+               Please add devices to the inventory before performing an audit.</p>
+            <a href="{% url 'add_device' %}" class="btn btn-primary">Add Device</a>
+        </div>
+    {% else %}
+        {% for audit_device in audit_devices %}
+            <!-- your normal audit table here -->
+        {% endfor %}
+    {% endif %}
     {% for ad in audit_devices %}
         <div class="device-row">
             <input type="checkbox" 
