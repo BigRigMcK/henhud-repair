@@ -26,7 +26,7 @@
                    name="found_{{ ad.device.id }}" 
                    id="dev_{{ ad.device.id }}"
                    {% if ad.found %}checked{% endif %}>
-            <label for="dev_{{ ad.device.id }}">{{ ad.device }}</label>
+            <label for="dev_{{ ad.device.id }}">{{ ad.device }} : {{ad.device.location}}</label>
         </div>
     {% endfor %}
     <button type="submit">Save Audit Results</button>

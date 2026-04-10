@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 from repair_tracker.audit_models import AuditLog
+from Inventory.models import *
 from .models import District_Device_Audit, Individual_AuditDevice
 # Register your models here.
 @admin.register(District_Device_Audit)

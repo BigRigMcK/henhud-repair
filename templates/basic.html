@@ -5,18 +5,4 @@
 {% block content %}
     <!-- Add forms or lists for repairs in future expansions -->
 
-
-    <form method="post">
-    {% csrf_token %}
-    {% for ad in audit_devices %}
-        <div class="device-row">
-            <input type="checkbox" 
-                   name="found_{{ ad.device.id }}" 
-                   id="dev_{{ ad.device.id }}"
-                   {% if ad.found %}checked{% endif %}>
-            <label for="dev_{{ ad.device.id }}">{{ ad.device }}</label>
-        </div>
-    {% endfor %}
-    <button type="submit">Save Audit Results</button>
-</form>
 {% endblock %}

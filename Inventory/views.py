@@ -21,10 +21,10 @@ def inventory_add_new_device(request):
 
 	if request.method == 'POST':
 		form = District_Device_Inventory_Form(request.POST, user=request.user)
-		if fomr.is_valid():
+		if form.is_valid():
 			device = form.save(commit=False)
-			devcie.created_by = request.user
-			devcie.save()
+			device.created_by = request.user
+			device.save()
 			messages.success(request, 'Device was Added to System Successfully!!')
 			return redirect('inventory_detail', pk=device.pk)
 		else:

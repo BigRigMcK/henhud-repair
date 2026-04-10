@@ -5,6 +5,8 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
 from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, Device_Model, Video
+
+#down models 
 from .audit_models import AuditLog, ConsentRecord
 from .csv_export_actions import (
       export_repairs_csv,
