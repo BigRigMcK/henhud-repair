@@ -7,14 +7,6 @@ from django_cryptography.fields import encrypt
 
 
 
-class Device_Model(models.Model):
-    Model_Type = models.CharField(unique=True, max_length=50)
-
-    def __str__(self):
-        return f"{self.Model_Type}"
-    class Meta:
-        verbose_name = "Device Model"
-        verbose_name_plural = "Device Models"
 
 # class Device_Current_Status(models.Model):
 
@@ -46,7 +38,7 @@ class Repair(models.Model):
 
     #Dell Repair information
     sent_to_dell_check = models.BooleanField(default=False)
-    dell_service_number = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
+    dell_service_number = models.CharField(max_length=50, null=True, blank=True)
     submitted_under = models.CharField(max_length=200, null=True, blank=True, default="techbilling@henhudschools.org")
 
 
@@ -415,54 +407,3 @@ class LoanerCheckoutHistory(models.Model):
     def get_audit_representation(self):
         """Safe representation for audit logs (no PII)"""
         return f"Checkout #{self.id} - {self.loaner.device_name}"
-
-class Classroom_Device_Purpose(models.Model):
-        name = models.CharField(max_length=100, unique=True)
-
-        def __str__(self):
-            return self.name
-        class Meta:
-            verbose_name = "Classroom Device Purpose"
-            verbose_name_plural = "Classroom Device Purposes"
-            ordering = ['name']
-
-
-
-class ClassroomDevices(models.Model):
-    classroom = models.CharField(max_length=50, blank=True)
-    # classroom_device_model = models.ForeignKey(
-    #     Device_Model,
-    #     on_delete=models.PROTECT,
-    #     related_name='devices'
-    #     )
-    classroom_dam_id = models.CharField(max_length=50, blank=True, null=True)
-    classroom_device_serial_number = models.CharField(blank=True,null=True)
-    classroom_device_checkout = models.DateTimeField(blank=True, null=True)
-    classroom_device_checkin = models.DateTimeField(blank=True, null=True)
-    classroom_device_purpose = models.ForeignKey(
-        Classroom_Device_Purpose,
-        on_delete=models.PROTECT,  # Prevents deleting a purpose that is in use
-        related_name='devices'
-        )
-    classroom_teacher = models.CharField(max_length=50, null=True)
-    
-    def __str__(self):
-        return f" {self.classroom_device_purpose} - {self.classroom} - {self.classroom_device_serial_number}"
-
-    class Meta:
-        verbose_name = "Classroom Device"
-        verbose_name_plural = "Classroom Devices"
-        ordering = ['classroom_device_purpose']
-
-
-class Video(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    video_file = models.FileField(upload_to='videos/')
-    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-

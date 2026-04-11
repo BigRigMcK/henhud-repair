@@ -2,10 +2,17 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 # Assuming these imports are correct based on your file structure
-from repair_tracker.models import Device_Model
 #from Base_Models.base_models import Current_Status 
 from django.contrib.contenttypes.fields import GenericRelation # Add this
 from repair_tracker.audit_models import AuditLog # Add this
+class Device_Model(models.Model):
+    Model_Type = models.CharField(unique=True, max_length=50)
+
+    def __str__(self):
+        return f"{self.Model_Type}"
+    class Meta:
+        verbose_name = "Device Model"
+        verbose_name_plural = "Device Models"
 
 class District_Location(models.Model):
     school = models.CharField(max_length=50)
@@ -40,7 +47,8 @@ class District_Device_Inventory(models.Model):
     current_status = models.ForeignKey(
         'Base_Models.Current_Status', 
         on_delete=models.SET_DEFAULT,
-        default=1 
+        default=0,
+        null=True, 
     )
     location = models.ForeignKey(
         District_Location, 
@@ -60,9 +68,9 @@ class District_Device_Inventory(models.Model):
     manufacture_make = models.CharField(max_length=50, blank=True, null=True)
     
     model_type = models.ForeignKey(
-        'repair_tracker.Device_Model', 
+        Device_Model, 
         on_delete=models.SET_DEFAULT,
-        default=1 
+        null=True, 
     )
     
     vendor = models.CharField(max_length=100, null=True, blank=True)
@@ -89,3 +97,55 @@ class Asset_History(models.Model):
     change_date = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     changed_by = models.CharField(max_length=100) # Or link to User model
+
+
+class Classroom_Device_Purpose(models.Model):
+        name = models.CharField(max_length=100, unique=True)
+
+        def __str__(self):
+            return self.name
+        class Meta:
+            verbose_name = "Classroom Device Purpose"
+            verbose_name_plural = "Classroom Device Purposes"
+            ordering = ['name']
+
+
+
+class ClassroomDevices(models.Model):
+    classroom = models.CharField(max_length=50, blank=True)
+    # classroom_device_model = models.ForeignKey(
+    #     Device_Model,
+    #     on_delete=models.PROTECT,
+    #     related_name='devices'
+    #     )
+    classroom_dam_id = models.CharField(max_length=50, blank=True, null=True)
+    classroom_device_serial_number = models.CharField(blank=True,null=True)
+    classroom_device_checkout = models.DateTimeField(blank=True, null=True)
+    classroom_device_checkin = models.DateTimeField(blank=True, null=True)
+    classroom_device_purpose = models.ForeignKey(
+        Classroom_Device_Purpose,
+        on_delete=models.PROTECT,  # Prevents deleting a purpose that is in use
+        related_name='devices'
+        )
+    classroom_teacher = models.CharField(max_length=50, null=True)
+    
+    def __str__(self):
+        return f" {self.classroom_device_purpose} - {self.classroom} - {self.classroom_device_serial_number}"
+
+    class Meta:
+        verbose_name = "Classroom Device"
+        verbose_name_plural = "Classroom Devices"
+        ordering = ['classroom_device_purpose']
+
+
+class Video(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    video_file = models.FileField(upload_to='videos/')
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+

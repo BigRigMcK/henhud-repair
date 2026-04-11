@@ -35,7 +35,7 @@ def inventory_add_new_device(request):
 	return render(request, 'inventory_add_new_device.html', {'form':form, 'action':'Create'})
 
 @login_required
-def edit_inventory(request, pk, asset_id):
+def edit_inventory(request, pk):
 	device = get_object_or_404(District_Device_Inventory, pk=pk, asset_id=asset_id)
 
 	if request.method == 'POST':

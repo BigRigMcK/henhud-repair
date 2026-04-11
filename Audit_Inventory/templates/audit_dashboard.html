@@ -4,13 +4,25 @@
 
 {% block content %}
     <!-- Add forms or lists for repairs in future expansions -->
+    <center> Please Select Your School </center>
 
+ {% if locations %}
+    <div class="card" style="margin:40px">
+        <div class="card-body" style="margin:20px">
+            <div class="table-responsive">
+                <table class ="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>School</th>
+                            <th>Room </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for location in locations %}
+                        <tr>
+                            <td><a href="{% url 'perform_audit' location.pk %}"> {{ location }} </a></td>
 
-
-<div class="text-align:center">Audit Reports</div>
-
-        <center><a href="1/"> Middle School </a>
-
-
+                        {% endfor %}
+{% endif %}
 
 {% endblock %}

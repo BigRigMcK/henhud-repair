@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
-from .models import Repair, LongTermLoaner, LoanerCheckoutHistory, ClassroomDevices, Classroom_Device_Purpose, Device_Model, Video
+from .models import Repair, LongTermLoaner, LoanerCheckoutHistory
 
 #down models 
 from .audit_models import AuditLog, ConsentRecord
@@ -712,48 +712,3 @@ class ConsentRecordAdmin(admin.ModelAdmin):
         }),
     )
 
-# ==================================================
-# Classroom Device Purposes
-# ===================================================
-
-@admin.register(ClassroomDevices)
-class ClassroomDevice(admin.ModelAdmin):
-    list_display = [
-        'classroom', 'classroom_dam_id','classroom_device_serial_number'
-    ]
-    list_filter = [ 'classroom', 'classroom_dam_id','classroom_device_serial_number']
-
-    fieldsets = (
-
-        ('Classroom Device', { 
-            'fields': ( 'classroom_device_purpose','classroom_dam_id',
-                 'classroom_device_serial_number','classroom','classroom_teacher', 'classroom_device_model',)}),
-        ('Device Check', {
-            'fields': ('classroom_device_checkout', 'classroom_device_checkin')
-            })
-        )
-
-@admin.register(Classroom_Device_Purpose)
-class ClassroomDevicePurpose(admin.ModelAdmin):
-    list_display = [
-        'name'
-        ]
-
-@admin.register(Device_Model)
-class Device_Model(admin.ModelAdmin):
-    list_display = [
-        'Model_Type'
-    ]
-    list_filter = [ 'Model_Type']
-
-
-@admin.register(Video)
-class Video(admin.ModelAdmin):
-    list_display = [
-        'title',    
-    'description', 
-    'video_file',
-    'uploaded_by', 
-    'uploaded_at',
-    ]
-    list_filter = [ 'title', 'uploaded_at']

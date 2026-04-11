@@ -8,7 +8,7 @@ from .models import (
     District_Device_Inventory,
     District_Location,
     District_Department,
-    Asset_History,
+    Asset_History, ClassroomDevices, Classroom_Device_Purpose, Device_Model,
 )
 from .csv_export_actions import export_inventory_csv, export_asset_history_csv
 
@@ -238,3 +238,39 @@ class District_DepartmentAdmin(admin.ModelAdmin):
 @admin.register(Current_Status)
 class Device_Current_StatusAdmin(admin.ModelAdmin):
     list_display = ['Status']
+
+# ==================================================
+# Classroom Device Purposes
+# ===================================================
+
+@admin.register(ClassroomDevices)
+class ClassroomDevice(admin.ModelAdmin):
+    list_display = [
+        'classroom', 'classroom_dam_id','classroom_device_serial_number'
+    ]
+    list_filter = [ 'classroom', 'classroom_dam_id','classroom_device_serial_number']
+
+    fieldsets = (
+
+        ('Classroom Device', { 
+            'fields': ( 'classroom_device_purpose','classroom_dam_id',
+                 'classroom_device_serial_number','classroom','classroom_teacher',)}),
+        ('Device Check', {
+            'fields': ('classroom_device_checkout', 'classroom_device_checkin')
+            })
+        )
+
+@admin.register(Classroom_Device_Purpose)
+class ClassroomDevicePurpose(admin.ModelAdmin):
+    list_display = [
+        'name'
+        ]
+
+@admin.register(Device_Model)
+class Device_Model(admin.ModelAdmin):
+    list_display = [
+        'Model_Type'
+    ]
+    list_filter = [ 'Model_Type']
+
+

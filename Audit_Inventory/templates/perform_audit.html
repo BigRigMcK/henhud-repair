@@ -1,34 +1,75 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Audit - {{ location }}{% endblock %}
 
 {% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Device Audit: <span class="text-primary">{{ district_location }}</span></h2>
+        <span class="badge bg-secondary">Started: {{ audit.audit_date|date:"M d, Y" }}</span>
+    </div>
 
-
-    <form method="post">
-    {% csrf_token %}
     {% if no_devices %}
-        <div class="alert alert-warning">
-            <h4>No Devices Found</h4>
-            <p>There are no devices registered for this location. 
-               Please add devices to the inventory before performing an audit.</p>
-            <a href="{% url 'add_device' %}" class="btn btn-primary">Add Device</a>
+        <div class="alert alert-warning shadow-sm">
+            <h4 class="alert-heading">No Devices Found</h4>
+            <p>There are no devices registered for <strong>{{ district_location }}</strong>. Please update the inventory before auditing.</p>
+            <hr>
+            <a href="/audit" class="btn btn-warning">Go to Back to Audit</a>
         </div>
     {% else %}
-        {% for audit_device in audit_devices %}
-            <!-- your normal audit table here -->
-        {% endfor %}
+        <form method="post" class="card shadow-sm">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 50px;" class="text-center">Status</th>
+                            <th>Device Tag / Serial</th>
+                            <th>Model</th>
+                            <th>Last Seen</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ad in audit_devices %}
+                        <tr>
+                            <td class="text-center">
+                                <div class="form-check d-flex justify-content-center">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="found_{{ ad.id }}" 
+                                           id="dev_{{ ad.id }}"
+                                           style="transform: scale(1.3);"
+                                           {% if ad.found %}checked{% endif %}>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>{{ ad.device.asset_id|default:"No Tag" }}</strong><br>
+                                <small class="text-muted">{{ ad.device.serial_number }}</small>
+                            </td>
+                            <td>{{ ad.device.model_type }}</td>
+                            <td>
+                                {% if ad.found_at %}
+                                    <small class="text-success">{{ ad.found_at|date:"M d, H:i" }}</small>
+                                {% else %}
+                                    <small class="text-danger italic">Not yet found</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <input type="text" name="notes_{{ ad.id }}" class="form-control form-control-sm" 
+                                       placeholder="Add note..." value="{{ ad.notes|default:'' }}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer bg-white d-flex justify-content-end py-3">
+                <a href="{% url 'audit_dashboard' %}" class="btn btn-outline-secondary me-2">Cancel</a>
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="fas fa-save"></i> Save Audit Progress
+                </button>
+            </div>
+        </form>
     {% endif %}
-    {% for ad in audit_devices %}
-        <div class="device-row">
-            <input type="checkbox" 
-                   name="found_{{ ad.device.id }}" 
-                   id="dev_{{ ad.device.id }}"
-                   {% if ad.found %}checked{% endif %}>
-            <label for="dev_{{ ad.device.id }}">{{ ad.device }} : {{ad.device.location}}</label>
-        </div>
-    {% endfor %}
-    <button type="submit">Save Audit Results</button>
-</form>
+</div>
 {% endblock %}

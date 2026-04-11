@@ -6,5 +6,5 @@ from . import views
 
 urlpatterns = [
 path('<int:location>/', views.perform_audit , name='perform_audit'),
-path('', views.audit_dashboard , name='audit_dashbaord'),
+path('', views.audit_dashboard , name='audit_dashboard'),
 ]

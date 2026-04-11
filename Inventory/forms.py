@@ -59,4 +59,3 @@ class District_Device_Inventory_Form(forms.ModelForm):
 
 # 	def __init__(self, *args, user=None, **kwargs):
 # 		super().__init__(*args, **kwargs)
-
