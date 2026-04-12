@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 #from Base_Models.base_models import Current_Status 
 from django.contrib.contenttypes.fields import GenericRelation # Add this
 from repair_tracker.audit_models import AuditLog # Add this
+from django_cryptography.fields import encrypt
 class Device_Model(models.Model):
     Model_Type = models.CharField(unique=True, max_length=50)
 
@@ -53,13 +54,14 @@ class District_Device_Inventory(models.Model):
     location = models.ForeignKey(
         District_Location, 
         on_delete=models.PROTECT,
-        null=True,
+        null=True
         
     
     )
     department = models.ForeignKey(
         District_Department, 
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True,
     )
     
     # Use underscores for variable names, never spaces
@@ -70,7 +72,9 @@ class District_Device_Inventory(models.Model):
     model_type = models.ForeignKey(
         Device_Model, 
         on_delete=models.SET_DEFAULT,
-        null=True, 
+        null=True,
+        default=0,
+         
     )
     
     vendor = models.CharField(max_length=100, null=True, blank=True)
@@ -79,6 +83,7 @@ class District_Device_Inventory(models.Model):
     po_order = models.CharField(max_length=50, blank=True, null=True)
     purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
     student_id_number = models.IntegerField(blank=True, null=True)
+    student_id_number_encrypted = encrypt(models.CharField(max_length=50, blank=True, null=True, default="$"))
     audit_logs = GenericRelation(AuditLog)
 
     class Meta:

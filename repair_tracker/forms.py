@@ -1,5 +1,5 @@
 from django import forms
-from .models import Repair, Video
+from .models import Repair
 
 class RepairForm(forms.ModelForm):
     class Meta:
@@ -25,10 +25,10 @@ class RepairForm(forms.ModelForm):
                 'rows' : 1,
                 'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
                 }),
-            'dell_service_number' : forms.Textarea(attrs={
-                'class' : 'form-control',
-                'rows' : 1,
-                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
+            'dell_service_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'style': 'width: 300px;',
+                'placeholder': 'e.g. SVC-ABC123',
                 }),
             'issue_description': forms.Textarea(attrs={
                 'class': 'form-control', 
@@ -66,7 +66,3 @@ class RepairForm(forms.ModelForm):
             del self.fields['vineetha_repair_comments']
 
 
-class VideoUploadForm(forms.ModelForm):
-    class Meta:
-        model = Video
-        fields = ['title', 'description', 'video_file']

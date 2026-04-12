@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory List{% endblock %}
+
+{% block content %}
+    <!-- Add forms or lists for repairs in future expansions -->
+
+<div class="container">
+{% if devices %}
+    <div class="card">
+            <h1><center> All Inventory </center></h1>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+
+                            <th> Asset Name </th>
+                            <th> Asset ID </th>
+                            <th> Serial Number </th>
+                            <th> Model Type </th>
+                            <th> Current Status </th>
+                            <th> Location </th>
+                            <th> Department </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for device in devices %}
+                        <tr>
+                            <td><a href="{% url 'inventory_detail' device.pk %}"> {{ device.asset_id }}</a></td>
+
+                            <td> {{device.asset_name}} </td>
+                            <td> {{device.serial_number}} </td>
+                            <td> {{device.model_type}} </td>
+                            <td> {{device.current_status}} </td>
+                            <td> {{device.location}} </td>
+                            <td> {{device.department}} </td>
+                                    
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</div>
+{% endblock %}

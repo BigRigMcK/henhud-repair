@@ -5,7 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .forms import District_Device_Inventory_Form
 from .models import District_Device_Inventory
-
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 # Views
@@ -59,9 +60,30 @@ def edit_inventory(request, pk):
 def inventory_detail(request, pk):
 	device = get_object_or_404(District_Device_Inventory, pk=pk)
 
+
  # Check if user can view student info
     #can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')
     #is_technician = request.user.groups.filter(name="Technicians").exists()
 
 
 	return render(request, 'inventory_device_detail.html', {'device': device})
+
+def inventory_list(request):
+
+	devices = District_Device_Inventory.objects.all()
+
+
+
+	 # Pagination
+	paginator = Paginator(devices, 25)  # Show 25 repairs per page
+	page_number = request.GET.get('page')
+	page_obj = paginator.get_page(page_number)
+
+	context = {
+	  'devices': page_obj,
+	  'page_obj': page_obj,
+	  'is_paginated': page_obj.has_other_pages(),
+	  #'sort_by' : sort_by,
+	}
+
+	return render(request, 'inventory_list.html', context)

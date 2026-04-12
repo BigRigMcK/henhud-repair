@@ -78,7 +78,7 @@ class District_Device_InventoryAdmin(admin.ModelAdmin):
             'fields': ('source_of_funding', 'po_order', 'purchase_value',),
         }),
         ('Student Info (RESTRICTED - ACCESS LOGGED)', {
-            'fields': ('student_id_number',),
+            'fields': ('student_id_number_encrypted',),
             'classes': ('collapse',),
             'description': 'FERPA-protected data. All access is logged.',
         }),
@@ -176,6 +176,7 @@ class AssetHistoryAdmin(admin.ModelAdmin):
 @admin.register(District_Location)
 class District_LocationAdmin(admin.ModelAdmin):
     list_display = ['school', 'room']
+    list_filter = ['school']
     search_fields = ['school', 'room']
 
     def save_model(self, request, obj, form, change):
