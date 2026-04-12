@@ -17,7 +17,7 @@ def home(request):
             # 2. Log the user in
             user = form.get_user()
             login(request, user)
-            return redirect('repairs/') # Refresh to show the logged-in state
+            return redirect('/') # Refresh to show the logged-in state
     else:
         # 3. Just show a blank form for GET requests
         form = AuthenticationForm()

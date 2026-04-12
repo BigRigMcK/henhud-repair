@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">
+  <!-- Background box (warehouse/storage feel) -->
+  <rect x="30" y="40" width="140" height="130" rx="8" fill="#1E40AF" stroke="#1E3A8A" stroke-width="12"/>
+  
+  <!-- Lid / top shelf -->
+  <rect x="25" y="35" width="150" height="18" rx="4" fill="#3B82F6" stroke="#1E40AF" stroke-width="10"/>
+  
+  <!-- Vertical dividers (shelves) -->
+  <rect x="75" y="55" width="8" height="95" rx="2" fill="#DBEAFE"/>
+  <rect x="120" y="55" width="8" height="95" rx="2" fill="#DBEAFE"/>
+  
+  <!-- Horizontal shelves -->
+  <rect x="38" y="85" width="124" height="8" rx="2" fill="#DBEAFE"/>
+  <rect x="38" y="120" width="124" height="8" rx="2" fill="#DBEAFE"/>
+  
+  <!-- Inventory items (boxes) -->
+  <!-- Top left box -->
+  <rect x="42" y="52" width="28" height="28" rx="3" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+  <!-- Top right box -->
+  <rect x="132" y="52" width="28" height="28" rx="3" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+  
+  <!-- Middle left box -->
+  <rect x="42" y="95" width="28" height="20" rx="3" fill="#34D399" stroke="#0F766E" stroke-width="4"/>
+  <!-- Middle right box -->
+  <rect x="132" y="95" width="28" height="20" rx="3" fill="#34D399" stroke="#0F766E" stroke-width="4"/>
+  
+  <!-- Bottom items (stacked) -->
+  <rect x="45" y="135" width="25" height="25" rx="3" fill="#F87171" stroke="#B91C1C" stroke-width="4"/>
+  <rect x="55" y="145" width="25" height="25" rx="3" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+  
+  <!-- Label / tag on the big box -->
+  <rect x="65" y="155" width="70" height="18" rx="2" fill="#F1F5F9"/>
+  <text x="100" y="168" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#1E40AF">INV</text>
+</svg>
