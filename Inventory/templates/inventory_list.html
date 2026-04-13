@@ -6,8 +6,11 @@
     <!-- Add forms or lists for repairs in future expansions -->
 
 <div class="container">
-
+    <div class="container-buttons d-flex justify-content-between">
     <a href="{% url 'home' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back Home </a>
+    <a href="{% url 'inventory_add_new_devcie' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Add New Device </a>
+    </div>
+
 {% if devices %}
     <div class="card">
             <h1><center> All Inventory </center></h1>
@@ -29,9 +32,9 @@
                     <tbody>
                         {% for device in devices %}
                         <tr>
-                            <td><a href="{% url 'inventory_detail' device.pk %}"> {{ device.asset_id }}</a></td>
 
                             <td> {{device.asset_name}} </td>
+                            <td><a href="{% url 'inventory_detail' device.pk %}"> {{ device.asset_id }}</a></td>
                             <td> {{device.serial_number}} </td>
                             <td> {{device.model_type}} </td>
                             <td> {{device.current_status}} </td>

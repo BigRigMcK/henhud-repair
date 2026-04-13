@@ -61,6 +61,26 @@
 
       </ul>
       <span class="fs-4"> {% if user.is_authenticated %} Hi, {{user.username}} &nbsp {%endif%} </span>
+      
+      <!-- Live Inventory Search -->
+      <li class="nav-item" style="position: relative; margin: 10px">
+        <input
+          id="inv-search-input"
+          type="search"
+          class="form-control form-control-sm"
+          placeholder="Search asset ID or serial…"
+          autocomplete="off"
+          style="width: 220px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff;"
+        >
+        <div id="inv-search-dropdown"
+             style="display:none; position:absolute; top:calc(100% + 4px); left:0;
+                    width: 360px; background:#fff; border-radius:6px;
+                    box-shadow: 0 8px 24px rgba(0,0,0,0.18); z-index:9999; overflow:hidden;">
+        </div>
+      </li>
+
+
+
       <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-3" role="search">
         <input type="search"
                class="form-control border-white text-white"

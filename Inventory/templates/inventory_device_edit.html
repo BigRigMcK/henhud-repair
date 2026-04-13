@@ -1,33 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}Inventory Details For {{device.asset_id}} {% endblock %}
-
 {% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
-{% load static %}
-
 <div class="container">
-<div style="margin-left: 50px; margin-right: 50px">
-<!-- Device Header -->
-    <div class="container">
-    <div class="container-buttons d-flex justify-content-between align-items-cente">
-        <a href="{% url 'inventory_list' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back to Inventory List </a>
-        <h1 class="position-absolute start-50 translate-middle-x m-0" > Device #{{ device.asset_id }}</h1>
-        <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary" style="margin:20px;">Edit</a>
-    </div>
-    </div>
+    <h2>{{ action }} Repair</h2>
     
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <!-- Display form-wide errors -->
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Please fix the following errors:</strong>
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
-<!-- Cards -->
+<!-- Status & Device Informaiton -->
+    <!-- Cards -->
 
-<div class="row">
+    <div class="row g-4">
 
     <!-- Device Card Details -->        
         <div class="col-md-6">
             <div class="card mb-3">
                 <div class="card-header" style="text-align: center";> Asset Information</div>
                     <div class="card-body">
-                        <p><strong> Device Name : </strong>{{device.device_name}}</p>
+                        <p><strong> Device Name : </strong>{{form.device_name}}</p>
                         <p><strong> Asset ID Number : </strong>{{device.asset_id}} </p>
                         <p><strong> Device Serial Number : </strong>{{device.serial_number}}</p>
                     </div>
@@ -45,19 +52,7 @@
                 <p></p>
             </div>
         </div>
-    
-<!-- Student Information -->
-    <div class="card mb-3">
-            <div class="card-header">Student Information</div>
-            <div class="card-body">
-                <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label">Student ID :</label>
-                    <div class="col-sm-8">{{ device.student_id_number_encrypted }}</div>
-                </div>
-            </div>
     </div>
-    </div>
-    
 
     <!--Extra Details  -->
     <div class="col-md-6">
@@ -84,14 +79,12 @@
                     </div>
                 </div>
             </div>
-
-<!-- END OF CARDS -->    
+        
+        <!-- Submit Buttons -->
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Save Repair</button>
+            <a href="{% url 'repair_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
 </div>
-<!-- END OF CONTAINER -->    
-</div>
-</div>
-
-
-
-
 {% endblock %}

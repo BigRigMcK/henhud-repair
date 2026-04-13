@@ -40,9 +40,16 @@ class District_Device_Inventory_Form(forms.ModelForm):
 			'student_id_number_encrypted': forms.TextInput(attrs={
 			    'class': 'form-control',
 			    'style': 'width: 200px;',
+			    
 			}),
 
 
+
+		}
+
+		labels = {
+
+			'student_id_number_encrypted': "Student ID :"
 
 		}
 

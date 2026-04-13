@@ -48,6 +48,74 @@
             crossorigin="anonymous"></script>
 
     <!-- Your extra JS (charts, custom behavior, etc.) -->
-    {% block extra_js %}{% endblock %}
+    {% block extra_js %}
+    <script>
+(function () {
+  const input = document.getElementById('inv-search-input');
+  const dropdown = document.getElementById('inv-search-dropdown');
+  if (!input) return;
+
+  let timer;
+
+  input.addEventListener('input', function () {
+    clearTimeout(timer);
+    const q = this.value.trim();
+    if (q.length < 2) { dropdown.style.display = 'none'; return; }
+    timer = setTimeout(() => fetchResults(q), 250);   // 250ms debounce
+  });
+
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { dropdown.style.display = 'none'; input.value = ''; }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  function fetchResults(q) {
+    fetch(`/inventory/search/?q=${encodeURIComponent(q)}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(r => r.json())
+    .then(data => renderDropdown(data.results))
+    .catch(() => { dropdown.style.display = 'none'; });
+  }
+
+  function renderDropdown(results) {
+    if (!results.length) {
+      dropdown.innerHTML = '<div style="padding:12px 16px; color:#888; font-size:13px;">No devices found</div>';
+      dropdown.style.display = 'block';
+      return;
+    }
+    dropdown.innerHTML = results.map(r => `
+      <a href="${r.url}"
+         style="display:flex; flex-direction:column; padding:10px 16px;
+                text-decoration:none; color:#1a1a1a; border-bottom:1px solid #f0f0f0;
+                transition: background 0.15s;"
+         onmouseover="this.style.background='#f5f8ff'"
+         onmouseout="this.style.background='transparent'">
+        <span style="font-weight:600; font-size:13px;">${r.asset_name}</span>
+        <span style="font-size:11px; color:#666; margin-top:2px;">
+          Asset&nbsp;#${r.asset_id} &nbsp;·&nbsp; S/N:&nbsp;${r.serial_number}
+          &nbsp;·&nbsp; ${r.model} &nbsp;·&nbsp; ${r.location}
+        </span>
+      </a>`).join('');
+    dropdown.style.display = 'block';
+  }
+})();
+</script>
+
+
+
+{% include 'footer.html' %}
+
+
+{% endblock %}
+
+
+
+
 </body>
 </html>

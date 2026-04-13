@@ -7,6 +7,9 @@ from .forms import District_Device_Inventory_Form
 from .models import District_Device_Inventory
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
+from django.db.models.functions import Cast
+from django.db.models import CharField
 
 
 # Views
@@ -33,7 +36,7 @@ def inventory_add_new_device(request):
 	else:
 		form = District_Device_Inventory_Form(user=request.user)
 
-	return render(request, 'inventory_add_new_device.html', {'form':form, 'action':'Create'})
+	return render(request, 'inventory_device_form.html', {'form':form, 'action':'Create'})
 
 @login_required
 def edit_inventory(request, pk):
@@ -50,7 +53,7 @@ def edit_inventory(request, pk):
 	else:
 		form = District_Device_Inventory_Form(instance=device, user=request.user)
 
-	return render(request, 'inventory_device_edit.html', {
+	return render(request, 'inventory_device_form.html', {
 		'form': form,
 		'action': 'Edit',
 		'device' : device
@@ -87,3 +90,32 @@ def inventory_list(request):
 	}
 
 	return render(request, 'inventory_list.html', context)
+
+def inventory_search(request):
+	q = request.GET.get('q', '').strip()
+	results = []
+	if len(q) >= 2:
+        # Try matching asset_id numerically first, then serial_number as text
+		filters = Q(serial_number__icontains=q) | Q(asset_name__icontains=q)
+		if q.isdigit():
+			# Cast asset_id to text so partial matches work (e.g. "123" matches "12345")
+			devices = District_Device_Inventory.objects.annotate(
+				asset_id_str=Cast('asset_id', output_field=CharField())
+			).filter(
+				filters | Q(asset_id_str__icontains=q)
+			).select_related('model_type', 'location')[:5]
+		else:
+			devices = District_Device_Inventory.objects.filter(filters).select_related('model_type', 'location')[:5]
+
+
+		for d in devices:
+			results.append({
+				'id': d.pk,
+				'asset_name': d.asset_name,
+				'asset_id': d.asset_id,
+				'serial_number': d.serial_number or '—',
+				'model': d.model_type.Model_Type if d.model_type else '—',
+				'location': str(d.location) if d.location else '—',
+				'url': f'/inventory/inventory_detail/{d.pk}/',
+			})
+	return JsonResponse({'results': results})	

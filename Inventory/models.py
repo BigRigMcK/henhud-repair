@@ -82,8 +82,8 @@ class District_Device_Inventory(models.Model):
     source_of_funding = models.CharField(max_length=50, blank=True, null=True)
     po_order = models.CharField(max_length=50, blank=True, null=True)
     purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
-    student_id_number = models.IntegerField(blank=True, null=True)
-    student_id_number_encrypted = encrypt(models.CharField(max_length=50, blank=True, null=True, default="$"))
+    #student_id_number = models.IntegerField(blank=True, null=True)
+    student_id_number_encrypted = encrypt(models.CharField(max_length=50, blank=True, null=True))
     audit_logs = GenericRelation(AuditLog)
 
     class Meta:
