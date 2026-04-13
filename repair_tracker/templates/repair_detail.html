@@ -12,22 +12,11 @@
             <a href="{% url 'repair_list' %}" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
-        <!-- Status & Assignment -->
-        <div class="row g-2">
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header">Status & Assignment</div>
-                <div class="card-body">
-                    <p><strong>Status:</strong> 
-                        <span class="badge bg-info">{{ repair.get_status_display }}</span>
-                    </p>
-                    <p><strong>Assigned To:</strong> {{ repair.assigned_to|default:"Unassigned" }}</p>
-                    <p><strong>Loaner:</strong> {{ repair.loaner|default:"None" }}</p>
-                    <p><strong>Created:</strong> {{ repair.created_at }}</p>
-                    <p><strong>Updated:</strong> {{ repair.updated_at }}</p>
-                </div>
-            </div>
-        </div>
+
+    
+    <div class="row g-2">
+
+
         <!-- Vineetha Checked -->
         <div class="col-md-6">
             <div class="card mb-6">
@@ -44,15 +33,31 @@
                         <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> {% endif %}
                     </p>
                 
-                    <p><strong> Vineetha Comments: </strong> {{ repair.vineetha_repair_comments }}</p>
+                    <p><strong> Vineetha Comments: </strong></p>
+                    <p> {{ repair.vineetha_repair_comments }}</p>
                 </div>
             </div>
         </div>
+        <!-- Status & Assignment -->
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header">Status & Assignment</div>
+                <div class="card-body">
+                    <p><strong>Status:</strong> 
+                        <span class="badge bg-info">{{ repair.get_status_display }}</span>
+                    </p>
+                    <p><strong>Assigned To:</strong> {{ repair.assigned_to|default:"Unassigned" }}</p>
+                    <p><strong>Loaner:</strong> {{ repair.loaner|default:"None" }}</p>
+                    <p><strong>Created:</strong> {{ repair.created_at }}</p>
+                    <p><strong>Updated:</strong> {{ repair.updated_at }}</p>
+                </div>
+            </div>
         </div>
+        
 
     
     <!-- Device Information -->
-    <div class="row g-2">
+    
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-header">Device Information</div>
@@ -109,7 +114,7 @@
         
         <div class="card-body">
             
-            <p><strong> Sent: </strong> {{repair.sent_to_dell_check}}</p>
+            
             <p><strong> Dell Service Number: </strong> <a href="">{{repair.dell_service_number}}</a></p>
             <p><strong> Dell Request Account: </strong> {{repair.submitted_under}} </p>
             
@@ -117,6 +122,7 @@
 
         </div>
     </div>
+</div>
 
 
 

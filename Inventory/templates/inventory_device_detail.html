@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Details For {{device.asset_id}} {% endblock %}
+
+{% block content %}
+    <!-- Add forms or lists for repairs in future expansions -->
+{% load static %}
+
+<div class="container">
+    <div style="margin-left: 50px; margin-right: 50px">
+<!-- Device Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{% url 'inventory_list' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back to Inventory List </a>
+        <h2> Device #{{ device.asset_id }}</h2>
+        <div>   
+            <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary">Edit</a>
+            
+        </div>
+    </div>
+
+<!-- Cards -->
+
+    <div class="row g-4">
+
+    <!-- Device Card Details -->        
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-header" style="text-align: center";> Asset Information</div>
+                    <div class="card-body">
+                        <p><strong> Device Name : </strong>{{device.device_name}}</p>
+                        <p><strong> Asset ID Number : </strong>{{device.asset_id}} </p>
+                        <p><strong> Device Serial Number : </strong>{{device.serial_number}}</p>
+                    </div>
+            </div>
+        </div>
+
+               
+    <!-- Device Location & Department  -->
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header" style="text-align: center";> Asset Information</div>
+            <div class="card-body">
+                <p><strong> Location : </strong> {{device.location}}</p>
+                <p><strong> Department : </strong> {{device.department}}</p>
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+<!-- Notes -->
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Notes</div>
+            <div class="card-body">
+                <div style="margin:20px">{{device.notes}} </div>
+            </div>
+        </div>
+    </div>
+    <!--Extra Details  -->
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Extra Device Details</div>
+            <div class="card-body">
+                <p><strong> Manufacture Make : </strong>{{manufacture_make}}</p> 
+                <p><strong> Vendor : </strong>{{vendor}}</p>
+                <p><strong> PO Order # : </strong>{{po_order}}</p> 
+                <p><strong> Purchase Value : </strong> {{purchase_value}}</p>
+                <p><strong> Source of Funding : </strong> {{source_of_funding}}</p>
+                <p><strong> Mac Address : </strong> {{mac_address}} </p>
+                <p><strong> Hard Drive Capacity : </strong> {{capacity_hard_drive_size}} </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+    
+    
+    </div>
+</div>
+
+
+
+{% endblock %}

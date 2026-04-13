@@ -40,7 +40,7 @@ class District_Department(models.Model):
 class District_Device_Inventory(models.Model):
     asset_name = models.CharField(max_length=50)
     asset_id = models.IntegerField(validators=[MinValueValidator(0)])
-    serial_number = models.CharField(max_length=30, null=True, blank=True)
+    serial_number = models.CharField(max_length=30)
     
     # Corrected ForeignKey logic
     # Note: default=1 assumes a record with ID 1 exists. 
@@ -87,7 +87,7 @@ class District_Device_Inventory(models.Model):
     audit_logs = GenericRelation(AuditLog)
 
     class Meta:
-		#verbose_name = "District Device Inventory"
+
         verbose_name_plural = "District Device Inventory"
 
     def __str__(self):

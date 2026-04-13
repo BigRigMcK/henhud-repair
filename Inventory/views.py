@@ -37,7 +37,7 @@ def inventory_add_new_device(request):
 
 @login_required
 def edit_inventory(request, pk):
-	device = get_object_or_404(District_Device_Inventory, pk=pk, asset_id=asset_id)
+	device = get_object_or_404(District_Device_Inventory, pk=pk)
 
 	if request.method == 'POST':
 		form = District_Device_Inventory_Form(request.POST, instance=device, user=request.user)
@@ -59,7 +59,7 @@ def edit_inventory(request, pk):
 @login_required
 def inventory_detail(request, pk):
 	device = get_object_or_404(District_Device_Inventory, pk=pk)
-
+	
 
  # Check if user can view student info
     #can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')

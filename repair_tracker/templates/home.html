@@ -38,8 +38,9 @@
     <div class="d-flex flex-wrap gap-4 justify-content-center special-grid">
         
         <!-- Audit Dashboard -->
-        <a href="{% url 'audit_dashboard' %}" class="text-decoration-none">
+        
             <div class="card h-100 shadow-sm hover-card" style="width: 300px; height: 300px;">
+                <a href="{% url 'audit_dashboard' %}" class="stretched-link"></a>
                 <div class="card-header d-flex align-items-center justify-content-center bg-light" style="height: 130px;">
                     <img src="{% static 'CardSVG/Audit_Logo.svg' %}"
                          alt="Inventory Logo"
@@ -52,7 +53,7 @@
                     </div>
                 </div>
             </div>
-        </a>
+        
 
         <!-- Inventory List -->
         
@@ -72,8 +73,9 @@
                         </a>
                     </div>
                 </div>
+                
             </div>
-        </a>
+        
 
         <!-- Repair List -->
         <div class="card h-100 shadow-sm hover-card" style="width: 300px; height: 300px; position: relative;">
