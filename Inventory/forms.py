@@ -8,7 +8,7 @@ class District_Device_Inventory_Form(forms.ModelForm):
 		'current_status','location','department','mac_address',
 		'capacity_hard_drive_size','manufacture_make', 'vendor',
 		'notes', 'source_of_funding', 'po_order', 'purchase_value',
-		'student_id_number_encrypted',
+		
 
 		]
 		widgets ={

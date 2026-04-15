@@ -2,14 +2,14 @@ from django import forms
 from .models import Repair
 from django.contrib.auth.forms import AuthenticationForm
 
-
+#'student_name', 'student_id', 'student_grade','student_email','student_school',
 
 class RepairForm(forms.ModelForm):
     class Meta:
         model = Repair
         fields = [
             'device_name','device_DAM_ID', 'device_serial',
-            'student_name', 'student_id', 'student_grade','student_email','student_school',
+            #'student_name', 'student_id', 'student_grade','student_email','student_school',
             'issue_description', 'resolution_notes','service_now_inc_number',
             'status', 'loaner', 'assigned_to',
             'contains_student_data', 'third_party_access', 
@@ -41,12 +41,12 @@ class RepairForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows' : 4,
                 }),
-            'student_email': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows' : 1,
-                'style' : 'width: 400px',
+            # 'student_email': forms.Textarea(attrs={
+            #     'class': 'form-control',
+            #     'rows' : 1,
+            #     'style' : 'width: 400px',
 
-                }),
+            #     }),
             'vineetha_repair_comments': forms.Textarea(attrs={
                 'class': 'form-conrtol',
                 'rows' : 1,

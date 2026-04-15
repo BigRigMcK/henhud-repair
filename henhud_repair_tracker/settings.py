@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'Inventory',
     'Base_Models',
     'Audit_Inventory',
-    'StudentInformation',
+    'District_Member_Information',
 ]
 
 MIDDLEWARE = [

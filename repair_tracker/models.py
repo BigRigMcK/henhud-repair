@@ -8,6 +8,7 @@ from django_cryptography.fields import encrypt
 
 
 
+
 # class Device_Current_Status(models.Model):
 
 # class District_Location(models.Model):
@@ -21,26 +22,21 @@ class Repair(models.Model):
     device_serial = models.CharField(max_length=20, default="")
     
     # Student information (ENCRYPTED for FERPA compliance)
-    student_name = encrypt(models.CharField(max_length=200, blank=True))
-    student_id = encrypt(models.CharField(max_length=50, blank=True))
-    student_email= encrypt(models.TextField(blank=True, default="@students.henhudschools.org"))
-    student_grade = models.CharField(max_length=10, blank=True, choices=[
-        ('K', 'Kindergarten'), ('1', '1st'), ('2', '2nd'), ('3', '3rd'),
-        ('4', '4th'), ('5', '5th'), ('6', '6th'), ('7', '7th'),
-        ('8', '8th'), ('9', '9th'), ('10', '10th'), ('11', '11th'),
-        ('12', '12th'), ('STAFF', 'Staff'),
-    ])
     
-    student_school = models.CharField(max_length=10, blank=True, choices=[
-        ('BMMS', "Blue Mountain Middle School"), ('BV', "Buchanan-Verplanck Elementary School"), 
-        ('FGL', 'Frank G. Lindsey'), ('FW', 'Furnace Woods'), ('HHHS', 'Hendrick Hudson High School'),
-        ])
 
     #Dell Repair information
     sent_to_dell_check = models.BooleanField(default=False)
     dell_service_number = models.CharField(max_length=50, null=True, blank=True)
     submitted_under = models.CharField(max_length=200, null=True, blank=True, default="techbilling@henhudschools.org")
 
+    #Student Information
+    district_member = models.ForeignKey(
+    'StudentInformation.District_Member',
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='repairs'
+)
 
 
     # Repair information
@@ -160,16 +156,13 @@ class LongTermLoaner(models.Model):
     )
     
     # Current checkout information (if checked out)
-    current_student_name = encrypt(models.CharField(
-        max_length=200, 
-        blank=True,
-        help_text="Current student - ENCRYPTED"
-    ))
-    current_student_id = encrypt(models.CharField(
-        max_length=50, 
-        blank=True,
-        help_text="Current student ID - ENCRYPTED"
-    ))
+    current_district_member = models.ForeignKey(
+    'StudentInformation.district_member',
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='loaner_checkouts'
+    )
     current_checkout_date = models.DateField(null=True, blank=True)
     current_expected_return = models.DateField(null=True, blank=True)
     current_checkout_notes = models.TextField(blank=True)
@@ -226,7 +219,7 @@ class LongTermLoaner(models.Model):
         """Get total number of times this device has been checked out"""
         return self.checkout_history.count()
     
-    def checkout_to_student(self, student_name, student_id, checkout_date, 
+    def checkout_to_district_member(self, student_name, student_id, checkout_date, 
                            expected_return, checked_out_by, notes=""):
         """
         Checkout this loaner to a student.
@@ -301,14 +294,13 @@ class LoanerCheckoutHistory(models.Model):
     )
     
     # Student information (ENCRYPTED)
-    student_name = encrypt(models.CharField(
-        max_length=200,
-        help_text="Student name - ENCRYPTED"
-    ))
-    student_id = encrypt(models.CharField(
-        max_length=50,
-        help_text="Student ID - ENCRYPTED"
-    ))
+    student = models.ForeignKey(
+    'StudentInformation.Student',
+    on_delete=models.SET_NULL,
+    null=True,
+    blank=True,
+    related_name='checkout_history'
+    )
     
     # Checkout information
     checkout_date = models.DateField(help_text="When device was checked out")

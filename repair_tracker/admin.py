@@ -47,7 +47,7 @@ class RepairAdmin(admin.ModelAdmin):
             'fields': ('device_name', 'device_DAM_ID', 'device_serial')
         }),
         ('Student Information (RESTRICTED - ACCESS LOGGED)', {
-            'fields': ('student_name', 'student_id', 'student_grade'),
+            'fields': ('district_member'),
             'classes': ('collapse',),
             'description': 'FERPA-protected data. All access is logged.'
         }),
@@ -108,8 +108,7 @@ class LoanerCheckoutHistoryInline(admin.TabularInline):
         'checkout_date',
         'expected_return_date', 
         'returned_date',
-        'student_id',
-        'student_name',
+        'district_member',
         'checked_out_by',
         'device_condition_out',
         'device_condition_in',
@@ -127,8 +126,7 @@ class LoanerCheckoutHistoryInline(admin.TabularInline):
         'device_condition_in',
         'is_overdue_display',
         'days_out_display',
-        'student_name',
-        'student_id',
+        
     ]
     
     def is_overdue_display(self, obj):
@@ -198,8 +196,7 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
         }),
         ('Current Checkout (if checked out)', {
             'fields': (
-                'current_student_name',
-                'current_student_id',
+                'current_district_member',
                 'current_checkout_date',
                 'current_expected_return',
                 'current_checkout_notes',
@@ -559,7 +556,7 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
             'fields': ('loaner',)
         }),
         ('Student Information (RESTRICTED - ACCESS LOGGED)', {
-            'fields': ('student_name', 'student_id'),
+            'fields': ('district_member'),
             'classes': ('collapse',),
             'description': 'FERPA-protected data. Access is audited.'
         }),
