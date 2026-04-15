@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cryptography',
+    'searchable_encrypted_fields',
 	'repair_tracker',
     'Inventory',
     'Base_Models',
@@ -132,6 +133,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
+
+#
+SEARCHABLE_ENCRYPTED_FIELDS_KEY = [ '4c801e96dbb46c7c37b983aa6b3244aae84cb2287c2ef88129554f5ed4888395' ]
 
 # Logging Configuration
 LOGGING = {

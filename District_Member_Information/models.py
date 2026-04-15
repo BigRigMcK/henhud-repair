@@ -1,6 +1,7 @@
 from django.db import models
 from django_cryptography.fields import encrypt
 from django.contrib.auth.models import User
+from searchable_encrypted_fields.fields import SearchableEncryptedCharField, SearchableEncryptedEmailField
 
 
 class District_Member(models.Model):
@@ -23,11 +24,11 @@ class District_Member(models.Model):
     ]
 
     # All FERPA fields encrypted
-    district_member_name = encrypt(models.CharField(max_length=200, blank=True, default="Please Update ID"))
-    district_member_id = encrypt(models.CharField(max_length=50, blank=True, unique=True, default="Please Update Name"))
-    district_member_email = encrypt(models.EmailField(blank=True, default="@students.henhudschools.org"))
-    district_member_grade = models.CharField(max_length=10, blank=True, choices=GRADE_CHOICES,default="Please Update Grade")
-    district_member_building = models.CharField(max_length=25, blank=True, choices=BUILDING_CHOICES, default="Please Update Building"),
+    district_member_name = SearchableEncryptedCharField(max_length=200, blank=True)
+    district_member_id = SearchableEncryptedCharField(max_length=50, blank=True, unique=True)
+    district_member_email = SearchableEncryptedEmailField(blank=True, default='@students.henhudschools.org')
+    district_member_grade = models.CharField(max_length=10, blank=True, choices=GRADE_CHOICES)
+    district_member_building = models.CharField(max_length=25, blank=True, choices=BUILDING_CHOICES)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

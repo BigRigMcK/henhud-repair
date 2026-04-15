@@ -22,9 +22,7 @@ class District_Member_Admin(admin.ModelAdmin):
     list_filter = [
        
     ]
-    search_fields = [
-       
-    ]
+
     readonly_fields = ['created_at','updated_at',]
     
     fieldsets = (
@@ -37,6 +35,18 @@ class District_Member_Admin(admin.ModelAdmin):
         }),
     )
     
+    def get_form(self, request, obj=None, **kwargs):
+        """ Inject placeholders into the admin form fields """
+        form = super().get_form(request, obj, **kwargs)
+        
+        # Add your placeholders here
+        form.base_fields['district_member_id'].widget.attrs['placeholder'] = 'e.g. 123456'
+        form.base_fields['district_member_name'].widget.attrs['placeholder'] = 'Full Name (Last, First)'
+        form.base_fields['district_member_email'].widget.attrs['placeholder'] = 'user@district.org'
+        
+        return form
+
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.created_by = request.user
@@ -79,9 +89,6 @@ class District_Member_DeviceAssignment_Admin(admin.ModelAdmin):
         'assigned_by',
         ]
     list_filter = [
-       
-    ]
-    search_fields = [
        
     ]
     
