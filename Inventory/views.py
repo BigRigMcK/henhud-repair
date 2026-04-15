@@ -63,7 +63,11 @@ def edit_inventory(request, pk):
 @login_required
 def inventory_detail(request, pk):
 	device = get_object_or_404(District_Device_Inventory, pk=pk)
-	repairs= Repair.objects.all()	
+
+	repairs = Repair.objects.filter(
+    Q(device_DAM_ID=device.asset_id) |
+    Q(device_serial__iexact=device.serial_number)
+	).select_related('assigned_to', 'created_by')
 
  # Check if user can view student info
     #can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')
