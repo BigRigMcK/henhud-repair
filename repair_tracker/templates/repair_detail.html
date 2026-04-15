@@ -7,18 +7,19 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Repair #{{ repair.id }}</h2>
-        <div>   
-            <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-primary">Edit</a>
-            <a href="{% url 'repair_list' %}" class="btn btn-secondary">Back to List</a>
+        <div>
+            <a href="{% url 'repair_print' repair.pk %}" class="btn btn-lg btn-outline-dark" style="margin:5px;">Print</a>
+            <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-lg btn-primary">Edit</a>
+            <a href="{% url 'repair_list' %}" class="btn btn-lg btn-secondary">Back to List</a>
         </div>
     </div>
 
-    
+ <!-- Start of cards -->   
     <div class="row g-2">
 
 
         <!-- Vineetha Checked -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card mb-6">
                 <div class="card-header">Vineetha </div>
                 <div class="card-body">
@@ -38,9 +39,11 @@
                 </div>
             </div>
         </div>
+
         <!-- Status & Assignment -->
-        <div class="col-md-6">
-            <div class="card mb-3">
+        <div class="row g-2">
+        <div class="col-md-4">
+            <div class="card mb-4">
                 <div class="card-header">Status & Assignment</div>
                 <div class="card-body">
                     <p><strong>Status:</strong> 
@@ -57,7 +60,7 @@
 
     
     <!-- Device Information -->
-    
+        
         <div class="col-md-4">
             <div class="card mb-4">
                 <div class="card-header">Device Information</div>
@@ -70,38 +73,48 @@
             </div>
         </div>
     
+    
     <!-- Student Information (conditional) -->
-    <div class="col-md-4">
-    {% if is_technician or can_view_student_info %}
-        <div class="card mb-4">
-            <div class="card-header">Student Information</div>
-            <div class="card-body">
-                <p><strong>Name:</strong> {{ repair.student_name }}</p>
-                <p><strong>Grade:</strong> {{ repair.get_student_grade_display }} &nbsp <strong>ID:</strong> {{ repair.student_id }}</p>
-                
+        
+        <div class="col-md-4">
+        {% if is_technician or can_view_student_info %}
+            <div class="card mb-4">
+                <div class="card-header">Student Information</div>
+                    <div class="card-body">
+                    <p><strong>Name:</strong> {{ repair.student_name }}</p>
+                    <p><strong>Grade:</strong> {{ repair.get_student_grade_display }} &nbsp <strong>ID:</strong> {{ repair.student_id }}</p>
+                    <p><strong>Email:</strong> {{ repair.student_email }}
+                </div>
             </div>
-        </div>
         {% else %}
-        <div class="card mb-4">
-            <div class="card-body text-muted">
-                Student information hidden - insufficient permissions
+            <div class="card mb-4">
+                    <div class="card-header">Student Information</div>
+                        <div class="card-body">
+                        <p><strong>Name:</strong> {{ repair.student_name }}</p>
+                        </div>
+                </div>
             </div>
-        </div>
-        {% endif %}
+            
+            {% endif %}
         
     </div>
+            
+        
     <!-- Repair Details -->
     <div class="card mb-3">
         <div class="card-header">Repair Details</div>
         <div class="card-body">
-            <p><strong>Service Now INC:</strong> {{ repair.service_now_inc_number}}
-            <p><strong>Issue:</strong></p>
+            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Service Now INC:</strong> {{ repair.service_now_inc_number}}
+        
+        
+            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Device Issue:</strong></p>
             <p>{{ repair.issue_description|linebreaks }}</p>
             
             {% if repair.resolution_notes %}
-            <p><strong>Resolution:</strong></p>
+            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Resolution:</strong></p>
             <p>{{ repair.resolution_notes|linebreaks }}</p>
             {% endif %}
+        
         </div>
     </div>
     

@@ -1,5 +1,8 @@
 from django import forms
 from .models import Repair
+from django.contrib.auth.forms import AuthenticationForm
+
+
 
 class RepairForm(forms.ModelForm):
     class Meta:
@@ -66,3 +69,19 @@ class RepairForm(forms.ModelForm):
             del self.fields['vineetha_repair_comments']
 
 
+from django.contrib.auth.forms import AuthenticationForm
+
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        'autocomplete': 'username',
+        'class': 'form-control', # Optional: for styling
+        'placeholder': 'Username',
+        'id': 'username'
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'autocomplete': 'current-password',
+        'class': 'form-control',
+        'placeholder': 'Password',
+        'id' : 'password',
+    }))

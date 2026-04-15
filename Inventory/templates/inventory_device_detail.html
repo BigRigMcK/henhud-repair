@@ -10,10 +10,14 @@
 <div style="margin-left: 50px; margin-right: 50px">
 <!-- Device Header -->
     <div class="container">
-    <div class="container-buttons d-flex justify-content-between align-items-cente">
+    <div class="container-buttons d-flex justify-content-between align-items-center">
+        
         <a href="{% url 'inventory_list' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back to Inventory List </a>
-        <h1 class="position-absolute start-50 translate-middle-x m-0" > Device #{{ device.asset_id }}</h1>
-        <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary" style="margin:20px;">Edit</a>
+        
+        <h1> Device #{{ device.asset_id }}</h1>
+        
+        <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary" style="margin:5px;">Edit</a>
+        
     </div>
     </div>
     
@@ -37,6 +41,7 @@
                
     <!-- Device Location & Department  -->
     <div class="col-md-6">
+
         <div class="card mb-3">
             <div class="card-header" style="text-align: center";> Asset Information</div>
             <div class="card-body">
@@ -47,15 +52,16 @@
         </div>
     
 <!-- Student Information -->
-    <div class="card mb-3">
-            <div class="card-header">Student Information</div>
-            <div class="card-body">
-                <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label">Student ID :</label>
-                    <div class="col-sm-8">{{ device.student_id_number_encrypted }}</div>
+        <div class="card mb-3">
+                <div class="card-header">Student Information</div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <label class="col-sm-4 col-form-label">Student ID :</label>
+                        <div class="col-sm-8">{{ device.student_id_number_encrypted }}</div>
+                    </div>
                 </div>
-            </div>
-    </div>
+        </div>
+
     </div>
     
 
@@ -76,14 +82,131 @@
         </div>
     </div>
         <!-- Notes -->
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header">Notes</div>
-                    <div class="card-body">
-                        <div style="margin:20px">{{device.notes}} </div>
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header">Notes</div>
+            <div class="card-body">
+                <div style="margin:20px">{{device.notes}} </div>
+            </div>
+        </div>
+    </div>
+        <!-- Repair Tickets -->
+    <div class="col-md-12">
+        <div class="card mb-3">
+            <div class="card-header">repair tickets</div>
+            <div class="card-body">
+                {% if repairs %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Device Name</th>
+                                    <th>
+                                        {% if sort_by == 'device_serial' %}
+                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=-device_serial">
+                                                Serial/DAM ID ▲
+                                            </a>
+                                        {% elif sort_by == '-device_serial' %}
+                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
+                                                Serial/DAM ID ▼
+                                            </a>
+                                        {% else %}
+                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
+                                                Serial/DAM ID
+                                            </a>
+                                        {% endif %}
+                                    </th>
+                                    <!--<th>Serial/DAM ID</th>-->
+                                    
+                                    <th>Student</th>
+                                    
+                                    <th>Issue</th>
+                                    <th>Status</th>
+                                    <th>Assigned To</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for repair in repairs %}
+                                <tr>
+                                    <td><a href="{% url 'repair_detail' repair.pk %}">#{{ repair.id }}</a></td>
+                                    <td>{{ repair.device_name }}</td>
+                                    <td>
+                                        <small>
+                                            {% if repair.device_serial %}
+                                                S/N: <a href="?search={{repair.device_serial}}&status=&assigned=">{{ repair.device_serial }}</a><br>
+                                            {% endif %}
+                                            {% if repair.device_DAM_ID %}
+                                                DAM: <a href="?search={{repair.device_DAM_ID}}&status=&assigned=">{{ repair.device_DAM_ID }}
+                                            {% endif %}
+                                        </small>
+                                    </td>
+                                    
+                                    <td>
+                                        {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
+                                        <small>
+                                            <a href="">{{ repair.student_name|default:"N/A" }} </a><br>
+                                            <span class="text-muted">{{ repair.get_student_grade_display }}</span>
+                                        </small>
+                                    </td>
+                                    
+                                    <td>
+                                        <small>{{ repair.issue_description|truncatewords:10 }}</small>
+                                    </td>
+                                    <td>
+                                        {% if repair.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'waiting_on_box' %}
+                                            <span class="badge bg-warning">{{ repair.get_status_display}} </span>
+                                        {% elif repair.status == 'sent_to_dell' %}
+                                            <span class="badge bg-info">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'on_site_repair' %}
+                                            <span class="badge bg-danger">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'awaiting_parts' %}
+                                            <span class="badge bg-secondary">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'returned_from_dell' %}
+                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'fixed_by_tech' %}
+                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'returned' %}
+                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
+                                        {% elif repair.status == 'completed' %}
+                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ repair.assigned_to.username|default:"Unassigned" }}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ repair.created_at|date:"m/d/Y" }}</small>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'repair_detail' repair.pk %}" 
+                                               class="btn btn-outline-primary" 
+                                               title="View"> Details
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{% url 'edit_repair' repair.pk %}" 
+                                               class="btn btn-outline-secondary" 
+                                               title="Edit"> Edit
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        {% endif %}
+
 
 <!-- END OF CARDS -->    
 </div>

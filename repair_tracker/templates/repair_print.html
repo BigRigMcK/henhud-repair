@@ -1,0 +1,301 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+  @media print {
+    /* Hide nav, buttons, and non-print elements */
+    header, nav, .no-print, .btn { display: none !important; }
+    body { background: white !important; }
+    .card { border: 1px solid #ccc !important; box-shadow: none !important; }
+    .print-container { margin: 0 !important; padding: 0 !important; }
+  }
+
+  .print-container { max-width: 900px; margin: 10px auto; }
+
+  .ticket-header {
+    background-color: #003366;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .ticket-header h1 { font-size: 1.4rem; margin: 0; }
+  .ticket-header .ticket-meta { text-align: right; font-size: 0.9rem; }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .info-card {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .info-card .card-title {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px 14px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #495057;
+  }
+
+  .info-card .card-body { padding: 12px 14px; }
+
+  .info-row {
+    display: flex;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .info-label {
+    font-weight: 600;
+    color: #495057;
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+
+  .info-value { color: #212529; }
+
+  .full-width { grid-column: 1 / -1; }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background-color: #e9ecef;
+    color: #495057;
+  }
+
+  .status-sent_to_dell { background-color: #cff4fc; color: #055160; }
+  .status-returned_from_dell, .status-fixed_by_tech, .status-returned, .status-tech_completed, .status-vineetha_completed { background-color: #d1e7dd; color: #0a3622; }
+  .status-on_site_repair { background-color: #f8d7da; color: #58151c; }
+  .status-pending, .status-need_to_assess, .status-waiting_on_box { background-color: #fff3cd; color: #664d03; }
+
+  .print-footer {
+    margin-top: 24px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 12px;
+    font-size: 0.78rem;
+    color: #6c757d;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .text-block {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .check-row { display: flex; gap: 20px; margin-bottom: 6px; }
+  .check-item { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; }
+  .check-box {
+    width: 16px; height: 16px;
+    border: 2px solid #495057;
+    border-radius: 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .check-box.checked { background: #198754; border-color: #198754; color: white; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="print-container">
+
+  <!-- Action buttons (hidden when printing) -->
+  <div class="no-print mb-3 d-flex gap-1">
+    <button onclick="window.print()" class="btn btn-primary">🖨️ Print</button>
+    <a href="{% url 'repair_detail' repair.pk %}" class="btn btn-outline-secondary">← Back to Ticket</a>
+    <a href="{% url 'repair_pdf' repair.pk %}" class="btn btn-outline-danger">⬇ Download PDF</a>
+  </div>
+
+  <!-- Ticket Header -->
+  <div class="ticket-header">
+    <div>
+      <h1>Hendrick Hudson School District</h1>
+      <div style="font-size:0.85rem; opacity:0.85;">IT Repair Ticket</div>
+    </div>
+    <div class="ticket-meta">
+      <div><strong>Ticket #{{ repair.id }}</strong></div>
+      <div>Created: {{ repair.created_at|date:"m/d/Y" }}</div>
+      <div>Updated: {{ repair.updated_at|date:"m/d/Y" }}</div>
+      {% if repair.created_by %}
+      <div>By: {{ repair.created_by.get_full_name|default:repair.created_by.username }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Row 1: Status & Device Info -->
+  <div class="section-grid">
+
+    <div class="info-card">
+      <div class="card-title">Status & Assignment</div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-label">Status</span>
+          <span class="info-value">
+            <span class="status-badge status-{{ repair.status }}">{{ repair.get_status_display }}</span>
+          </span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Assigned To</span>
+          <span class="info-value">{{ repair.assigned_to.get_full_name|default:repair.assigned_to.username|default:"Unassigned" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Loaner Device</span>
+          <span class="info-value">{{ repair.loaner|default:"None" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Service Now INC</span>
+          <span class="info-value">{{ repair.service_now_inc_number|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="card-title">Device Information</div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-label">Device Name</span>
+          <span class="info-value">{{ repair.device_name|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">DAM ID</span>
+          <span class="info-value">{{ repair.device_DAM_ID|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Serial Number</span>
+          <span class="info-value">{{ repair.device_serial|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: Student Info (conditional) -->
+  
+  <div class="section-grid">
+    <div class="info-card">
+      <div class="card-title">Student Information <span style="color:#dc3545; font-size:0.75rem;">(FERPA Protected)</span></div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-label">Name</span>
+          <span class="info-value">{{ repair.student_name|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">School</span>
+          <span class="info-value">{{ repair.get_student_school_display|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ repair.student_email|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+  <!-- Dell Repair  -->
+  <div class="section-grid">
+    <div class="info-card full-width">
+      <div class="card-title">Dell Repair Shipment</div>
+      <div class="card-body">
+        <div class="info-row">
+          <span class="info-label">Sent to Dell</span>
+          <span class="info-value">{% if repair.sent_to_dell_check %}✅ Yes{% else %}❌ No{% endif %}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Dell Service #</span>
+          <span class="info-value">{{ repair.dell_service_number|default:"—" }}</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Submitted Under</span>
+          <span class="info-value">{{ repair.submitted_under|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+
+  <!-- Issue Description & Resolution -->
+  <div class="info-card full-width mb-3">
+    <div class="card-title">Issue Description</div>
+    <div class="card-body">
+      <div class="text-block">{{ repair.issue_description|default:"—" }}</div>
+    </div>
+  </div>
+
+  <!-- Resolution Notes -->
+  <div class="info-card full-width mb-3">
+    <div class="card-title">Resolution Notes</div>
+    <div class="card-body">
+      {% if repair.resolution_notes %}
+      <div class="text-block">{{ repair.resolution_notes }}</div>
+      {% else %}
+      <div class="text-block" style="height:72px;"></div>
+      {% endif %}
+    </div>
+  </div>
+  
+
+
+  <!-- Vineetha Section (superuser only) -->
+<!--   {% if user.is_superuser %}
+  <div class="info-card full-width mb-3">
+    <div class="card-title">DOT / Admin Notes</div>
+    <div class="card-body">
+      <div class="check-row">
+        <div class="check-item">
+          <span class="check-box {% if repair.vineetha_checked %}checked{% endif %}">{% if repair.vineetha_checked %}✓{% endif %}</span>
+          Checked
+        </div>
+        <div class="check-item">
+          <span class="check-box {% if repair.vineetha_closed %}checked{% endif %}">{% if repair.vineetha_closed %}✓{% endif %}</span>
+          Closed
+        </div>
+      </div>
+      {% if repair.vineetha_repair_comments %}
+      <div class="info-row mt-2">
+        <span class="info-label">Comments</span>
+        <span class="info-value">{{ repair.vineetha_repair_comments }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %} -->
+
+  <!-- Signature Lines -->
+  <div class="section-grid mt-4">
+    <div style="border-top: 2px solid #333; padding-top: 8px; font-size: 0.85rem; color: #495057;">
+      Technician Signature &amp; Date
+    </div>
+    <div style="border-top: 2px solid #333; padding-top: 8px; font-size: 0.85rem; color: #495057;">
+      Student / Staff Signature &amp; Date
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="print-footer">
+    <span>Hendrick Hudson School District IT Department</span>
+    <span>Ticket #{{ repair.id }} — Printed {{ now|date:"m/d/Y H:i" }}</span>
+  </div>
+
+</div>
+{% endblock %}

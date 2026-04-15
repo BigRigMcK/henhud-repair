@@ -4,15 +4,16 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .forms import RepairForm
+from .forms import RepairForm, LoginForm
 from .models import Repair
+from django.utils import timezone
 
 
 # Create your views here.
 def home(request):
     if request.method == 'POST':
         # 1. Fill the form with the data the user sent
-        form = AuthenticationForm(data=request.POST)
+        form = LoginForm(data=request.POST)
         if form.is_valid():
             # 2. Log the user in
             user = form.get_user()
@@ -20,7 +21,7 @@ def home(request):
             return redirect('/') # Refresh to show the logged-in state
     else:
         # 3. Just show a blank form for GET requests
-        form = AuthenticationForm()
+        form = LoginForm()
     return render(request, 'home.html', {'form': form})
 
 
@@ -163,3 +164,15 @@ def repair_list(request):
     }
     
     return render(request, 'repair_list.html', context)
+
+
+
+@login_required
+def repair_print(request, pk):
+    repair = get_object_or_404(Repair, pk=pk)
+    can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')
+    return render(request, 'repair_print.html', {
+        'repair': repair,
+        'can_view_student_info': can_view_student_info,
+        'now': timezone.now(),
+    })

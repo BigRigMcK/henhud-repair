@@ -3,13 +3,14 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .forms import District_Device_Inventory_Form
-from .models import District_Device_Inventory
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.db.models.functions import Cast
 from django.db.models import CharField
+from .forms import District_Device_Inventory_Form
+from .models import District_Device_Inventory
+from repair_tracker.models import Repair
 
 
 # Views
@@ -62,14 +63,19 @@ def edit_inventory(request, pk):
 @login_required
 def inventory_detail(request, pk):
 	device = get_object_or_404(District_Device_Inventory, pk=pk)
-	
+	repairs= Repair.objects.all()	
 
  # Check if user can view student info
     #can_view_student_info = request.user.has_perm('repair_tracker.view_student_info')
     #is_technician = request.user.groups.filter(name="Technicians").exists()
 
+	context = {
+	'device' : device,
+	'repairs': repairs,
 
-	return render(request, 'inventory_device_detail.html', {'device': device})
+	}
+
+	return render(request, 'inventory_device_detail.html', context)
 
 def inventory_list(request):
 

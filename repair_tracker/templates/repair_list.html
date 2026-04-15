@@ -112,9 +112,9 @@
                                 {% endif %}
                             </th>
                             <!--<th>Serial/DAM ID</th>-->
-                            {% if can_view_student_info %}
+                            
                             <th>Student</th>
-                            {% endif %}
+                            
                             <th>Issue</th>
                             <th>Status</th>
                             <th>Assigned To</th>
@@ -130,14 +130,14 @@
                             <td>
                                 <small>
                                     {% if repair.device_serial %}
-                                        S/N: {{ repair.device_serial }}<br>
+                                        S/N: <a href="?search={{repair.device_serial}}&status=&assigned=">{{ repair.device_serial }}</a><br>
                                     {% endif %}
                                     {% if repair.device_DAM_ID %}
-                                        DAM: {{ repair.device_DAM_ID }}
+                                        DAM: <a href="?search={{repair.device_DAM_ID}}&status=&assigned=">{{ repair.device_DAM_ID }}
                                     {% endif %}
                                 </small>
                             </td>
-                            {% if can_view_student_info %}
+                            
                             <td>
                                 {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
                                 <small>
@@ -145,7 +145,7 @@
                                     <span class="text-muted">{{ repair.get_student_grade_display }}</span>
                                 </small>
                             </td>
-                            {% endif %}
+                            
                             <td>
                                 <small>{{ repair.issue_description|truncatewords:10 }}</small>
                             </td>
