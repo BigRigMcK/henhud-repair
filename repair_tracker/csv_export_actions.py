@@ -39,7 +39,7 @@ def export_repairs_csv(modeladmin, request, queryset):
 
     headers = [
         'ID', 'Device Name', 'DAM ID', 'Serial Number',
-        'Status', 'School', 'Service Now INC',
+        'Status', 'Service Now INC',
         'Sent to Dell', 'Dell Service #', 'Submitted Under',
         'Loaner', 'Assigned To', 'Created By',
         'Created At', 'Updated At',
@@ -48,7 +48,7 @@ def export_repairs_csv(modeladmin, request, queryset):
         'Issue Description', 'Resolution Notes',
     ]
     if can_view_student:
-        headers += ['Student Name', 'Student ID', 'Student Email', 'Student Grade']
+        headers += ['District Member']
 
     writer.writerow(headers)
 
@@ -81,11 +81,9 @@ def export_repairs_csv(modeladmin, request, queryset):
             repair.resolution_notes or '',
         ]
         if can_view_student:
+            dm = repair.district_member
             row += [
-                repair.student_name or '',
-                repair.student_id or '',
-                repair.student_email or '',
-                repair.get_student_grade_display() if repair.student_grade else '',
+                str(dm) if dm else '',   # district_member __str__
             ]
         writer.writerow(row)
 
@@ -140,8 +138,7 @@ def export_loaners_csv(modeladmin, request, queryset):
         ]
         if can_view_student:
             row += [
-                loaner.current_student_name or '',
-                loaner.current_student_id or '',
+                str(loaner.current_district_member) if loaner.current_district_member else '',
                 loaner.current_checkout_date.strftime('%Y-%m-%d') if loaner.current_checkout_date else '',
                 loaner.current_expected_return.strftime('%Y-%m-%d') if loaner.current_expected_return else '',
                 loaner.current_checked_out_by.username if loaner.current_checked_out_by else '',
@@ -204,7 +201,9 @@ def export_checkout_history_csv(modeladmin, request, queryset):
             record.return_notes or '',
         ]
         if can_view_student:
-            row += [record.student_name or '', record.student_id or '']
+            row += [
+            str(record.district_member) if record.district_member else '',
+            ]
         writer.writerow(row)
 
     pii_note = ' [included student PII]' if can_view_student else ' [PII excluded]'

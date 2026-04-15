@@ -113,7 +113,7 @@
                             </th>
                             <!--<th>Serial/DAM ID</th>-->
                             
-                            <th>Student</th>
+                            <th>District Member</th>
                             
                             <th>Issue</th>
                             <th>Status</th>
@@ -140,10 +140,10 @@
                             
                             <td>
                                 {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
-                                <small>
-                                    <a href="">{{ repair.student_name|default:"N/A" }} </a><br>
-                                    <span class="text-muted">{{ repair.get_student_grade_display }}</span>
-                                </small>
+                                <a href="">{{ repair.district_member|default:"N/A" }}</a><br>
+                                <span class="text-muted">
+                                    {{ repair.district_member.get_student_grade_display|default:"" }}
+                                </span>
                             </td>
                             
                             <td>

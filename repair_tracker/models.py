@@ -31,7 +31,7 @@ class Repair(models.Model):
 
     #Student Information
     district_member = models.ForeignKey(
-    'StudentInformation.District_Member',
+    'District_Member_Information.District_Member',
     on_delete=models.SET_NULL,
     null=True,
     blank=True,
@@ -157,7 +157,7 @@ class LongTermLoaner(models.Model):
     
     # Current checkout information (if checked out)
     current_district_member = models.ForeignKey(
-    'StudentInformation.district_member',
+    'District_Member_Information.District_Member',
     on_delete=models.SET_NULL,
     null=True,
     blank=True,
@@ -219,37 +219,27 @@ class LongTermLoaner(models.Model):
         """Get total number of times this device has been checked out"""
         return self.checkout_history.count()
     
-    def checkout_to_district_member(self, student_name, student_id, checkout_date, 
-                           expected_return, checked_out_by, notes=""):
-        """
-        Checkout this loaner to a student.
-        Creates a history record and updates current status.
-        """
-        # Update current status
-        self.current_student_name = student_name
-        self.current_student_id = student_id
+    def checkout_to_district_member(self, district_member, checkout_date, expected_return, checked_out_by, notes=""):
+        self.current_district_member = district_member
         self.current_checkout_date = checkout_date
         self.current_expected_return = expected_return
         self.current_checkout_notes = notes
         self.current_checked_out_by = checked_out_by
         self.status = 'checked_out'
         self.save()
-        
-        # Create history record
+
         history = LoanerCheckoutHistory.objects.create(
             loaner=self,
-            student_name=student_name,
-            student_id=student_id,
+            district_member=district_member,   # ← FK, not raw fields
             checkout_date=checkout_date,
             expected_return_date=expected_return,
             checkout_notes=notes,
             checked_out_by=checked_out_by,
             device_condition_out=self.device_condition,
         )
-        
         return history
     
-    def return_from_student(self, returned_by, return_notes="", condition_in=None):
+    def return_from_district_member(self, returned_by, return_notes="", condition_in=None):
         """
         Return this loaner from current student.
         Updates history record and clears current checkout.
@@ -268,8 +258,7 @@ class LongTermLoaner(models.Model):
             current_checkout.save()
         
         # Clear current checkout info
-        self.current_student_name = ""
-        self.current_student_id = ""
+        self.current_district_member = None  
         self.current_checkout_date = None
         self.current_expected_return = None
         self.current_checkout_notes = ""
@@ -294,8 +283,8 @@ class LoanerCheckoutHistory(models.Model):
     )
     
     # Student information (ENCRYPTED)
-    student = models.ForeignKey(
-    'StudentInformation.Student',
+    district_member = models.ForeignKey(
+    'District_Member_Information.District_Member',
     on_delete=models.SET_NULL,
     null=True,
     blank=True,

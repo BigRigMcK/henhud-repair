@@ -9,7 +9,7 @@ class RepairForm(forms.ModelForm):
         model = Repair
         fields = [
             'device_name','device_DAM_ID', 'device_serial',
-            #'student_name', 'student_id', 'student_grade','student_email','student_school',
+            'district_member',
             'issue_description', 'resolution_notes','service_now_inc_number',
             'status', 'loaner', 'assigned_to',
             'contains_student_data', 'third_party_access', 
@@ -59,10 +59,7 @@ class RepairForm(forms.ModelForm):
     
     # Remove student info fields if user lacks permission
         if user and not user.has_perm('repair_tracker.view_student_info'):
-            del self.fields['student_name']
-            del self.fields['student_id']
-            del self.fields['student_grade']
-            del self.fields['student_school']
+            del self.fields['district_member']
         if user and not user.is_superuser:
             del self.fields['vineetha_checked']
             del self.fields['vineetha_closed']

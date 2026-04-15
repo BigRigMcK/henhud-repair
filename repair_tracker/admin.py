@@ -46,8 +46,8 @@ class RepairAdmin(admin.ModelAdmin):
         ('Device Information', {
             'fields': ('device_name', 'device_DAM_ID', 'device_serial')
         }),
-        ('Student Information (RESTRICTED - ACCESS LOGGED)', {
-            'fields': ('district_member'),
+        ('District Member Information (RESTRICTED - ACCESS LOGGED)', {
+            'fields': ('district_member',),
             'classes': ('collapse',),
             'description': 'FERPA-protected data. All access is logged.'
         }),
@@ -203,7 +203,7 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 'current_checked_out_by',
             ),
             'classes': ('collapse',),
-            'description': 'FERPA-protected student data. Access is audited. '
+            'description': 'FERPA-protected District Member data. Access is audited. '
                           'History is automatically created when you save.'
         }),
     )
@@ -387,11 +387,10 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 super().save_model(request, obj, form, change)
                 
                 # Create history record if we have the required fields
-                if obj.current_student_name and obj.current_checkout_date:
+                if obj.current_district_member and obj.current_checkout_date:
                     LoanerCheckoutHistory.objects.create(
                         loaner=obj,
-                        student_name=obj.current_student_name,
-                        student_id=obj.current_student_id or '',
+                        current_district_member=obj.current_district_member or '',
                         checkout_date=obj.current_checkout_date,
                         expected_return_date=obj.current_expected_return or obj.current_checkout_date,
                         checkout_notes=obj.current_checkout_notes,
@@ -407,7 +406,7 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 else:
                     self.message_user(
                         request,
-                        '⚠️ Warning: Checkout history not created - missing student name or checkout date',
+                        '⚠️ Warning: Checkout history not created - missing District Member name or checkout date',
                         level='warning'
                     )
             
@@ -436,15 +435,13 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 super().save_model(request, obj, form, change)
                 
                 # Clear current checkout fields
-                obj.current_student_name = ''
-                obj.current_student_id = ''
+                obj.current_district_member = None
                 obj.current_checkout_date = None
                 obj.current_expected_return = None
                 obj.current_checkout_notes = ''
                 obj.current_checked_out_by = None
                 obj.save(update_fields=[
-                    'current_student_name',
-                    'current_student_id', 
+                    'current_district_member', 
                     'current_checkout_date',
                     'current_expected_return',
                     'current_checkout_notes',
@@ -455,13 +452,12 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 super().save_model(request, obj, form, change)
         
         # ====================================================================
-        # UPDATE EXISTING CHECKOUT (student changed while still checked out)
+        # UPDATE EXISTING CHECKOUT (current_district_member changed while still checked out)
         # ====================================================================
         elif change and obj.status == 'checked_out':
-            # Check if student info changed while device is checked out
-            student_changed = any(field in form.changed_data for field in [
-                'current_student_name', 
-                'current_student_id',
+            # Check if current_district_member info changed while device is checked out
+            district_member_changed = any(field in form.changed_data for field in [
+                'current_district_member'
                 'current_checkout_date',
                 'current_expected_return'
             ])
@@ -472,10 +468,8 @@ class LongTermLoanerAdmin(admin.ModelAdmin):
                 
                 if current_checkout:
                     # Update the existing history record
-                    if 'current_student_name' in form.changed_data:
-                        current_checkout.student_name = obj.current_student_name
-                    if 'current_student_id' in form.changed_data:
-                        current_checkout.student_id = obj.current_student_id
+                    if 'current_district_member' in form.changed_data:
+                        current_checkout.district_member = obj.current_district_member
                     if 'current_checkout_date' in form.changed_data:
                         current_checkout.checkout_date = obj.current_checkout_date
                     if 'current_expected_return' in form.changed_data:
@@ -555,8 +549,8 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
         ('Loaner Device', {
             'fields': ('loaner',)
         }),
-        ('Student Information (RESTRICTED - ACCESS LOGGED)', {
-            'fields': ('district_member'),
+        ('District Member Information (RESTRICTED - ACCESS LOGGED)', {
+            'fields': ('district_member',),
             'classes': ('collapse',),
             'description': 'FERPA-protected data. Access is audited.'
         }),
@@ -581,8 +575,6 @@ class LoanerCheckoutHistoryAdmin(admin.ModelAdmin):
     
     readonly_fields = [
         'loaner',
-        'student_name',
-        'student_id',
         'checkout_date',
         'expected_return_date',
         'checked_out_by',

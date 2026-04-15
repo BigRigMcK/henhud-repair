@@ -80,25 +80,20 @@
         {% if is_technician or can_view_student_info %}
             <div class="card mb-4">
                 <div class="card-header">Student Information</div>
-                    <div class="card-body">
-                    <p><strong>Name:</strong> {{ repair.student_name }}</p>
-                    <p><strong>Grade:</strong> {{ repair.get_student_grade_display }} &nbsp <strong>ID:</strong> {{ repair.student_id }}</p>
-                    <p><strong>Email:</strong> {{ repair.student_email }}
+                <div class="card-body">
+                    {% if repair.district_member %}
+                        <p><strong>Name:</strong> {{ repair.district_member.district_member_name }}</p>
+                        <p><strong>Grade:</strong> {{ repair.district_member.get_district_member_grade_display }}
+                           &nbsp <strong>ID:</strong> {{ repair.district_member.district_member_id }}</p>
+                        <p><strong>Email:</strong> {{ repair.district_member.district_member_email }}</p>
+                    {% else %}
+                        <p class="text-muted">No student linked to this repair.</p>
+                    {% endif %}
                 </div>
             </div>
-        {% else %}
-            <div class="card mb-4">
-                    <div class="card-header">Student Information</div>
-                        <div class="card-body">
-                        <p><strong>Name:</strong> {{ repair.student_name }}</p>
-                        </div>
-                </div>
-            </div>
-            
             {% endif %}
-        
-    </div>
-            
+        </div>
+                        
         
     <!-- Repair Details -->
     <div class="card mb-3">

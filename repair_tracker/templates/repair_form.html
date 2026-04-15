@@ -138,58 +138,15 @@
         
     
         <!-- Student Information Section (conditional) -->
-        {% if form.student_name %}
-        <div class="card mb-3">
-            <div class="card-header">
-                Student Information 
-                <small class="text-muted">(Encrypted - FERPA Protected)</small>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        {{ form.student_name.label_tag }}
-                        {{ form.student_name }}
-                        {% if form.student_name.errors %}
-                            <div class="text-danger">{{ form.student_name.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-3">
-                        {{ form.student_id.label_tag }}
-                        {{ form.student_id }}
-                        {% if form.student_id.errors %}
-                            <div class="text-danger">{{ form.student_id.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-5">
-                        {{ form.student_school.label_tag }}
-                        {{ form.student_school }}
-                        {% if form.student_school.erros %}
-                        <div class="text-danger">{{ form.student_email.errors }}</div>
-                        {% endif %}
-                    
-                    </div>
-                    
-                <div class="row" style="margin-top:10px">
-                    <div class="col-md-5">
-                        {{ form.student_email.label_tag }}
-                        {{ form.student_email }}
-                        {% if form.student_email.errors %}
-                        <div class="text-danger">{{ form.student_email.errors }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-3">
-                        {{ form.student_grade.label_tag }}
-                        <br>
-                        {{ form.student_grade }}
-                        {% if form.student_grade.errors %}
-                            <div class="text-danger">{{ form.student_grade.errors }}</div>
-                        {% endif %}
-                    </div>
+        {% if form.district_member %}
+            <div class="card mb-3">
+                <div class="card-header">Student Information <small class="text-muted">(FERPA Protected)</small></div>
+                <div class="card-body">
+                    {{ form.district_member.label_tag }}
+                    {{ form.district_member }}
                     
                 </div>
             </div>
-            </div>
-        </div>
         {% endif %}
 
 <!-- Repair Details Section -->
