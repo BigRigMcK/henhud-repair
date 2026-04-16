@@ -30,7 +30,7 @@ class District_Member(models.Model):
     district_member_id = EncryptedCharField(max_length=50, blank=True)
     district_member_id_index = SearchField(
         hash_key=settings.SEARCH_D_M_ID_HASH_KEY,
-        for_field='district_member_id', unique=True,)
+        encrypted_field_name='district_member_id', unique=True,)
 
     
     
