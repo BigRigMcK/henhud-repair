@@ -1,7 +1,8 @@
 from django.db import models
 from django_cryptography.fields import encrypt
 from django.contrib.auth.models import User
-from encrypted_fields.fields import EncryptedCharField
+from encrypted_fields.fields import EncryptedCharField, EncryptedEmailField, SearchField
+from django.conf import settings
 
 
 class District_Member(models.Model):
@@ -25,9 +26,18 @@ class District_Member(models.Model):
 
     # All FERPA fields encrypted
     district_member_name = EncryptedCharField(max_length=200, blank=True)
-    district_member_id = EncryptedCharField(max_length=50, blank=True, unique=True)
+    
+    district_member_id = EncryptedCharField(max_length=50, blank=True)
+    district_member_id_index = SearchField(
+        hash_key=settings.SEARCH_D_M_ID_HASH_KEY,
+        for_field='district_member_id', unique=True,)
+
+    
+    
     district_member_email = EncryptedEmailField(blank=True, default='@students.henhudschools.org')
+    
     district_member_grade = models.CharField(max_length=10, blank=True, choices=GRADE_CHOICES)
+    
     district_member_building = models.CharField(max_length=25, blank=True, choices=BUILDING_CHOICES)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,10 +51,10 @@ class District_Member(models.Model):
         ]
 
     def __str__(self):
-        return f"Student #{self.district_member_id}"  # Never expose name in __str__ (audit safety)
+        return f"Student #{self.pk}"  # Never expose name in __str__ (audit safety)
 
     def get_audit_representation(self):
-        return f"Student Record #{self.district_member_id} - Grade: {self.district_member_grade} - Building: {self.district_member_building}"
+        return f"Student Record #{self.pk} - Grade: {self.district_member_grade} - Building: {self.district_member_building}"
 
 
 class District_Member_DeviceAssignment(models.Model):
