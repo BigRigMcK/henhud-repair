@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
 from django.db.models import Q
+import hashlib
 
 from .models import District_Member, District_Member_DeviceAssignment
 from Inventory.models import District_Device_Inventory
@@ -34,17 +35,16 @@ def _audit(request, action, obj, changes=None):
 
 def _hash_for_search(value, hash_key):
     """
-    Hash a plaintext value the same way SearchField does internally,
-    so we can perform an exact lookup against the stored HMAC hash in the DB.
-    Uses HMAC-SHA256, matching django-searchable-encrypted-fields behaviour.
+    Reproduce exactly what django-searchable-encrypted-fields SearchField
+    stores in the database via get_prep_value():
+
+        stored = "xx" + sha256( (value + hash_key).encode() ).hexdigest()
+
+    Source: encrypted_fields/fields.py — get_prep_value()
     """
-    import hmac
-    import hashlib
-    return hmac.new(
-        hash_key.encode(),
-        value.encode(),
-        hashlib.sha256
-    ).hexdigest()
+    SEARCH_HASH_PREFIX = "xx"
+    raw = str(value) + hash_key
+    return SEARCH_HASH_PREFIX + hashlib.sha256(raw.encode()).hexdigest()
 
 
 # ============================================================================
@@ -69,7 +69,7 @@ def assignment_list(request):
         'active_count': active_assignments.count(),
         'tab': tab,
     }
-    return render(request, 'assignment_list.html', context)
+    return render(request, 'members/assignment_list.html', context)
 
 
 # ============================================================================
@@ -90,7 +90,6 @@ def assignment_checkout(request):
         device = get_object_or_404(District_Device_Inventory, pk=device_pk)
         member = get_object_or_404(District_Member, pk=member_pk)
 
-        # Check device not already out
         already_out = District_Member_DeviceAssignment.objects.filter(
             device=device,
             returned_date__isnull=True
@@ -124,7 +123,7 @@ def assignment_checkout(request):
         )
         return redirect('assignment_list')
 
-    return render(request, 'assignment_checkout.html')
+    return render(request, 'members/assignment_checkout.html')
 
 
 # ============================================================================
@@ -161,7 +160,7 @@ def assignment_checkin(request, pk):
         )
         return redirect('assignment_list')
 
-    return render(request, 'assignment_checkin.html', {'assignment': assignment})
+    return render(request, 'members/assignment_checkin.html', {'assignment': assignment})
 
 
 # ============================================================================
@@ -186,7 +185,7 @@ def member_detail(request, pk):
         'history': history,
         'can_view_pii': can_view_pii,
     }
-    return render(request, 'member_detail.html', context)
+    return render(request, 'members/member_detail.html', context)
 
 
 # ============================================================================
@@ -199,7 +198,7 @@ def device_search_api(request):
     results = []
 
     if len(q) >= 1:
-        filters = Q(serial_number__icontains=q) | Q(asset_id__icontains=q)
+        filters = Q(serial_number__icontains=q) | Q(asset_name__icontains=q)
         if q.isdigit():
             filters |= Q(asset_id=q)
 
@@ -240,10 +239,9 @@ def member_search_api(request):
     if len(q) < 1:
         return JsonResponse({'results': []})
 
-    # Each SearchField stores an HMAC-SHA256 hash of the plaintext value.
-    # To look up a member, we hash the query using each field's secret key
-    # and do an exact match. The technician must type the exact full value
-    # (full name, full district ID, or full email address) to get a result.
+    # django-searchable-encrypted-fields stores:
+    #   "xx" + sha256( (plaintext + hash_key).encode() ).hexdigest()
+    # We reproduce that here to do an exact DB lookup.
     found = {}  # pk → member, deduplicated across all three lookups
 
     # 1. Search by district ID
@@ -251,7 +249,7 @@ def member_search_api(request):
         id_hash = _hash_for_search(q, django_settings.SEARCH_D_M_ID_HASH_KEY)
         for m in District_Member.objects.filter(district_member_id_index=id_hash):
             found[m.pk] = m
-    except Exception:
+    except Exception as e:
         pass
 
     # 2. Search by full name
@@ -259,7 +257,7 @@ def member_search_api(request):
         name_hash = _hash_for_search(q, django_settings.SEARCH_D_M_NME_HASH_KEY)
         for m in District_Member.objects.filter(district_member_name_index=name_hash):
             found[m.pk] = m
-    except Exception:
+    except Exception as e:
         pass
 
     # 3. Search by email address
@@ -267,7 +265,7 @@ def member_search_api(request):
         email_hash = _hash_for_search(q, django_settings.SEARCH_D_M_EML_HASH_KEY)
         for m in District_Member.objects.filter(district_member_email_index=email_hash):
             found[m.pk] = m
-    except Exception:
+    except Exception as e:
         pass
 
     results = []
