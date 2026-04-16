@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% block title %}Member #{{ member.pk }} — Device History{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --card-radius: 10px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+  }
+
+  .member-meta span {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 20px;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .ferpa-notice {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.82rem;
+    color: #664d03;
+    margin-bottom: 1rem;
+  }
+
+  .pii-block {
+    background: #f0f4ff;
+    border: 1px solid #b8c9e8;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pii-block .pii-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .pii-row .pii-item { display: flex; flex-direction: column; }
+  .pii-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: #6c757d; font-weight: 600; }
+  .pii-value { font-weight: 600; color: #1a1a1a; }
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--hh-navy);
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--hh-navy);
+  }
+
+  .table thead th {
+    background-color: var(--hh-navy);
+    color: white;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .table tbody tr:hover { background: #f0f4ff; }
+
+  .badge-active {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+    border-radius: 12px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .badge-returned {
+    background: #d1e7dd;
+    color: #0a5c36;
+    border: 1px solid #a3cfbb;
+    border-radius: 12px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .btn-checkin-sm {
+    background: #198754;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+
+  .btn-checkin-sm:hover { opacity: 0.85; color: white; }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6c757d;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+      <div>
+        <div style="font-size:0.8rem;opacity:0.7;margin-bottom:0.2rem;">District Member Profile</div>
+        <h2 class="mb-0 fw-bold">Member #{{ member.pk }}</h2>
+        <div class="member-meta mt-1">
+          <span>{{ member.get_district_member_grade_display }}</span>
+          <span>{{ member.district_member_building }}</span>
+        </div>
+      </div>
+      <div>
+        <a href="{% url 'assignment_checkout' %}?member={{ member.pk }}"
+           class="btn"
+           style="background:var(--hh-accent);color:#1a1a1a;font-weight:700;border-radius:8px;">
+          ＋ Assign Device
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PII Block (gated) -->
+  {% if can_view_pii %}
+  <div class="pii-block">
+    <div class="pii-row">
+      <div class="pii-item">
+        <span class="pii-label">Name</span>
+        <span class="pii-value">{{ member.district_member_name }}</span>
+      </div>
+      <div class="pii-item">
+        <span class="pii-label">District ID</span>
+        <span class="pii-value">{{ member.district_member_id }}</span>
+      </div>
+      <div class="pii-item">
+        <span class="pii-label">Email</span>
+        <span class="pii-value">{{ member.district_member_email }}</span>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="ferpa-notice">
+    🔒 <strong>FERPA Protected:</strong> Name, ID, and email are encrypted and require elevated permissions to view.
+    Contact your administrator if you need access.
+  </div>
+  {% endif %}
+
+  <!-- Active Checkouts -->
+  <div class="section-title mt-3">Currently Checked Out</div>
+  {% if active %}
+  <div class="table-responsive mb-4">
+    <table class="table table-hover table-sm align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Asset ID</th>
+          <th>Serial #</th>
+          <th>Checked Out</th>
+          <th>Days Out</th>
+          <th>By</th>
+          <th>Notes</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in active %}
+        <tr>
+          <td>
+            <a href="/inventory/inventory_detail/{{ a.device.pk }}/"
+               style="color:var(--hh-navy);font-weight:600;text-decoration:none;">
+              {{ a.device.asset_name }}
+            </a>
+          </td>
+          <td><code>{{ a.device.asset_id }}</code></td>
+          <td><code>{{ a.device.serial_number|default:"—" }}</code></td>
+          <td>{{ a.assigned_date|date:"m/d/Y" }}</td>
+          <td><small class="text-muted">{{ a.assigned_date|timesince }}</small></td>
+          <td>{{ a.assigned_by.get_full_name|default:a.assigned_by.username|default:"—" }}</td>
+          <td>
+            {% if a.notes %}
+              <span title="{{ a.notes }}" style="cursor:help;">📝 <small>{{ a.notes|truncatewords:6 }}</small></span>
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            <a href="{% url 'assignment_checkin' a.pk %}" class="btn btn-checkin-sm">✓ Check In</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state mb-3">
+    <div>No devices currently checked out to this member.</div>
+  </div>
+  {% endif %}
+
+  <!-- History -->
+  <div class="section-title mt-2">Assignment History</div>
+  {% if history %}
+  <div class="table-responsive mb-4">
+    <table class="table table-hover table-sm align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Device</th>
+          <th>Asset ID</th>
+          <th>Checked Out</th>
+          <th>Returned</th>
+          <th>Duration</th>
+          <th>By</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in history %}
+        <tr>
+          <td>
+            <a href="/inventory/inventory_detail/{{ a.device.pk }}/"
+               style="color:var(--hh-navy);font-weight:600;text-decoration:none;">
+              {{ a.device.asset_name }}
+            </a>
+          </td>
+          <td><code>{{ a.device.asset_id }}</code></td>
+          <td>{{ a.assigned_date|date:"m/d/Y" }}</td>
+          <td>
+            <span class="badge-returned">{{ a.returned_date|date:"m/d/Y" }}</span>
+          </td>
+          <td>
+            <small class="text-muted">
+              {% if a.returned_date %}{{ a.assigned_date|timesince:a.returned_date }}{% else %}—{% endif %}
+            </small>
+          </td>
+          <td>{{ a.assigned_by.get_full_name|default:a.assigned_by.username|default:"—" }}</td>
+          <td>
+            {% if a.notes %}
+              <span title="{{ a.notes }}" style="cursor:help;">📝 <small>{{ a.notes|truncatewords:6 }}</small></span>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state mb-3">
+    <div>No previous assignments on record for this member.</div>
+  </div>
+  {% endif %}
+
+  <div class="mt-2">
+    <a href="{% url 'assignment_list' %}" class="text-muted text-decoration-none" style="font-size:0.85rem;">
+      ← Back to All Assignments
+    </a>
+  </div>
+
+</div>
+{% endblock %}

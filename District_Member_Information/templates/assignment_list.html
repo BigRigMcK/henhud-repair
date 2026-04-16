@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% block title %}Device Assignments — HH IT{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-success: #198754;
+    --hh-danger: #dc3545;
+    --hh-muted: #6c757d;
+    --card-radius: 10px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .nav-tabs .nav-link {
+    color: var(--hh-navy);
+    font-weight: 500;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .nav-tabs .nav-link.active {
+    color: var(--hh-navy);
+    font-weight: 700;
+    border-bottom-color: white;
+  }
+
+  .table thead th {
+    background-color: var(--hh-navy);
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .table tbody tr:hover {
+    background-color: #f0f4ff;
+  }
+
+  .badge-checked-out {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+    border-radius: 20px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .badge-returned {
+    background-color: #d1e7dd;
+    color: #0a5c36;
+    border: 1px solid #a3cfbb;
+    border-radius: 20px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .btn-checkin {
+    background-color: var(--hh-success);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: opacity 0.15s;
+  }
+
+  .btn-checkin:hover { opacity: 0.85; color: white; }
+
+  .btn-checkout-new {
+    background-color: var(--hh-accent);
+    color: #1a1a1a;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.55rem 1.4rem;
+    transition: opacity 0.15s;
+  }
+
+  .btn-checkout-new:hover { opacity: 0.85; }
+
+  .member-link {
+    color: var(--hh-navy);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .member-link:hover { text-decoration: underline; }
+
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--hh-muted);
+  }
+
+  .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
+
+  .days-out {
+    font-size: 0.75rem;
+    color: var(--hh-muted);
+  }
+
+  .days-out.long {
+    color: var(--hh-danger);
+    font-weight: 600;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4">
+
+  <!-- Page Header -->
+  <div class="page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div>
+      <h2 class="mb-0 fw-bold">📋 Device Assignments</h2>
+      <div class="mt-1 opacity-75" style="font-size:0.9rem;">Track device checkouts and returns for all district members</div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+      <span class="stat-badge">{{ active_count }} Currently Out</span>
+      <a href="{% url 'assignment_checkout' %}" class="btn btn-checkout-new">
+        ＋ Check Out Device
+      </a>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-0" id="assignmentTabs">
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'active' %}active{% endif %}"
+         href="?tab=active">
+        Active Checkouts
+        {% if active_count > 0 %}
+          <span class="badge rounded-pill ms-1" style="background:var(--hh-accent);color:#1a1a1a;">{{ active_count }}</span>
+        {% endif %}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if tab == 'history' %}active{% endif %}"
+         href="?tab=history">
+        Return History
+      </a>
+    </li>
+  </ul>
+
+  <div class="card border-top-0 rounded-0 rounded-bottom shadow-sm mb-4">
+    <div class="card-body p-0">
+
+      <!-- ACTIVE TAB -->
+      {% if tab == 'active' %}
+        {% if active_assignments %}
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Device</th>
+                <th>Asset ID</th>
+                <th>Serial #</th>
+                <th>Assigned To</th>
+                <th>Grade / Building</th>
+                <th>Checked Out</th>
+                <th>Days Out</th>
+                <th>Assigned By</th>
+                <th>Notes</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in active_assignments %}
+              {% with days=a.assigned_date|timesince %}
+              <tr>
+                <td class="text-muted" style="font-size:0.8rem;">{{ a.pk }}</td>
+                <td>
+                  <a href="/inventory/inventory_detail/{{ a.device.pk }}/" class="member-link">
+                    {{ a.device.asset_name }}
+                  </a>
+                </td>
+                <td><code>{{ a.device.asset_id }}</code></td>
+                <td><code>{{ a.device.serial_number|default:"—" }}</code></td>
+                <td>
+                  <a href="{% url 'member_detail' a.district_member.pk %}" class="member-link">
+                    Member #{{ a.district_member.pk }}
+                  </a>
+                </td>
+                <td>
+                  <span class="badge bg-secondary" style="font-size:0.7rem;">
+                    {{ a.district_member.get_district_member_grade_display }}
+                  </span>
+                  <br>
+                  <small class="text-muted">{{ a.district_member.district_member_building }}</small>
+                </td>
+                <td>{{ a.assigned_date|date:"m/d/Y" }}</td>
+                <td>
+                  {% now "Y-m-d" as today %}
+                  <span class="days-out {% if a.assigned_date|timesince|slice:":2" != "0 " %}{% endif %}">
+                    {{ a.assigned_date|timesince }}
+                  </span>
+                </td>
+                <td>{{ a.assigned_by.get_full_name|default:a.assigned_by.username|default:"—" }}</td>
+                <td>
+                  {% if a.notes %}
+                    <span title="{{ a.notes }}" style="cursor:help;">
+                      📝 <small>{{ a.notes|truncatewords:5 }}</small>
+                    </span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{% url 'assignment_checkin' a.pk %}" class="btn btn-checkin">
+                    ✓ Check In
+                  </a>
+                </td>
+              </tr>
+              {% endwith %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <i>✅</i>
+          <h5 class="fw-semibold">No devices currently checked out</h5>
+          <p class="text-muted">All devices are accounted for. Use the button above to check one out.</p>
+          <a href="{% url 'assignment_checkout' %}" class="btn btn-checkout-new mt-2">Check Out a Device</a>
+        </div>
+        {% endif %}
+
+      <!-- HISTORY TAB -->
+      {% else %}
+        {% if history_assignments %}
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Device</th>
+                <th>Asset ID</th>
+                <th>Assigned To</th>
+                <th>Grade / Building</th>
+                <th>Checked Out</th>
+                <th>Returned</th>
+                <th>Duration</th>
+                <th>Assigned By</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in history_assignments %}
+              <tr>
+                <td class="text-muted" style="font-size:0.8rem;">{{ a.pk }}</td>
+                <td>
+                  <a href="/inventory/inventory_detail/{{ a.device.pk }}/" class="member-link">
+                    {{ a.device.asset_name }}
+                  </a>
+                </td>
+                <td><code>{{ a.device.asset_id }}</code></td>
+                <td>
+                  <a href="{% url 'member_detail' a.district_member.pk %}" class="member-link">
+                    Member #{{ a.district_member.pk }}
+                  </a>
+                </td>
+                <td>
+                  <span class="badge bg-secondary" style="font-size:0.7rem;">
+                    {{ a.district_member.get_district_member_grade_display }}
+                  </span>
+                  <br>
+                  <small class="text-muted">{{ a.district_member.district_member_building }}</small>
+                </td>
+                <td>{{ a.assigned_date|date:"m/d/Y" }}</td>
+                <td>
+                  <span class="badge-returned">{{ a.returned_date|date:"m/d/Y" }}</span>
+                </td>
+                <td>
+                  <small class="text-muted">
+                    {% if a.returned_date and a.assigned_date %}
+                      {{ a.assigned_date|timesince:a.returned_date }}
+                    {% else %}—{% endif %}
+                  </small>
+                </td>
+                <td>{{ a.assigned_by.get_full_name|default:a.assigned_by.username|default:"—" }}</td>
+                <td>
+                  {% if a.notes %}
+                    <span title="{{ a.notes }}" style="cursor:help;">
+                      📝 <small>{{ a.notes|truncatewords:5 }}</small>
+                    </span>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <i>📂</i>
+          <h5 class="fw-semibold">No return history yet</h5>
+          <p class="text-muted">Returned devices will appear here.</p>
+        </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

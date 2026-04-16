@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+{% block title %}Check Out Device — HH IT{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --card-radius: 10px;
+  }
+
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+  }
+
+  .step-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--hh-navy);
+    margin-bottom: 0.3rem;
+  }
+
+  .search-wrapper { position: relative; }
+
+  .search-input {
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--hh-navy);
+    box-shadow: 0 0 0 3px rgba(0,51,102,0.12);
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1000;
+    max-height: 280px;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .search-results.show { display: block; }
+
+  .result-item {
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.1s;
+  }
+
+  .result-item:last-child { border-bottom: none; }
+
+  .result-item:hover { background: #f0f4ff; }
+
+  .result-item.checked-out {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: #fafafa;
+  }
+
+  .result-item .result-title {
+    font-weight: 600;
+    color: var(--hh-navy);
+    font-size: 0.95rem;
+  }
+
+  .result-item .result-meta {
+    font-size: 0.78rem;
+    color: #6c757d;
+    margin-top: 1px;
+  }
+
+  .selected-card {
+    background: #f0f4ff;
+    border: 2px solid var(--hh-navy);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .selected-card.show { display: block; }
+
+  .selected-card .selected-title {
+    font-weight: 700;
+    color: var(--hh-navy);
+  }
+
+  .selected-card .clear-btn {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    float: right;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  .checkout-card {
+    border: 1px solid #dee2e6;
+    border-radius: var(--card-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  .checkout-card .card-header {
+    background: var(--hh-navy);
+    color: white;
+    font-weight: 700;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+    padding: 0.85rem 1.2rem;
+  }
+
+  .btn-submit-checkout {
+    background: var(--hh-accent);
+    color: #1a1a1a;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 2rem;
+    font-size: 1rem;
+    transition: opacity 0.15s;
+  }
+
+  .btn-submit-checkout:hover:not(:disabled) { opacity: 0.85; }
+  .btn-submit-checkout:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid #ccc;
+    border-top-color: var(--hh-navy);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    position: absolute;
+    right: 12px; top: 50%; transform: translateY(-50%);
+  }
+
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width:780px;">
+
+  <div class="page-header">
+    <h2 class="mb-0 fw-bold">📤 Check Out Device</h2>
+    <div class="mt-1 opacity-75" style="font-size:0.9rem;">
+      Assign a device to a district member
+    </div>
+  </div>
+
+  <form method="POST" id="checkoutForm">
+    {% csrf_token %}
+
+    <!-- Hidden fields populated by JS -->
+    <input type="hidden" name="device_pk" id="device_pk">
+    <input type="hidden" name="member_pk" id="member_pk">
+
+    <div class="checkout-card card mb-3">
+      <div class="card-header">Step 1 — Find the Device</div>
+      <div class="card-body">
+        <div class="step-label">Search by Asset ID or Serial Number</div>
+        <div class="search-wrapper">
+          <input type="text" id="deviceSearch" class="search-input"
+                 placeholder="Type Asset ID (e.g. 12345) or serial number…"
+                 autocomplete="off">
+          <div class="spinner" id="deviceSpinner"></div>
+          <div class="search-results" id="deviceResults"></div>
+        </div>
+        <div class="selected-card" id="deviceSelected">
+          <button type="button" class="clear-btn" onclick="clearDevice()">✕ Clear</button>
+          <div class="selected-title" id="deviceSelectedTitle"></div>
+          <div class="text-muted" style="font-size:0.82rem;" id="deviceSelectedMeta"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-card card mb-3">
+      <div class="card-header">Step 2 — Find the District Member</div>
+      <div class="card-body">
+        <div class="step-label">Search by Full Name, District ID, or Email</div>
+        <div class="search-wrapper">
+          <input type="text" id="memberSearch" class="search-input"
+                 placeholder="Type full name, exact district ID, or full email…"
+                 autocomplete="off">
+          <div class="spinner" id="memberSpinner"></div>
+          <div class="search-results" id="memberResults"></div>
+        </div>
+        <div class="selected-card" id="memberSelected">
+          <button type="button" class="clear-btn" onclick="clearMember()">✕ Clear</button>
+          <div class="selected-title" id="memberSelectedTitle"></div>
+          <div class="text-muted" style="font-size:0.82rem;" id="memberSelectedMeta"></div>
+        </div>
+
+        <div class="mt-2 p-2 rounded" style="font-size:0.8rem;color:#664d03;background:#fff8e1;border:1px solid #ffe082;">
+          🔒 <strong>Encrypted search:</strong> Names, IDs, and emails are stored encrypted.
+          You must type the <strong>exact full value</strong> to find a match —
+          e.g. <em>"Smith, John"</em> or <em>"123456"</em> or <em>"jsmith@henhudschools.org"</em>.
+          Partial searches are not supported for encrypted fields.
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-card card mb-4">
+      <div class="card-header">Step 3 — Notes <span style="font-weight:400;opacity:0.7;">(optional)</span></div>
+      <div class="card-body">
+        <textarea name="notes" class="form-control" rows="3"
+                  placeholder="Reason for assignment, special instructions, etc."></textarea>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <button type="submit" class="btn btn-submit-checkout" id="submitBtn" disabled>
+        ✓ Confirm Checkout
+      </button>
+      <a href="{% url 'assignment_list' %}" class="text-muted text-decoration-none">Cancel</a>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  let deviceTimeout, memberTimeout;
+  let devicePk = null, memberPk = null;
+
+  function debounce(fn, delay) {
+    return function(...args) {
+      clearTimeout(this._t);
+      this._t = setTimeout(() => fn(...args), delay);
+    }
+  }
+
+  // ── DEVICE SEARCH ──────────────────────────────────────────────────────────
+  const deviceSearch = document.getElementById('deviceSearch');
+  const deviceResults = document.getElementById('deviceResults');
+  const deviceSpinner = document.getElementById('deviceSpinner');
+
+  deviceSearch.addEventListener('input', function() {
+    const q = this.value.trim();
+    clearTimeout(deviceTimeout);
+    if (q.length < 2) { deviceResults.classList.remove('show'); return; }
+
+    deviceSpinner.style.display = 'block';
+    deviceTimeout = setTimeout(() => {
+      fetch(`/members/api/device-search/?q=${encodeURIComponent(q)}`)
+        .then(r => r.json())
+        .then(data => {
+          deviceSpinner.style.display = 'none';
+          renderDeviceResults(data.results);
+        }).catch(() => { deviceSpinner.style.display = 'none'; });
+    }, 280);
+  });
+
+  function renderDeviceResults(results) {
+    if (!results.length) {
+      deviceResults.innerHTML = '<div class="result-item"><span class="text-muted">No devices found</span></div>';
+      deviceResults.classList.add('show');
+      return;
+    }
+    deviceResults.innerHTML = results.map(d => {
+      const out = d.is_checked_out;
+      return `<div class="result-item ${out ? 'checked-out' : ''}"
+                   data-pk="${d.pk}"
+                   data-name="${d.asset_name}"
+                   data-id="${d.asset_id}"
+                   data-serial="${d.serial_number}"
+                   data-model="${d.model}"
+                   onclick="${out ? '' : 'selectDevice(this)'}">
+        <div class="result-title">${d.asset_name} ${out ? '<span class="badge bg-warning text-dark ms-1" style="font-size:0.65rem;">Already Checked Out</span>' : ''}</div>
+        <div class="result-meta">Asset ID: ${d.asset_id} &nbsp;|&nbsp; S/N: ${d.serial_number} &nbsp;|&nbsp; ${d.model}</div>
+      </div>`;
+    }).join('');
+    deviceResults.classList.add('show');
+  }
+
+  function selectDevice(el) {
+    devicePk = el.dataset.pk;
+    document.getElementById('device_pk').value = devicePk;
+    document.getElementById('deviceSelectedTitle').textContent = el.dataset.name;
+    document.getElementById('deviceSelectedMeta').textContent =
+      `Asset ID: ${el.dataset.id}  |  S/N: ${el.dataset.serial}  |  ${el.dataset.model}`;
+    document.getElementById('deviceSelected').classList.add('show');
+    deviceResults.classList.remove('show');
+    deviceSearch.value = '';
+    checkReady();
+  }
+
+  function clearDevice() {
+    devicePk = null;
+    document.getElementById('device_pk').value = '';
+    document.getElementById('deviceSelected').classList.remove('show');
+    checkReady();
+  }
+
+  // ── MEMBER SEARCH ──────────────────────────────────────────────────────────
+  const memberSearch = document.getElementById('memberSearch');
+  const memberResults = document.getElementById('memberResults');
+  const memberSpinner = document.getElementById('memberSpinner');
+
+  memberSearch.addEventListener('input', function() {
+    const q = this.value.trim();
+    clearTimeout(memberTimeout);
+    if (q.length < 2) { memberResults.classList.remove('show'); return; }
+
+    memberSpinner.style.display = 'block';
+    memberTimeout = setTimeout(() => {
+      fetch(`/members/api/member-search/?q=${encodeURIComponent(q)}`)
+        .then(r => r.json())
+        .then(data => {
+          memberSpinner.style.display = 'none';
+          renderMemberResults(data.results);
+        }).catch(() => { memberSpinner.style.display = 'none'; });
+    }, 280);
+  });
+
+  function renderMemberResults(results) {
+    if (!results.length) {
+      memberResults.innerHTML = '<div class="result-item"><span class="text-muted">No members found</span></div>';
+      memberResults.classList.add('show');
+      return;
+    }
+    memberResults.innerHTML = results.map(m =>
+      `<div class="result-item"
+            data-pk="${m.pk}"
+            data-display="${m.display}"
+            data-grade="${m.grade}"
+            data-building="${m.building}"
+            onclick="selectMember(this)">
+        <div class="result-title">Member #${m.pk}</div>
+        <div class="result-meta">${m.grade} &nbsp;|&nbsp; ${m.building} ${m.id_index ? '&nbsp;|&nbsp; ID: ' + m.id_index : ''}</div>
+      </div>`
+    ).join('');
+    memberResults.classList.add('show');
+  }
+
+  function selectMember(el) {
+    memberPk = el.dataset.pk;
+    document.getElementById('member_pk').value = memberPk;
+    document.getElementById('memberSelectedTitle').textContent = `Member #${el.dataset.pk}`;
+    document.getElementById('memberSelectedMeta').textContent =
+      `${el.dataset.grade}  |  ${el.dataset.building}`;
+    document.getElementById('memberSelected').classList.add('show');
+    memberResults.classList.remove('show');
+    memberSearch.value = '';
+    checkReady();
+  }
+
+  function clearMember() {
+    memberPk = null;
+    document.getElementById('member_pk').value = '';
+    document.getElementById('memberSelected').classList.remove('show');
+    checkReady();
+  }
+
+  // ── ENABLE SUBMIT when both selected ──────────────────────────────────────
+  function checkReady() {
+    document.getElementById('submitBtn').disabled = !(devicePk && memberPk);
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', function(e) {
+    if (!deviceSearch.contains(e.target) && !deviceResults.contains(e.target))
+      deviceResults.classList.remove('show');
+    if (!memberSearch.contains(e.target) && !memberResults.contains(e.target))
+      memberResults.classList.remove('show');
+  });
+</script>
+{% endblock %}

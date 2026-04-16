@@ -17,13 +17,22 @@
   <div class="container-fluid">
     <div class="d-flex flex-wrap align-items-center justify-content-start">
 
+
+
+
+
+<!-- Title -->
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none me-4">
         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Hen Hud">
           <use xlink:href="#bootstrap"></use>
         </svg>
         <span class="fs-4 fw-bold">Hierarchical. Inventory. Management. (Put it in H.I.M)</span>
       </a>
-
+<!-- End of Title -->
+<!-- Name and Search -->
+      <!-- <span class="fs-4"> {% if user.is_authenticated %} Hi, {{user.username}} &nbsp {% endif %} </span> -->
+      
+<!-- Navigation Header -->
       <ul class="nav col-12 col-lg-auto mb-2 mb-md-0 me-auto align-items-center">
         <li><a href="/" class="nav-link px-2 text-white">Home</a></li>
         <li><a href="/audit" class="nav-link px-2 text-white"> Audit </a></li>
@@ -38,11 +47,22 @@
             <li><a class="dropdown-item" href="/inventory"> Inventory Home</a></li>
             <li><a class="dropdown-item" href="/inventory/inventory_list"> Inventory List </a></li>
           </ul>
+          <!-- End of Inventory Dropdown -->
 
 
-        <!--<li><a href="/logs" class="nav-link px-2 text-white">Logs</a></li>
-        <li><a href="/inputrepair" class="nav-link px-2 text-white">Input Repair</a></li>-->
-        
+        <!-- District Member Info -->
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link dropdown-toggle text-white px-2" id="ticketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            District Member
+          </a>
+          <ul class="dropdown-menu shadow" aria-labelledby="ticketsDropdown">
+            <li><a class="dropdown-item" href="/members/assignments/">Assignment List</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/members/assignments/<int:pk>/checkin/">Assignment Checkout</a></li>
+            <li><a class="dropdown-item" href="/members/<int:pk>/">Member Look up</a></li>
+          </ul>
+        </li>
+        <!-- End of District Member Info -->
         
         <li class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle text-white px-2" id="ticketsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -57,19 +77,21 @@
         </li>
 
         <li><a href="/videos" class="nav-link px-2 text-white">Videos</a></li>
-
+        </li>
       </ul>
-      <span class="fs-4"> {% if user.is_authenticated %} Hi, {{user.username}} &nbsp {%endif%} </span>
-      
-      <!-- Live Inventory Search -->
-      <li class="nav-item" style="position: relative; margin: 10px">
+
+<!-- End of Navigation Header -->
+
+<!-- Live Inventory Search -->
+
+      <li class="nav-item" style="position: relative; margin: 10px; list-style: none;">
         <input
           id="inv-search-input"
           type="search"
           class="form-control form-control-sm"
           placeholder="Search asset ID or serial…"
           autocomplete="off"
-          style="width: 220px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff;"
+          style="width: 420px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); color: #fff;"
         >
         <div id="inv-search-dropdown"
              style="display:none; position:absolute; top:calc(100% + 4px); left:0;
@@ -77,17 +99,10 @@
                     box-shadow: 0 8px 24px rgba(0,0,0,0.18); z-index:9999; overflow:hidden;">
         </div>
       </li>
+<!-- end of Name and Search -->
 
 
 
-      <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-3" role="search">
-        <input type="search"
-               class="form-control border-white text-white"
-               style="background-color: rgba(255,255,255,0.1);"
-               placeholder="Search..."
-               aria-label="Search">
-      </form>
- -->
       <div class="text-end">
         <a href="/admin" class="btn btn-outline-light">ADMIN ONLY</a>
       </div>

@@ -21,23 +21,40 @@ class District_Member(models.Model):
         ('FW', 'Furnace Woods'),
         ('HHHS', 'Hendrick Hudson High School'),
         ('MAITG', 'Maintainance Garage'),
-        # ... add the rest of your schools
     ]
 
-    # All FERPA fields encrypted
+    # ── Encrypted PII fields ──────────────────────────────────────────────────
+    # IMPORTANT: Each encrypted data field MUST be declared BEFORE its
+    # SearchField index. If a SearchField appears before the field it points
+    # to, the library's has_default() call recurses infinitely during migrate.
+
+    # Name + search index
     district_member_name = EncryptedCharField(max_length=200, blank=True)
-    
+    district_member_name_index = SearchField(
+        hash_key=settings.SEARCH_D_M_NME_HASH_KEY,
+        encrypted_field_name='district_member_name',
+        null=True,
+        blank=True,
+    )
+
+    # District ID + search index
+    district_member_id = EncryptedCharField(max_length=50, blank=True)
     district_member_id_index = SearchField(
         hash_key=settings.SEARCH_D_M_ID_HASH_KEY,
-        encrypted_field_name='district_member_id', unique=True,)
-    district_member_id = EncryptedCharField(max_length=50, blank=True)
+        encrypted_field_name='district_member_id',
+        unique=True,
+    )
 
-    
-    
+    # Email + search index
     district_member_email = EncryptedEmailField(blank=True, default='@students.henhudschools.org')
-    
+    district_member_email_index = SearchField(
+        hash_key=settings.SEARCH_D_M_EML_HASH_KEY,
+        encrypted_field_name='district_member_email',
+        null=True,
+        blank=True,
+    )
+
     district_member_grade = models.CharField(max_length=10, blank=True, choices=GRADE_CHOICES)
-    
     district_member_building = models.CharField(max_length=25, blank=True, choices=BUILDING_CHOICES)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,7 +66,7 @@ class District_Member(models.Model):
         permissions = [
             ("view_student_pii", "Can view student PII (FERPA protected)"),
         ]
-        
+
     def __str__(self):
         return f"Student #{self.pk}"  # Never expose name in __str__ (audit safety)
 
@@ -94,5 +111,4 @@ class District_Member_DeviceAssignment(models.Model):
         return f"Assignment #{self.pk} - Device: {self.device} - District Member: {self.district_member}"
 
     def is_active(self):
-        return self.returned_date is None# Create your models here.
-        
+        return self.returned_date is None

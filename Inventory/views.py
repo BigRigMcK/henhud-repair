@@ -106,7 +106,7 @@ def inventory_search(request):
 	results = []
 	if len(q) >= 2:
         # Try matching asset_id numerically first, then serial_number as text
-		filters = Q(serial_number__icontains=q) | Q(asset_name__icontains=q)
+		filters = Q(serial_number__icontains=q) | Q(asset_id__icontains=q)
 		if q.isdigit():
 			# Cast asset_id to text so partial matches work (e.g. "123" matches "12345")
 			devices = District_Device_Inventory.objects.annotate(

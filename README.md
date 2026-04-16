@@ -18,3 +18,6 @@ District_Department.objects.get_or_create(id=2, defaults={'department': 'Student
 District_Department.objects.get_or_create(id=3, defaults={'department': 'Classroom Loaner Devices'})
 District_Department.objects.get_or_create(id=4, defaults={'department': 'HHHS Long Term Loaner Devices'})
 District_Department.objects.get_or_create(id=5, defaults={'department': 'BMMS Long Term Loaner Devices'})
+
+
+psql -U postgres -d repair_tracker_db
