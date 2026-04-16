@@ -1,28 +1,105 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Audit Dashboard{% endblock %}
 
 {% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
-    <center> Please Select Your School </center>
+<div class="container mt-4">
 
- {% if locations %}
-    <div class="card" style="margin:40px">
-        <div class="card-body" style="margin:20px">
-            <div class="table-responsive">
-                <table class ="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>School</th>
-                            <th>Room </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for location in locations %}
-                        <tr>
-                            <td><a href="{% url 'perform_audit' location.pk %}"> {{ location }} </a></td>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Audit Dashboard</h2>
+    <span class="text-muted">Select a location to begin or resume an audit</span>
+  </div>
 
-                        {% endfor %}
-{% endif %}
+  {% if schools %}
+    {% for school_name, location_items in schools.items %}
+    <div class="mb-5">
 
+      <!-- School header -->
+      <div class="d-flex align-items-center mb-3">
+        <h4 class="mb-0 me-3">{{ school_name }}</h4>
+        <hr class="flex-grow-1 m-0">
+      </div>
+
+      <div class="row g-3">
+        {% for item in location_items %}
+        {% with loc=item.location audit=item.latest_audit count=item.device_count %}
+        <div class="col-md-4 col-lg-3">
+          <div class="card h-100 shadow-sm">
+
+            <!-- Card header: room name + status badge -->
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <strong>{{ loc.room }}</strong>
+              {% if audit %}
+                {% if audit.is_complete %}
+                  <span class="badge bg-success">Complete</span>
+                {% else %}
+                  <span class="badge bg-warning text-dark">In Progress</span>
+                {% endif %}
+              {% else %}
+                <span class="badge bg-secondary">Never Audited</span>
+              {% endif %}
+            </div>
+
+            <div class="card-body">
+              <!-- Device count -->
+              <p class="mb-2 text-muted small">
+                <i class="bi bi-laptop me-1"></i>{{ count }} device{{ count|pluralize }} in inventory
+              </p>
+
+              <!-- Last audit details -->
+              {% if audit %}
+                <p class="mb-1 small">
+                  <strong>Last Audit:</strong> {{ audit.started_at|date:"M d, Y" }}
+                </p>
+                <p class="mb-1 small">
+                  <strong>By:</strong> {{ audit.auditor.get_full_name|default:audit.auditor.username }}
+                </p>
+                <p class="mb-2 small">
+                  <strong>Result:</strong>
+                  <span class="text-success">{{ audit.found_count }} found</span> /
+                  <span class="text-danger">{{ audit.missing_count }} missing</span>
+                </p>
+              {% else %}
+                <p class="text-muted small mb-2">No audits on record.</p>
+              {% endif %}
+            </div>
+
+            <!-- Card footer: action buttons -->
+            <div class="card-footer bg-white d-flex gap-2">
+              <a href="{% url 'start_audit' loc.pk %}"
+                 class="btn btn-sm btn-primary flex-grow-1"
+                 onclick="return confirm('Start a new audit for {{ loc }}?')">
+                <i class="bi bi-play-circle me-1"></i>New Audit
+              </a>
+              {% if audit and not audit.is_complete %}
+                <a href="{% url 'perform_audit' audit.pk %}"
+                   class="btn btn-sm btn-outline-warning flex-grow-1">
+                  <i class="bi bi-arrow-clockwise me-1"></i>Resume
+                </a>
+              {% endif %}
+              {% if audit %}
+                <a href="{% url 'audit_history' loc.pk %}"
+                   class="btn btn-sm btn-outline-secondary"
+                   title="View audit history">
+                  <i class="bi bi-clock-history"></i>
+                </a>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+      </div><!-- /.row -->
+
+    </div><!-- /.mb-5 school block -->
+    {% endfor %}
+
+  {% else %}
+    <div class="alert alert-info">
+      No locations found. Please add locations in the admin before running audits.
+    </div>
+  {% endif %}
+
+</div>
 {% endblock %}

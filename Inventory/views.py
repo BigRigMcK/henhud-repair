@@ -47,7 +47,7 @@ def edit_inventory(request, pk):
 		form = District_Device_Inventory_Form(request.POST, instance=device, user=request.user)
 		if form.is_valid():
 			form.save()
-			messages.success(request, f"Device : {asset_id} has been Updated Successfully")
+			messages.success(request, f"Device : {device.asset_id} has been Updated Successfully")
 			return redirect('inventory_detail',pk=device.pk)
 		else:
 			print(form.errors)

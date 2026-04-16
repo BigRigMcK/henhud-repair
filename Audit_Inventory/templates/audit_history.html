@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Audit History — {{ location }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Audit History</h2>
+      <span class="text-muted">{{ location }}</span>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'start_audit' location.pk %}"
+         class="btn btn-primary"
+         onclick="return confirm('Start a new audit for {{ location }}?')">
+        <i class="bi bi-play-circle me-1"></i>New Audit
+      </a>
+      <a href="{% url 'audit_dashboard' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>Dashboard
+      </a>
+    </div>
+  </div>
+
+  {% if audits %}
+    {% for audit in audits %}
+    <div class="card mb-3 shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+          <strong>Audit #{{ audit.id }}</strong>
+          &nbsp;·&nbsp;
+          {{ audit.started_at|date:"F j, Y" }}
+          &nbsp;·&nbsp;
+          By {{ audit.auditor.get_full_name|default:audit.auditor.username }}
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <!-- Mini progress -->
+          <span class="text-success small">
+            <i class="bi bi-check-circle me-1"></i>{{ audit.found_count }} found
+          </span>
+          <span class="text-danger small">
+            <i class="bi bi-x-circle me-1"></i>{{ audit.missing_count }} missing
+          </span>
+          {% if audit.is_complete %}
+            <span class="badge bg-success">Complete</span>
+          {% else %}
+            <a href="{% url 'perform_audit' audit.pk %}" class="badge bg-warning text-dark text-decoration-none">
+              In Progress — Resume
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Collapsible device breakdown -->
+      <div class="card-body p-0">
+        <button class="btn btn-link btn-sm text-muted w-100 text-start ps-3 py-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#audit_{{ audit.id }}_devices">
+          <i class="bi bi-chevron-down me-1"></i>Show device breakdown
+        </button>
+        <div class="collapse" id="audit_{{ audit.id }}_devices">
+          <table class="table table-sm table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Device</th>
+                <th>Serial</th>
+                <th>Status</th>
+                <th>Found At</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for record in audit.audit_devices.all %}
+              <tr class="{% if record.found %}table-success{% else %}table-danger{% endif %}">
+                <td>
+                  <a href="/inventory/inventory_detail/{{ record.device.pk }}/" target="_blank">
+                    {{ record.device.asset_name }}
+                  </a>
+                  <small class="text-muted d-block">DAM: {{ record.device.asset_id }}</small>
+                </td>
+                <td><small>{{ record.device.serial_number|default:"—" }}</small></td>
+                <td>
+                  {% if record.found %}
+                    <span class="badge bg-success">Found</span>
+                  {% else %}
+                    <span class="badge bg-danger">Missing</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <small>{{ record.found_at|date:"M d, Y g:i A"|default:"—" }}</small>
+                </td>
+                <td>
+                  <small>{{ record.notes|default:"—" }}</small>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {% if audit.notes %}
+      <div class="card-footer text-muted small">
+        <strong>Notes:</strong> {{ audit.notes }}
+      </div>
+      {% endif %}
+
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <div class="alert alert-info">
+      No audits have been run for <strong>{{ location }}</strong> yet.
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

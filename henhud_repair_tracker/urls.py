@@ -24,7 +24,7 @@ urlpatterns = [
 	path('', include('repair_tracker.urls')),
     path("accounts/", include("django.contrib.auth.urls")),
     path("inventory/", include('Inventory.urls')),
-    path("audit/", include('Audit_Inventory.urls')),  # new
+    path("audit/", include('Audit_Inventory.urls')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
