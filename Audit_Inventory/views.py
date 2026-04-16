@@ -9,19 +9,13 @@ from .models import District_Device_Audit, Individual_AuditDevice
 
 
 # ============================================================================
-# AUDIT DASHBOARD  —  /audit/
+# AUDIT DASHBOARD  -  /audit/
 # ============================================================================
 
 @login_required
 def audit_dashboard(request):
-    """
-    Show all locations grouped by school.
-    Each location card shows the most recent audit's date, who ran it,
-    and a found/total summary so techs know what needs attention.
-    """
     locations = District_Location.objects.all().order_by('school', 'room')
 
-    # Annotate each location with its most recent audit
     location_data = []
     for loc in locations:
         latest_audit = (
@@ -37,7 +31,6 @@ def audit_dashboard(request):
             'device_count': device_count,
         })
 
-    # Group by school name for the template
     schools = {}
     for item in location_data:
         school = item['location'].school
@@ -45,25 +38,16 @@ def audit_dashboard(request):
             schools[school] = []
         schools[school].append(item)
 
-    context = {
-        'schools': schools,  # dict: {school_name: [location_data, ...]}
-    }
-    return render(request, 'audit_dashboard.html', context)
+    return render(request, 'audit_dashboard.html', {'schools': schools})
 
 
 # ============================================================================
-# START NEW AUDIT  —  /audit/<location_id>/start/
+# START NEW AUDIT  -  /audit/<location_id>/start/
 # ============================================================================
 
 @login_required
 def start_audit(request, location_id):
-    """
-    Always creates a fresh audit record for this location.
-    Pre-populates Individual_AuditDevice rows for every device at that location.
-    Redirects immediately into perform_audit.
-    """
     location = get_object_or_404(District_Location, pk=location_id)
-
     inventory_devices = District_Device_Inventory.objects.filter(location=location)
 
     if not inventory_devices.exists():
@@ -74,13 +58,10 @@ def start_audit(request, location_id):
         )
         return redirect('audit_dashboard')
 
-    # Create a brand-new audit record
     audit = District_Device_Audit.objects.create(
         location=location,
         auditor=request.user,
     )
-
-    # Bulk-create one row per device
     Individual_AuditDevice.objects.bulk_create([
         Individual_AuditDevice(audit=audit, device=device)
         for device in inventory_devices
@@ -91,32 +72,36 @@ def start_audit(request, location_id):
 
 
 # ============================================================================
-# PERFORM AUDIT  —  /audit/session/<audit_id>/
+# PERFORM AUDIT  -  /audit/session/<audit_id>/
 # ============================================================================
 
 @login_required
 def perform_audit(request, audit_id):
-    """
-    The main audit-taking view.
-    Techs check off each device as found and optionally add notes.
-    Saving does NOT close the audit — use complete_audit for that.
-    """
     audit = get_object_or_404(
         District_Device_Audit.objects.select_related('location', 'auditor'),
         pk=audit_id,
     )
 
     if request.method == 'POST':
-        audit_records = Individual_AuditDevice.objects.filter(audit=audit)
+        audit_records = Individual_AuditDevice.objects.filter(
+            audit=audit
+        ).select_related('device')
 
         for record in audit_records:
             was_found_before = record.found
             is_found_now = request.POST.get(f'found_{record.id}') == 'on'
             note = request.POST.get(f'notes_{record.id}', '').strip()
 
-            # Only stamp found_at the first time it transitions to found
             if is_found_now and not was_found_before:
-                record.found_at = timezone.now()
+                now = timezone.now()
+                record.found_at = now
+
+                # Write last_seen_at and last_seen_location back to the
+                # inventory record so it's visible everywhere in the system.
+                device = record.device
+                device.last_seen_at = now
+                device.last_seen_location = audit.location
+                device.save(update_fields=['last_seen_at', 'last_seen_location'])
 
             record.found = is_found_now
             record.notes = note
@@ -125,37 +110,65 @@ def perform_audit(request, audit_id):
         messages.success(request, "Audit progress saved.")
         return redirect('perform_audit', audit_id=audit.pk)
 
-    # GET — build context
+    # ── GET ──────────────────────────────────────────────────────────────────
     audit_devices = list(
         Individual_AuditDevice.objects
         .filter(audit=audit)
-        .select_related('device', 'device__model_type', 'device__location')
+        .select_related(
+            'device',
+            'device__model_type',
+            'device__location',
+            'device__last_seen_location',   # pre-fetch FK so template hits no extra queries
+        )
         .order_by('device__asset_name')
     )
 
-    # For devices not yet found this session, find the most recent found_at
-    # from any prior audit so the template can show "Last seen <date>".
-    # This is done in the view — Django templates cannot call .filter().
-    device_ids_not_found = [
+    # For devices not yet found this session, look up the most recent
+    # found_at AND the location of that sighting from any prior audit.
+    # We do this in the view because Django templates cannot call .filter().
+    device_ids_not_yet_found = [
         ad.device_id for ad in audit_devices if not ad.found_at
     ]
-    if device_ids_not_found:
-        from django.db.models import Max
-        prior_qs = (
+
+    prior_time_map = {}     # device_id -> datetime
+    prior_location_map = {} # device_id -> District_Location instance
+
+    if device_ids_not_yet_found:
+        # Step 1: find the most recent found_at per device across all prior audits
+        prior_timestamps = (
             Individual_AuditDevice.objects
-            .filter(device_id__in=device_ids_not_found, found=True)
+            .filter(device_id__in=device_ids_not_yet_found, found=True)
             .exclude(audit=audit)
             .values('device_id')
             .annotate(last_found=Max('found_at'))
         )
-        prior_map = {row['device_id']: row['last_found'] for row in prior_qs}
-    else:
-        prior_map = {}
+        prior_time_map = {row['device_id']: row['last_found'] for row in prior_timestamps}
 
-    # Attach prior_found_at directly onto each object so the template
-    # can access {{ ad.prior_found_at }} without any custom filters.
+        # Step 2: for each device, fetch the audit record that matches that
+        # exact timestamp so we can pull its location.
+        if prior_time_map:
+            from django.db.models import Q
+            import functools, operator
+
+            # Build a filter: (device_id=X AND found_at=T) OR (device_id=Y AND found_at=U) ...
+            conditions = [
+                Q(device_id=dev_id, found_at=ts)
+                for dev_id, ts in prior_time_map.items()
+            ]
+            combined = functools.reduce(operator.or_, conditions)
+
+            matching_records = (
+                Individual_AuditDevice.objects
+                .filter(combined)
+                .select_related('audit__location')
+            )
+            for rec in matching_records:
+                prior_location_map[rec.device_id] = rec.audit.location
+
+    # Attach both values directly onto the object so the template is clean.
     for ad in audit_devices:
-        ad.prior_found_at = prior_map.get(ad.device_id)
+        ad.prior_found_at       = prior_time_map.get(ad.device_id)
+        ad.prior_found_location = prior_location_map.get(ad.device_id)
 
     context = {
         'audit': audit,
@@ -169,17 +182,12 @@ def perform_audit(request, audit_id):
 
 
 # ============================================================================
-# COMPLETE AUDIT  —  /audit/session/<audit_id>/complete/
+# COMPLETE AUDIT  -  /audit/session/<audit_id>/complete/
 # ============================================================================
 
 @login_required
 def complete_audit(request, audit_id):
-    """
-    Marks the audit as complete and redirects back to the dashboard.
-    Only accepts POST to prevent accidental completion via link.
-    """
     audit = get_object_or_404(District_Device_Audit, pk=audit_id)
-
     if request.method == 'POST':
         audit.complete()
         messages.success(
@@ -188,20 +196,15 @@ def complete_audit(request, audit_id):
             f"{audit.found_count()} of {audit.total_devices()} devices found."
         )
         return redirect('audit_dashboard')
-
     return redirect('perform_audit', audit_id=audit_id)
 
 
 # ============================================================================
-# AUDIT HISTORY  —  /audit/<location_id>/history/
+# AUDIT HISTORY  -  /audit/<location_id>/history/
 # ============================================================================
 
 @login_required
 def audit_history(request, location_id):
-    """
-    Show all past audits for a specific location so techs can compare
-    results over time and see when each device was last seen.
-    """
     location = get_object_or_404(District_Location, pk=location_id)
     audits = (
         District_Device_Audit.objects
@@ -209,9 +212,4 @@ def audit_history(request, location_id):
         .prefetch_related('audit_devices__device')
         .order_by('-started_at')
     )
-
-    context = {
-        'location': location,
-        'audits': audits,
-    }
-    return render(request, 'audit_history.html', context)
+    return render(request, 'audit_history.html', {'location': location, 'audits': audits})

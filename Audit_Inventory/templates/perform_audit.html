@@ -5,12 +5,10 @@
 {% block content %}
 <div class="container mt-4">
 
-  <!-- Header row -->
+  <!-- Header -->
   <div class="d-flex justify-content-between align-items-start mb-3">
     <div>
-      <h2 class="mb-1">
-        Device Audit: <span class="text-primary">{{ audit.location }}</span>
-      </h2>
+      <h2 class="mb-1">Device Audit: <span class="text-primary">{{ audit.location }}</span></h2>
       <small class="text-muted">
         Started {{ audit.started_at|date:"M d, Y g:i A" }} by
         {{ audit.auditor.get_full_name|default:audit.auditor.username }}
@@ -43,17 +41,16 @@
   </div>
 
   {% if audit.is_complete %}
-    <div class="alert alert-success">
-      <i class="bi bi-check-circle-fill me-2"></i>
-      This audit was marked <strong>complete</strong> on {{ audit.completed_at|date:"M d, Y g:i A" }}.
-      It is now read-only.
-    </div>
+  <div class="alert alert-success">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    This audit was marked <strong>complete</strong> on {{ audit.completed_at|date:"M d, Y g:i A" }}.
+    It is now read-only.
+  </div>
   {% endif %}
 
   <!-- Audit form -->
   <form method="post" class="card shadow-sm">
     {% csrf_token %}
-
     <div class="table-responsive">
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
@@ -62,7 +59,8 @@
             <th>Device</th>
             <th>Serial Number</th>
             <th>Model</th>
-            <th>Last Seen</th>
+            <th>Last Seen Time</th>
+            <th>Last Seen Location</th>
             <th>Notes</th>
           </tr>
         </thead>
@@ -83,7 +81,7 @@
               </div>
             </td>
 
-            <!-- Device name + DAM ID -->
+            <!-- Device -->
             <td>
               <a href="/inventory/inventory_detail/{{ ad.device.pk }}/" target="_blank">
                 <strong>{{ ad.device.asset_name }}</strong>
@@ -92,27 +90,55 @@
             </td>
 
             <!-- Serial -->
-            <td>
-              <small>{{ ad.device.serial_number|default:"—" }}</small>
-            </td>
+            <td><small>{{ ad.device.serial_number|default:"—" }}</small></td>
 
             <!-- Model -->
-            <td>
-              <small>{{ ad.device.model_type|default:"—" }}</small>
-            </td>
+            <td><small>{{ ad.device.model_type|default:"—" }}</small></td>
 
-            <!-- Last seen: found_at this session, or last seen in a prior audit -->
+            <!-- Last Seen Time ─────────────────────────────────────────────
+                 Priority:
+                 1. found_at on this record  → found in THIS session right now
+                 2. device.last_seen_at      → stored from any previous audit
+                 3. prior_found_at           → fallback query result
+                 4. Nothing                 → truly never seen
+            ──────────────────────────────────────────────────────────────-->
             <td>
               {% if ad.found_at %}
-                <small class="text-success">
-                  <i class="bi bi-check2-circle me-1"></i>{{ ad.found_at|date:"M d, Y g:i A" }}
+                <small class="text-success fw-bold">
+                  <i class="bi bi-check2-circle me-1"></i>
+                  {{ ad.found_at|date:"M d, Y g:i A" }}
+                </small>
+              {% elif ad.device.last_seen_at %}
+                <small class="text-warning">
+                  <i class="bi bi-clock-history me-1"></i>
+                  {{ ad.device.last_seen_at|date:"M d, Y" }}
                 </small>
               {% elif ad.prior_found_at %}
                 <small class="text-warning">
-                  <i class="bi bi-clock-history me-1"></i>Last seen {{ ad.prior_found_at|date:"M d, Y" }}
+                  <i class="bi bi-clock-history me-1"></i>
+                  {{ ad.prior_found_at|date:"M d, Y" }}
                 </small>
               {% else %}
                 <small class="text-muted">Never seen</small>
+              {% endif %}
+            </td>
+
+            <!-- Last Seen Location ─────────────────────────────────────────
+                 Priority:
+                 1. found_at set             → being found HERE right now
+                 2. device.last_seen_location → stored from a previous audit
+                 3. prior_found_location     → fallback from query
+                 4. Nothing                 → never seen anywhere
+            ──────────────────────────────────────────────────────────────-->
+            <td>
+              {% if ad.found_at %}
+                <small class="text-success fw-bold">{{ audit.location }}</small>
+              {% elif ad.device.last_seen_location %}
+                <small class="text-warning">{{ ad.device.last_seen_location }}</small>
+              {% elif ad.prior_found_location %}
+                <small class="text-warning">{{ ad.prior_found_location }}</small>
+              {% else %}
+                <small class="text-muted">—</small>
               {% endif %}
             </td>
 
@@ -132,22 +158,18 @@
       </table>
     </div>
 
-    <!-- Footer buttons -->
+    <!-- Footer -->
     {% if not audit.is_complete %}
     <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
       <a href="{% url 'audit_history' audit.location.pk %}" class="btn btn-outline-secondary">
         <i class="bi bi-clock-history me-1"></i>View History
       </a>
       <div class="d-flex gap-2">
-        <!-- Save progress without closing -->
-        <button type="submit" name="action" value="save" class="btn btn-primary px-4">
+        <button type="submit" class="btn btn-primary px-4">
           <i class="bi bi-floppy me-1"></i>Save Progress
         </button>
-        <!-- Mark complete -->
-        <button type="button"
-                class="btn btn-success px-4"
-                data-bs-toggle="modal"
-                data-bs-target="#completeModal">
+        <button type="button" class="btn btn-success px-4"
+                data-bs-toggle="modal" data-bs-target="#completeModal">
           <i class="bi bi-check-circle me-1"></i>Mark Complete
         </button>
       </div>
@@ -155,10 +177,9 @@
     {% endif %}
 
   </form>
-
 </div>
 
-<!-- Complete confirmation modal -->
+<!-- Complete modal -->
 {% if not audit.is_complete %}
 <div class="modal fade" id="completeModal" tabindex="-1">
   <div class="modal-dialog">
@@ -173,15 +194,10 @@
           <strong>{{ total_count }}</strong> devices
           (<strong class="text-danger">{{ missing_count }}</strong> still missing).
         </p>
-        <p class="mb-0">
-          Marking this audit complete locks it as read-only.
-          You can always start a new audit for this location later.
-        </p>
+        <p class="mb-0">Marking complete locks this audit as read-only. You can always start a new audit later.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          Keep Working
-        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Keep Working</button>
         <form method="post" action="{% url 'complete_audit' audit.pk %}">
           {% csrf_token %}
           <button type="submit" class="btn btn-success">

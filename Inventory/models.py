@@ -83,6 +83,19 @@ class District_Device_Inventory(models.Model):
     po_order = models.CharField(max_length=50, blank=True, null=True)
     purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
     
+    last_seen_at = models.DateTimeField(
+    null=True,
+    blank=True,
+    help_text="Last time this device was confirmed found in an audit.",
+    )
+    last_seen_location = models.ForeignKey(
+        'Inventory.District_Location',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='last_seen_devices',
+        help_text="Location where this device was last confirmed in an audit.",
+    )
     
     audit_logs = GenericRelation(AuditLog)
 
