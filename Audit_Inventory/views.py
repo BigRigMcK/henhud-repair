@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Max
-
-from Inventory.models import District_Device_Inventory, District_Location
+from Base_Models.models import District_Location
+from Inventory.models import District_Device_Inventory 
 from .models import District_Device_Audit, Individual_AuditDevice
 
 

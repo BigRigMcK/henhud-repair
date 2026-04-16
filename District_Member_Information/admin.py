@@ -12,6 +12,7 @@ class District_Member_Admin(admin.ModelAdmin):
     list_display = [
         'id',
         'district_member_id',
+        'district_member_id_index',
         'district_member_name', 
         'district_member_email',
         'district_member_grade', 

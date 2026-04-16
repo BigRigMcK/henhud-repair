@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from Inventory.models import District_Device_Inventory, District_Location
+from Inventory.models import District_Device_Inventory
 
 
 class District_Device_Audit(models.Model):
@@ -12,7 +12,7 @@ class District_Device_Audit(models.Model):
     history is preserved so you can compare audits over time.
     """
     location = models.ForeignKey(
-        District_Location,
+        'Base_Models.District_Location',
         on_delete=models.PROTECT,
         related_name='audits',
     )
@@ -28,6 +28,8 @@ class District_Device_Audit(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     is_complete = models.BooleanField(default=False)
+
+
 
     # Many-to-many through Individual_AuditDevice (no redundant M2M field)
     class Meta:

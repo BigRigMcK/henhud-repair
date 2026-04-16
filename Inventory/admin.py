@@ -6,8 +6,6 @@ from Base_Models.models import Current_Status
 
 from .models import (
     District_Device_Inventory,
-    District_Location,
-    District_Department,
     Asset_History, ClassroomDevices, Classroom_Device_Purpose, Device_Model,
 )
 from .csv_export_actions import export_inventory_csv, export_asset_history_csv
@@ -172,64 +170,6 @@ class AssetHistoryAdmin(admin.ModelAdmin):
 # ============================================================================
 # DISTRICT LOCATION
 # ============================================================================
-
-@admin.register(District_Location)
-class District_LocationAdmin(admin.ModelAdmin):
-    list_display = ['school', 'room']
-    list_filter = ['school']
-    search_fields = ['school', 'room']
-
-    def save_model(self, request, obj, form, change):
-        action = 'UPDATE' if change else 'CREATE'
-        changes = {}
-        if change:
-            for field in form.changed_data:
-                changes[field] = {
-                    'old': str(form.initial.get(field, '')),
-                    'new': str(form.cleaned_data.get(field, '')),
-                }
-        super().save_model(request, obj, form, change)
-        _audit(request, action, obj, changes if changes else None)
-
-    def delete_model(self, request, obj):
-        _audit(request, 'DELETE', obj, {'deleted': str(obj)})
-        super().delete_model(request, obj)
-
-    def delete_queryset(self, request, queryset):
-        for obj in queryset:
-            _audit(request, 'DELETE', obj, {'deleted': str(obj)})
-        super().delete_queryset(request, queryset)
-
-
-# ============================================================================
-# DISTRICT DEPARTMENT
-# ============================================================================
-
-@admin.register(District_Department)
-class District_DepartmentAdmin(admin.ModelAdmin):
-    list_display = ['department']
-    search_fields = ['department']
-
-    def save_model(self, request, obj, form, change):
-        action = 'UPDATE' if change else 'CREATE'
-        changes = {}
-        if change:
-            for field in form.changed_data:
-                changes[field] = {
-                    'old': str(form.initial.get(field, '')),
-                    'new': str(form.cleaned_data.get(field, '')),
-                }
-        super().save_model(request, obj, form, change)
-        _audit(request, action, obj, changes if changes else None)
-
-    def delete_model(self, request, obj):
-        _audit(request, 'DELETE', obj, {'deleted': str(obj)})
-        super().delete_model(request, obj)
-
-    def delete_queryset(self, request, queryset):
-        for obj in queryset:
-            _audit(request, 'DELETE', obj, {'deleted': str(obj)})
-        super().delete_queryset(request, queryset)
 
 
 # ============================================================================

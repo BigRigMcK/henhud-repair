@@ -15,26 +15,6 @@ class Device_Model(models.Model):
         verbose_name = "Device Model"
         verbose_name_plural = "Device Models"
 
-class District_Location(models.Model):
-    school = models.CharField(max_length=50)
-    room = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name_plural = "District Locations"
-
-    audit_logs = GenericRelation(AuditLog)
-    def __str__(self):
-        return f"{self.school} - {self.room}"
-	
-class District_Department(models.Model):
-    department = models.CharField(max_length=100)
-
-    audit_logs = GenericRelation(AuditLog)
-    class Meta:
-        verbose_name_plural = "District Departments"
-
-    def __str__(self):
-        return self.department
 
 
 class District_Device_Inventory(models.Model):
@@ -52,14 +32,14 @@ class District_Device_Inventory(models.Model):
         null=True, 
     )
     location = models.ForeignKey(
-        District_Location, 
+        'Base_Models.District_Location', 
         on_delete=models.PROTECT,
         null=True
         
     
     )
     department = models.ForeignKey(
-        District_Department, 
+        'Base_Models.District_Department', 
         on_delete=models.PROTECT,
         null=True,
     )
@@ -84,12 +64,12 @@ class District_Device_Inventory(models.Model):
     purchase_value = models.CharField(max_length=50, blank=True, null=True, default="$")
     
     last_seen_at = models.DateTimeField(
-    null=True,
-    blank=True,
-    help_text="Last time this device was confirmed found in an audit.",
+        null=True,
+        blank=True,
+        help_text="Last time this device was confirmed found in an audit.",
     )
     last_seen_location = models.ForeignKey(
-        'Inventory.District_Location',
+        'Base_Models.District_Location',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

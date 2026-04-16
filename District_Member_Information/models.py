@@ -14,12 +14,12 @@ class District_Member(models.Model):
     ]
     BUILDING_CHOICES = [
         ('BMMS', "Blue Mountain Middle School"),
+        ('BUSG', 'Bus Garage'),
         ('BV', "Buchanan-Verplanck Elementary School"),
+        ('DO', 'District Office'),
         ('FGL', 'Frank G. Lindsey'),
         ('FW', 'Furnace Woods'),
         ('HHHS', 'Hendrick Hudson High School'),
-        ('DO', 'District Office'),
-        ('BUSG', 'Bus Garage'),
         ('MAITG', 'Maintainance Garage'),
         # ... add the rest of your schools
     ]
@@ -27,10 +27,10 @@ class District_Member(models.Model):
     # All FERPA fields encrypted
     district_member_name = EncryptedCharField(max_length=200, blank=True)
     
-    district_member_id = EncryptedCharField(max_length=50, blank=True)
     district_member_id_index = SearchField(
         hash_key=settings.SEARCH_D_M_ID_HASH_KEY,
         encrypted_field_name='district_member_id', unique=True,)
+    district_member_id = EncryptedCharField(max_length=50, blank=True)
 
     
     
@@ -49,7 +49,7 @@ class District_Member(models.Model):
         permissions = [
             ("view_student_pii", "Can view student PII (FERPA protected)"),
         ]
-
+        
     def __str__(self):
         return f"Student #{self.pk}"  # Never expose name in __str__ (audit safety)
 
