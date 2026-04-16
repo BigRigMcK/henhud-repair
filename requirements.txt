@@ -3,3 +3,4 @@ psycopg2-binary>=2.9
 python-decouple>=3.8
 django-cryptography>=1.1
 reportlab>=4.0.4
+django-searchable-encrypted-fields>=0.2.1
