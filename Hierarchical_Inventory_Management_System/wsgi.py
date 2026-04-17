@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'henhud_repair_tracker.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Hierarchical_Inventory_Management_System.settings')
 
 application = get_wsgi_application()

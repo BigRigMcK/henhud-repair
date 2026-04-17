@@ -73,7 +73,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-ROOT_URLCONF = 'henhud_repair_tracker.urls'
+ROOT_URLCONF = 'Hierarchical_Inventory_Management_System.urls'
 
 TEMPLATES = [
     {
@@ -91,9 +91,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'henhud_repair_tracker.wsgi.application'
+WSGI_APPLICATION = 'Hierarchical_Inventory_Management_System.wsgi.application'
 
-
+# Hierarchical_Inventory_Management_System
+# henhud_repair_tracker
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
