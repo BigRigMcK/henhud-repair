@@ -296,17 +296,23 @@ modalEl?.addEventListener('shown.bs.modal', () => {
 });
 
 function setupCameraControls() {
-  // Get the underlying video track to access torch + zoom
-  const video = document.querySelector('#qr-reader video');
-  if (!video) return;
+  // Poll for the video element since html5-qrcode creates it asynchronously
+  let attempts = 0;
+  const poll = setInterval(() => {
+    attempts++;
+    const video = document.querySelector('#qr-reader video');
+    if (!video || !video.srcObject) {
+      if (attempts > 20) clearInterval(poll); // give up after 2 seconds
+      return;
+    }
+    clearInterval(poll);
 
-  video.addEventListener('loadedmetadata', () => {
     const stream = video.srcObject;
-    if (!stream) return;
     videoTrack = stream.getVideoTracks()[0];
     if (!videoTrack) return;
 
     const capabilities = videoTrack.getCapabilities?.() || {};
+    console.log('Camera capabilities:', capabilities); // helpful for debugging
 
     // Show torch button if supported
     if (capabilities.torch) {
@@ -331,18 +337,18 @@ function setupCameraControls() {
       document.getElementById('zoomLabel').style.display = '';
 
       document.getElementById('zoomInBtn').addEventListener('click', () => {
-        currentZoom = Math.min(max, currentZoom + (step || 0.5));
+        currentZoom = Math.min(max, +(currentZoom + (step || 0.5)).toFixed(1));
         videoTrack.applyConstraints({ advanced: [{ zoom: currentZoom }] });
         document.getElementById('zoomLabel').textContent = `${currentZoom.toFixed(1)}x`;
       });
 
       document.getElementById('zoomOutBtn').addEventListener('click', () => {
-        currentZoom = Math.max(min, currentZoom - (step || 0.5));
+        currentZoom = Math.max(min, +(currentZoom - (step || 0.5)).toFixed(1));
         videoTrack.applyConstraints({ advanced: [{ zoom: currentZoom }] });
         document.getElementById('zoomLabel').textContent = `${currentZoom.toFixed(1)}x`;
       });
     }
-  });
+  }, 100); // check every 100ms
 }
 
 modalEl?.addEventListener('hidden.bs.modal', () => {
