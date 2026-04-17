@@ -64,13 +64,31 @@
             <h5 class="modal-title">Scan Device QR Code</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <div class="modal-body text-center">
+          <div class="modal-body text-center p-2">
+
+        <!-- Camera controls toolbar -->
+            <div class="d-flex justify-content-center gap-2 mb-2">
+              <button type="button" class="btn btn-sm btn-outline-warning" id="torchBtn" style="display:none;">
+                <i class="bi bi-lightning-charge-fill me-1"></i>Torch
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="zoomOutBtn" style="display:none;">
+                <i class="bi bi-zoom-out"></i>
+              </button>
+              <span id="zoomLabel" class="align-self-center small text-muted" style="display:none;">1x</span>
+              <button type="button" class="btn btn-sm btn-outline-secondary" id="zoomInBtn" style="display:none;">
+                <i class="bi bi-zoom-in"></i>
+              </button>
+            </div>
+
             <div id="qr-reader" style="width:100%;"></div>
-            <div id="scan-result" class="mt-3"></div>
-          </div>
+            <div class="text-muted small mt-1">
+              <i class="bi bi-info-circle me-1"></i>Hold steady — aim the QR code inside the box
+            </div>
+            <div id="scan-result" class="mt-2"></div>
         </div>
       </div>
     </div>
+  </div>
   {% endif %}
 
   <!-- Audit form -->
@@ -222,44 +240,118 @@
   </div>
 </div>
 
-<!-- QR library served locally (no CDN needed) -->
-<script src="{% static 'js/html5-qrcode.min.js' %}"></script>
 
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{% if not audit.is_complete %}
+<script src="{% static 'js/html5-qrcode.min.js' %}"></script>
 <script>
 const SCAN_URL = "{% url 'scan_device' audit.id %}";
 const CSRF = "{{ csrf_token }}";
 let scanner = null;
 let scannerRunning = false;
+let torchOn = false;
+let currentZoom = 1;
+let videoTrack = null;
 
 const modalEl = document.getElementById('scannerModal');
 const modal = modalEl ? new bootstrap.Modal(modalEl) : null;
 
 document.getElementById('scanBtn')?.addEventListener('click', () => modal?.show());
 
-// Start camera ONLY after modal is fully visible
 modalEl?.addEventListener('shown.bs.modal', () => {
   if (scannerRunning) return;
+
   scanner = new Html5Qrcode("qr-reader");
   scanner.start(
     { facingMode: "environment" },
-    { fps: 10, qrbox: { width: 250, height: 250 } },
+    {
+      fps: 15,                              // increased from 10 → faster detection
+      qrbox: { width: 300, height: 300 },  // larger box → easier to aim
+      aspectRatio: 1.0,
+      experimentalFeatures: {
+        useBarCodeDetectorIfSupported: true  // uses native API if available = faster
+      },
+      videoConstraints: {
+        facingMode: "environment",
+        width: { ideal: 1280 },   // request higher resolution
+        height: { ideal: 720 },
+      }
+    },
     (decodedText) => handleScan(decodedText),
-    (err) => { /* suppress per-frame errors */ }
+    (err) => {}
   ).then(() => {
     scannerRunning = true;
+    setupCameraControls();
   }).catch(err => {
     document.getElementById('scan-result').innerHTML =
       `<div class="alert alert-danger">
         <strong>Camera error:</strong> ${err}<br>
-        <small>Make sure camera permission is allowed for this site in your browser settings.</small>
+        <small>Make sure camera permission is allowed for this site.</small>
       </div>`;
   });
 });
 
-// Stop camera when modal closes
+function setupCameraControls() {
+  // Get the underlying video track to access torch + zoom
+  const video = document.querySelector('#qr-reader video');
+  if (!video) return;
+
+  video.addEventListener('loadedmetadata', () => {
+    const stream = video.srcObject;
+    if (!stream) return;
+    videoTrack = stream.getVideoTracks()[0];
+    if (!videoTrack) return;
+
+    const capabilities = videoTrack.getCapabilities?.() || {};
+
+    // Show torch button if supported
+    if (capabilities.torch) {
+      const torchBtn = document.getElementById('torchBtn');
+      torchBtn.style.display = '';
+      torchBtn.addEventListener('click', () => {
+        torchOn = !torchOn;
+        videoTrack.applyConstraints({ advanced: [{ torch: torchOn }] });
+        torchBtn.classList.toggle('btn-warning', torchOn);
+        torchBtn.classList.toggle('btn-outline-warning', !torchOn);
+        torchBtn.innerHTML = torchOn
+          ? '<i class="bi bi-lightning-charge-fill me-1"></i>Torch ON'
+          : '<i class="bi bi-lightning-charge-fill me-1"></i>Torch';
+      });
+    }
+
+    // Show zoom buttons if supported
+    if (capabilities.zoom) {
+      const { min, max, step } = capabilities.zoom;
+      document.getElementById('zoomInBtn').style.display = '';
+      document.getElementById('zoomOutBtn').style.display = '';
+      document.getElementById('zoomLabel').style.display = '';
+
+      document.getElementById('zoomInBtn').addEventListener('click', () => {
+        currentZoom = Math.min(max, currentZoom + (step || 0.5));
+        videoTrack.applyConstraints({ advanced: [{ zoom: currentZoom }] });
+        document.getElementById('zoomLabel').textContent = `${currentZoom.toFixed(1)}x`;
+      });
+
+      document.getElementById('zoomOutBtn').addEventListener('click', () => {
+        currentZoom = Math.max(min, currentZoom - (step || 0.5));
+        videoTrack.applyConstraints({ advanced: [{ zoom: currentZoom }] });
+        document.getElementById('zoomLabel').textContent = `${currentZoom.toFixed(1)}x`;
+      });
+    }
+  });
+}
+
 modalEl?.addEventListener('hidden.bs.modal', () => {
+  if (torchOn && videoTrack) {
+    videoTrack.applyConstraints({ advanced: [{ torch: false }] }).catch(() => {});
+    torchOn = false;
+  }
   if (scannerRunning) {
-    scanner.stop().then(() => { scannerRunning = false; }).catch(() => {});
+    scanner.stop().then(() => { scannerRunning = false; videoTrack = null; }).catch(() => {});
   }
 });
 
@@ -283,12 +375,8 @@ async function handleScan(value) {
         <i class="bi bi-check-circle me-1"></i>
         Marked found: <strong>${data.asset_name}</strong> (DAM: ${data.asset_id})
       </div>`;
-      // Update the row checkbox visually without a page reload
       const cb = document.querySelector(`[name="found_${data.record_id}"]`);
-      if (cb) {
-        cb.checked = true;
-        cb.closest('tr')?.classList.add('table-success');
-      }
+      if (cb) { cb.checked = true; cb.closest('tr')?.classList.add('table-success'); }
       setTimeout(() => modal.hide(), 1500);
     } else {
       resultDiv.innerHTML = `<div class="alert alert-warning">⚠ ${data.message}</div>`;
@@ -301,5 +389,4 @@ async function handleScan(value) {
 }
 </script>
 {% endif %}
-
 {% endblock %}
