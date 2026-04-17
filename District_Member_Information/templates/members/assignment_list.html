@@ -214,10 +214,11 @@
                 </td>
                 <td>{{ a.assigned_date|date:"m/d/Y" }}</td>
                 <td>
-                  {% now "Y-m-d" as today %}
-                  <span class="days-out {% if a.assigned_date|timesince|slice:":2" != "0 " %}{% endif %}">
-                    {{ a.assigned_date|timesince }}
-                  </span>
+                  {% now "Y-m-d" as today_str %}
+                    <span class="days-out">
+                        {{ a.days_out }} day{{ a.days_out|pluralize }}
+
+                    </span>
                 </td>
                 <td>{{ a.assigned_by.get_full_name|default:a.assigned_by.username|default:"—" }}</td>
                 <td>

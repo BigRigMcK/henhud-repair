@@ -344,11 +344,11 @@
     memberResults.innerHTML = results.map(m =>
       `<div class="result-item"
             data-pk="${m.pk}"
-            data-display="${m.display}"
+            data-district-id="${m.district_member_id}"
             data-grade="${m.grade}"
             data-building="${m.building}"
             onclick="selectMember(this)">
-        <div class="result-title">Member #${m.pk}</div>
+        <div class="result-title">Member #${m.district_member_id}</div>
         <div class="result-meta">${m.grade} &nbsp;|&nbsp; ${m.building} ${m.id_index ? '&nbsp;|&nbsp; ID: ' + m.id_index : ''}</div>
       </div>`
     ).join('');
@@ -358,7 +358,7 @@
   function selectMember(el) {
     memberPk = el.dataset.pk;
     document.getElementById('member_pk').value = memberPk;
-    document.getElementById('memberSelectedTitle').textContent = `Member #${el.dataset.pk}`;
+    document.getElementById('memberSelectedTitle').textContent = `District ID: ${el.dataset.districtId}`;
     document.getElementById('memberSelectedMeta').textContent =
       `${el.dataset.grade}  |  ${el.dataset.building}`;
     document.getElementById('memberSelected').classList.add('show');

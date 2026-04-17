@@ -3,9 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Max
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from Base_Models.models import District_Location
 from Inventory.models import District_Device_Inventory 
 from .models import District_Device_Audit, Individual_AuditDevice
+import json
+
 
 
 # ============================================================================
@@ -213,3 +217,49 @@ def audit_history(request, location_id):
         .order_by('-started_at')
     )
     return render(request, 'audit_history.html', {'location': location, 'audits': audits})
+
+@login_required
+
+def scan_device(request, audit_id):
+    """Called via AJAX when a QR code is scanned during an audit."""
+    audit = get_object_or_404(District_Device_Audit, pk=audit_id)
+
+    if audit.is_complete:
+        return JsonResponse({'status': 'error', 'message': 'Audit is complete.'}, status=400)
+
+    data = json.loads(request.body)
+    scanned_value = data.get('value', '').strip()
+
+    # Try matching asset_id (numeric) or serial_number
+    record = None
+    if scanned_value.isdigit():
+        record = Individual_AuditDevice.objects.filter(
+            audit=audit, device__asset_id=int(scanned_value)
+        ).select_related('device').first()
+
+    if not record:
+        record = Individual_AuditDevice.objects.filter(
+            audit=audit, device__serial_number__iexact=scanned_value
+        ).select_related('device').first()
+
+    if not record:
+        return JsonResponse({'status': 'not_found', 'message': f'No device matched: {scanned_value}'})
+
+    if not record.found:
+        now = timezone.now()
+        record.found = True
+        record.found_at = now
+        record.save()
+
+        device = record.device
+        device.last_seen_at = now
+        device.last_seen_location = audit.location
+        device.save(update_fields=['last_seen_at', 'last_seen_location'])
+
+    return JsonResponse({
+        'status': 'ok',
+        'record_id': record.id,
+        'asset_name': record.device.asset_name,
+        'asset_id': record.device.asset_id,
+        'already_found': record.found,
+    })

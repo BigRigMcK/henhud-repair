@@ -16,4 +16,7 @@ urlpatterns = [
 
     # View all past audits for a location
     path('<int:location_id>/history/', views.audit_history, name='audit_history'),
+
+    path('session/<int:audit_id>/scan/', views.scan_device, name='scan_device'),
+
 ]

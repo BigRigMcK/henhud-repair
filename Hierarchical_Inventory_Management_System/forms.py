@@ -1,5 +1,5 @@
 from django import forms
-from . import views
+
 from django.contrib.auth.forms import AuthenticationForm
 
 

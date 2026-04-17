@@ -3,12 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, F, ExpressionWrapper, IntegerField
+from django.db.models.functions import Now, TruncDate
+from datetime import date
 import hashlib
 
 from .models import District_Member, District_Member_DeviceAssignment
-from Inventory.models import District_Device_Inventory
 from repair_tracker.audit_models import AuditLog
+from Inventory.models import District_Device_Inventory
+
 
 
 # ============================================================================
@@ -63,11 +66,14 @@ def assignment_list(request):
         returned_date__isnull=False
     ).select_related('district_member', 'device', 'assigned_by').order_by('-returned_date')[:100]
 
+    
+
     context = {
         'active_assignments': active_assignments,
         'history_assignments': history_assignments,
         'active_count': active_assignments.count(),
         'tab': tab,
+    
     }
     return render(request, 'members/assignment_list.html', context)
 
@@ -274,7 +280,8 @@ def member_search_api(request):
             'pk': m.pk,
             'grade': m.get_district_member_grade_display(),
             'building': m.district_member_building,
-            'id_index': m.district_member_id_index or '',
+            'district_member_id': m.district_member_id or '',  # decrypted plaintext
         })
+
 
     return JsonResponse({'results': results})

@@ -3,6 +3,7 @@ from django_cryptography.fields import encrypt
 from django.contrib.auth.models import User
 from encrypted_fields.fields import EncryptedCharField, EncryptedEmailField, SearchField
 from django.conf import settings
+from datetime import date
 
 
 class District_Member(models.Model):
@@ -101,6 +102,18 @@ class District_Member_DeviceAssignment(models.Model):
         related_name='device_assignments_made'
     )
     notes = models.TextField(blank=True)
+
+
+    @property
+    def days_out(self):
+        if self.returned_date:
+            return (self.returned_date - self.assigned_date).days
+        return (date.today() - self.assigned_date).days
+
+
+
+
+
 
     class Meta:
         verbose_name = "Student Device Assignment"

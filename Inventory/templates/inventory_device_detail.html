@@ -10,11 +10,21 @@
 <div style="margin-left: 50px; margin-right: 50px">
 <!-- Device Header -->
     <div class="container">
-    <div class="container-buttons d-flex justify-content-between align-items-center">
+    <div class="container-buttons d-flex justify-content-between align-items-center" style="padding: 15px;">
         
         <a href="{% url 'inventory_list' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back to Inventory List </a>
         
         <h1> Device #{{ device.asset_id }}</h1>
+            <!-- QR Code Creation -->
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+            <div id="qrcode" class="mt-2"></div>
+        <script>
+          new QRCode(document.getElementById("qrcode"), {
+            text: "{{ device.asset_id }}",
+            width: 128, height: 128
+          });
+        </script>
+
         
         <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary" style="margin:5px;">Edit</a>
         
@@ -37,6 +47,7 @@
                     </div>
             </div>
         </div>
+
 
                
     <!-- Device Location & Department  -->
@@ -90,6 +101,10 @@
             </div>
         </div>
     </div>
+
+
+
+
         <!-- Repair Tickets -->
     <div class="col-md-12">
         <div class="card mb-3">

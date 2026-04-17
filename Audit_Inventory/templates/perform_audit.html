@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Audit — {{ audit.location }}{% endblock %}
 
@@ -48,6 +49,30 @@
   </div>
   {% endif %}
 
+  {% if not audit.is_complete %}
+    <div class="mb-3 text-end">
+      <button type="button" class="btn btn-primary" id="scanBtn">
+        <i class="bi bi-qr-code-scan me-1"></i> Scan QR Code
+      </button>
+    </div>
+
+    <!-- Scanner modal -->
+    <div class="modal fade" id="scannerModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Scan Device QR Code</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center">
+            <div id="qr-reader" style="width:100%;"></div>
+            <div id="scan-result" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
   <!-- Audit form -->
   <form method="post" class="card shadow-sm">
     {% csrf_token %}
@@ -95,13 +120,7 @@
             <!-- Model -->
             <td><small>{{ ad.device.model_type|default:"—" }}</small></td>
 
-            <!-- Last Seen Time ─────────────────────────────────────────────
-                 Priority:
-                 1. found_at on this record  → found in THIS session right now
-                 2. device.last_seen_at      → stored from any previous audit
-                 3. prior_found_at           → fallback query result
-                 4. Nothing                 → truly never seen
-            ──────────────────────────────────────────────────────────────-->
+            <!-- Last Seen Time -->
             <td>
               {% if ad.found_at %}
                 <small class="text-success fw-bold">
@@ -123,13 +142,7 @@
               {% endif %}
             </td>
 
-            <!-- Last Seen Location ─────────────────────────────────────────
-                 Priority:
-                 1. found_at set             → being found HERE right now
-                 2. device.last_seen_location → stored from a previous audit
-                 3. prior_found_location     → fallback from query
-                 4. Nothing                 → never seen anywhere
-            ──────────────────────────────────────────────────────────────-->
+            <!-- Last Seen Location -->
             <td>
               {% if ad.found_at %}
                 <small class="text-success fw-bold">{{ audit.location }}</small>
@@ -208,6 +221,85 @@
     </div>
   </div>
 </div>
+
+<!-- QR library served locally (no CDN needed) -->
+<script src="{% static 'js/html5-qrcode.min.js' %}"></script>
+
+<script>
+const SCAN_URL = "{% url 'scan_device' audit.id %}";
+const CSRF = "{{ csrf_token }}";
+let scanner = null;
+let scannerRunning = false;
+
+const modalEl = document.getElementById('scannerModal');
+const modal = modalEl ? new bootstrap.Modal(modalEl) : null;
+
+document.getElementById('scanBtn')?.addEventListener('click', () => modal?.show());
+
+// Start camera ONLY after modal is fully visible
+modalEl?.addEventListener('shown.bs.modal', () => {
+  if (scannerRunning) return;
+  scanner = new Html5Qrcode("qr-reader");
+  scanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: { width: 250, height: 250 } },
+    (decodedText) => handleScan(decodedText),
+    (err) => { /* suppress per-frame errors */ }
+  ).then(() => {
+    scannerRunning = true;
+  }).catch(err => {
+    document.getElementById('scan-result').innerHTML =
+      `<div class="alert alert-danger">
+        <strong>Camera error:</strong> ${err}<br>
+        <small>Make sure camera permission is allowed for this site in your browser settings.</small>
+      </div>`;
+  });
+});
+
+// Stop camera when modal closes
+modalEl?.addEventListener('hidden.bs.modal', () => {
+  if (scannerRunning) {
+    scanner.stop().then(() => { scannerRunning = false; }).catch(() => {});
+  }
+});
+
+async function handleScan(value) {
+  if (!scannerRunning) return;
+  scanner.pause();
+
+  const resultDiv = document.getElementById('scan-result');
+  resultDiv.innerHTML = `<div class="alert alert-info">Looking up device...</div>`;
+
+  try {
+    const resp = await fetch(SCAN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': CSRF },
+      body: JSON.stringify({ value })
+    });
+    const data = await resp.json();
+
+    if (data.status === 'ok') {
+      resultDiv.innerHTML = `<div class="alert alert-success">
+        <i class="bi bi-check-circle me-1"></i>
+        Marked found: <strong>${data.asset_name}</strong> (DAM: ${data.asset_id})
+      </div>`;
+      // Update the row checkbox visually without a page reload
+      const cb = document.querySelector(`[name="found_${data.record_id}"]`);
+      if (cb) {
+        cb.checked = true;
+        cb.closest('tr')?.classList.add('table-success');
+      }
+      setTimeout(() => modal.hide(), 1500);
+    } else {
+      resultDiv.innerHTML = `<div class="alert alert-warning">⚠ ${data.message}</div>`;
+      setTimeout(() => scanner.resume(), 2000);
+    }
+  } catch (e) {
+    resultDiv.innerHTML = `<div class="alert alert-danger">Network error. Try again.</div>`;
+    setTimeout(() => scanner.resume(), 2000);
+  }
+}
+</script>
 {% endif %}
 
 {% endblock %}
