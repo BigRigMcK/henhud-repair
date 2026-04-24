@@ -56,6 +56,8 @@ class RepairForm(forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['district_member'].widget = forms.HiddenInput()
+        self.fields['district_member'].required = False
     
     # Remove student info fields if user lacks permission
         if user and not user.has_perm('repair_tracker.view_student_info'):

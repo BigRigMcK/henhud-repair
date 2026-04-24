@@ -239,23 +239,23 @@ def device_search_api(request):
 @login_required
 def member_search_api(request):
     from django.conf import settings as django_settings
+    from django.db.models import Prefetch
+    from District_Member_Information.models import District_Member_DeviceAssignment
 
     q = request.GET.get('q', '').strip()
-
     if len(q) < 1:
         return JsonResponse({'results': []})
 
-    # django-searchable-encrypted-fields stores:
-    #   "xx" + sha256( (plaintext + hash_key).encode() ).hexdigest()
-    # We reproduce that here to do an exact DB lookup.
-    found = {}  # pk → member, deduplicated across all three lookups
+    can_view_pii = request.user.has_perm('District_Member_Information.view_student_pii')
 
-    # 1. Search by district ID
+    found = {}  # pk → member, deduplicated
+
+    # 1. Search by district ID (primary use case for repair form)
     try:
         id_hash = _hash_for_search(q, django_settings.SEARCH_D_M_ID_HASH_KEY)
         for m in District_Member.objects.filter(district_member_id_index=id_hash):
             found[m.pk] = m
-    except Exception as e:
+    except Exception:
         pass
 
     # 2. Search by full name
@@ -263,25 +263,62 @@ def member_search_api(request):
         name_hash = _hash_for_search(q, django_settings.SEARCH_D_M_NME_HASH_KEY)
         for m in District_Member.objects.filter(district_member_name_index=name_hash):
             found[m.pk] = m
-    except Exception as e:
+    except Exception:
         pass
 
-    # 3. Search by email address
+    # 3. Search by email
     try:
         email_hash = _hash_for_search(q, django_settings.SEARCH_D_M_EML_HASH_KEY)
         for m in District_Member.objects.filter(district_member_email_index=email_hash):
             found[m.pk] = m
-    except Exception as e:
+    except Exception:
         pass
 
+    if not found:
+        return JsonResponse({'results': []})
+
+    # Single prefetch: active device assignments + their devices for all matched members.
+    # This is ONE extra query regardless of how many members matched — no N+1.
+    active_assignment_prefetch = Prefetch(
+        'device_assignments',
+        queryset=District_Member_DeviceAssignment.objects.filter(
+            returned_date__isnull=True
+        ).select_related('device').order_by('-assigned_date'),
+        to_attr='active_assignments_list',
+    )
+
+    members_qs = District_Member.objects.filter(
+        pk__in=found.keys()
+    ).prefetch_related(active_assignment_prefetch)[:4]
+
     results = []
-    for m in found.values():
-        results.append({
+    for m in members_qs:
+        # Pull the most recent active assignment device (already in memory, no extra query)
+        active_device = None
+        if m.active_assignments_list:
+            device = m.active_assignments_list[0].device
+            active_device = {
+                'device_name': device.asset_name,
+                'device_DAM_ID': device.asset_id,
+                'device_serial': device.serial_number or '',
+            }
+
+        entry = {
             'pk': m.pk,
+            'district_member_id': m.district_member_id or '',
             'grade': m.get_district_member_grade_display(),
             'building': m.district_member_building,
-            'district_member_id': m.district_member_id or '',  # decrypted plaintext
-        })
+            'active_device': active_device,
+        }
 
+        # Only include PII fields if user has permission
+        if can_view_pii:
+            entry['name'] = m.district_member_name or ''
+            entry['email'] = m.district_member_email or ''
+        else:
+            entry['name'] = None
+            entry['email'] = None
+
+        results.append(entry)
 
     return JsonResponse({'results': results})

@@ -23,6 +23,7 @@ def tickets(requests):
 #Repair Ticket
 @login_required
 def create_repair(request):
+    can_view_pii = request.user.has_perm('District_Member_Information.view_student_pii')
     if request.method == 'POST':
         form = RepairForm(request.POST, user=request.user)
         if form.is_valid():
@@ -35,12 +36,21 @@ def create_repair(request):
             print(form.errors)
     else:
         form = RepairForm(user=request.user)
-    
-    return render(request, 'repair_form.html', {'form': form, 'action': 'Create'})
+
+    context = {
+    'form': form, 
+    'action': 'Create',
+    'can_view_pii' : can_view_pii
+
+    }
+
+    return render(request, 'repair_form.html', context)
+
 
 @login_required
 def edit_repair(request, pk):
     repair = get_object_or_404(Repair, pk=pk)
+    can_view_pii = request.user.has_perm('District_Member_Information.view_student_pii')
     
     if request.method == 'POST':
         form = RepairForm(request.POST, instance=repair, user=request.user)
@@ -51,11 +61,16 @@ def edit_repair(request, pk):
     else:
         form = RepairForm(instance=repair, user=request.user)
     
-    return render(request, 'repair_form.html', {
+
+    context = {
         'form': form, 
         'action': 'Edit',
-        'repair': repair
-    })
+        'repair': repair,
+        'can_view_pii' : can_view_pii
+    }
+
+
+    return render(request, 'repair_form.html', context)
 
 @login_required
 def repair_detail(request, pk):

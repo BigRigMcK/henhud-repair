@@ -164,7 +164,7 @@
                                     <td>
                                         {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
                                         <small>
-                                            <a href="">{{ repair.student_name|default:"N/A" }} </a><br>
+                                            <a href="">{{ repair.district_member|default:"N/A" }} </a><br>
                                             <span class="text-muted">{{ repair.get_student_grade_display }}</span>
                                         </small>
                                     </td>

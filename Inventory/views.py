@@ -14,7 +14,7 @@ from repair_tracker.models import Repair
 
 
 # Views
-
+@login_required
 def inventory_home(request):
 
 
@@ -81,6 +81,7 @@ def inventory_detail(request, pk):
 
 	return render(request, 'inventory_device_detail.html', context)
 
+@login_required
 def inventory_list(request):
 
 	devices = District_Device_Inventory.objects.all()
@@ -101,6 +102,8 @@ def inventory_list(request):
 
 	return render(request, 'inventory_list.html', context)
 
+	
+@login_required
 def inventory_search(request):
 	q = request.GET.get('q', '').strip()
 	results = []

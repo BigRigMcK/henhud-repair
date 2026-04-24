@@ -138,16 +138,173 @@
         
     
         <!-- Student Information Section (conditional) -->
-        {% if form.district_member %}
-            <div class="card mb-3">
-                <div class="card-header">Student Information <small class="text-muted">(FERPA Protected)</small></div>
-                <div class="card-body">
-                    {{ form.district_member.label_tag }}
-                    {{ form.district_member }}
-                    
-                </div>
+        <!-- Hidden FK field — posted with the form, set by JS when a card is selected -->
+        {{ form.district_member }}
+
+        <!-- District Member Search Section -->
+        <div class="card mb-3">
+            <div class="card-header">
+                District Member 
+                <small class="text-muted">(FERPA Protected — search by Member ID)</small>
             </div>
-        {% endif %}
+            <div class="card-body">
+
+                <!-- Search input -->
+                <div class="position-relative mb-2">
+                    <input type="text"
+                           id="memberSearchInput"
+                           class="form-control"
+                           placeholder="Type Member ID to search…"
+                           autocomplete="off"
+                           style="max-width: 380px;">
+                    <div id="memberSpinner"
+                         class="spinner-border spinner-border-sm text-secondary position-absolute"
+                         style="top: 10px; right: 12px; display: none;"
+                         role="status">
+                    </div>
+                </div>
+
+                <!-- Card results grid (up to 4) -->
+                <div id="memberCardResults" class="row g-2 mb-2" style="display:none;"></div>
+
+                <!-- Selected member display -->
+                <div id="memberSelected" class="alert alert-success d-flex justify-content-between align-items-start mb-0" style="display:none !important;">
+                    <div>
+                        <strong id="selectedMemberTitle"></strong>
+                        <div id="selectedMemberMeta" class="small text-muted mt-1"></div>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger ms-3" onclick="clearMember()">
+                        ✕ Clear
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+<script>
+(function () {
+    const searchInput   = document.getElementById('memberSearchInput');
+    const spinner       = document.getElementById('memberSpinner');
+    const cardResults   = document.getElementById('memberCardResults');
+    const selectedBox   = document.getElementById('memberSelected');
+    const selectedTitle = document.getElementById('selectedMemberTitle');
+    const selectedMeta  = document.getElementById('selectedMemberMeta');
+    // The hidden FK input rendered by Django (id="id_district_member")
+    const fkInput       = document.getElementById('id_district_member');
+
+    // Device fields to auto-populate
+    const deviceNameField   = document.getElementById('id_device_name');
+    const deviceDAMField    = document.getElementById('id_device_DAM_ID');
+    const deviceSerialField = document.getElementById('id_device_serial');
+
+    let debounceTimer = null;
+
+    searchInput.addEventListener('input', function () {
+        const q = this.value.trim();
+        clearTimeout(debounceTimer);
+
+        if (q.length < 2) {
+            hideResults();
+            return;
+        }
+
+        spinner.style.display = 'block';
+        debounceTimer = setTimeout(() => {
+            fetch(`/members/api/member-search/?q=${encodeURIComponent(q)}`)
+                .then(r => r.json())
+                .then(data => {
+                    spinner.style.display = 'none';
+                    renderCards(data.results || []);
+                })
+                .catch(() => { spinner.style.display = 'none'; });
+        }, 280);
+    });
+
+    function renderCards(results) {
+        cardResults.innerHTML = '';
+
+        if (!results.length) {
+            cardResults.innerHTML = `
+                <div class="col-12">
+                    <div class="card border-warning">
+                        <div class="card-body text-muted small">No members found for that ID.</div>
+                    </div>
+                </div>`;
+            cardResults.style.display = 'flex';
+            return;
+        }
+
+        results.forEach(m => {
+            const col = document.createElement('div');
+            col.className = 'col-md-6 col-lg-3';
+
+            const hasDevice = m.active_device !== null;
+            const deviceBadge = hasDevice
+                ? `<span class="badge bg-success mt-1">Device Assigned</span>`
+                : `<span class="badge bg-secondary mt-1">No Active Device</span>`;
+
+            const nameRow  = m.name  ? `<div class="small"><strong>Name:</strong> ${m.name}</div>` : '';
+            const emailRow = m.email ? `<div class="small text-muted">${m.email}</div>` : '';
+
+            col.innerHTML = `
+                <div class="card h-100 border-primary member-result-card"
+                     style="cursor:pointer; transition: box-shadow 0.15s;"
+                     onmouseenter="this.style.boxShadow='0 0 0 2px #0d6efd'"
+                     onmouseleave="this.style.boxShadow=''"
+                     onclick='selectMember(${JSON.stringify(m)})'>
+                    <div class="card-body p-2">
+                        <div class="fw-bold text-primary mb-1">ID: ${m.district_member_id}</div>
+                        ${nameRow}
+                        ${emailRow}
+                        <div class="small"><strong>Grade:</strong> ${m.grade}</div>
+                        <div class="small"><strong>Building:</strong> ${m.building}</div>
+                        ${deviceBadge}
+                    </div>
+                </div>`;
+            cardResults.appendChild(col);
+        });
+
+        cardResults.style.display = 'flex';
+    }
+
+    window.selectMember = function (m) {
+        // Set the hidden FK value so Django saves the relationship
+        fkInput.value = m.pk;
+
+        // Auto-populate device fields if there's an active assignment
+        if (m.active_device) {
+            if (deviceNameField)   deviceNameField.value   = m.active_device.device_name;
+            if (deviceDAMField)    deviceDAMField.value    = m.active_device.device_DAM_ID;
+            if (deviceSerialField) deviceSerialField.value = m.active_device.device_serial;
+        }
+
+        // Show selected summary
+        selectedTitle.textContent = `Member ID: ${m.district_member_id}`;
+        const deviceInfo = m.active_device
+            ? ` · Device: ${m.active_device.device_name} (DAM ${m.active_device.device_DAM_ID})`
+            : ' · No active device assignment';
+        const namePart = m.name ? ` · ${m.name}` : '';
+        selectedMeta.textContent = `${m.grade} · ${m.building}${namePart}${deviceInfo}`;
+
+        selectedBox.style.display = 'flex';
+        hideResults();
+        searchInput.value = '';
+    };
+
+    window.clearMember = function () {
+        fkInput.value = '';
+        if (deviceNameField)   deviceNameField.value   = '';
+        if (deviceDAMField)    deviceDAMField.value    = '';
+        if (deviceSerialField) deviceSerialField.value = '';
+        selectedBox.style.display = 'none';
+    };
+
+    function hideResults() {
+        cardResults.style.display = 'none';
+        cardResults.innerHTML = '';
+    }
+})();
+</script>
 
 <!-- Repair Details Section -->
         <div class="card mb-3">

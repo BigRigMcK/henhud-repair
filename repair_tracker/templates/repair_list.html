@@ -139,11 +139,21 @@
                             </td>
                             
                             <td>
-                                {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
-                                <a href="">{{ repair.district_member|default:"N/A" }}</a><br>
-                                <span class="text-muted">
-                                    {{ repair.district_member.get_student_grade_display|default:"" }}
-                                </span>
+                                {% if repair.district_member %}
+                                    {% if can_view_pii %}
+                                        <span class="fw-semibold">{{ repair.district_member.district_member_name|default:"—" }}</span><br>
+                                        <small class="text-muted">ID: {{ repair.district_member.district_member_id }}</small>
+                                    {% else %}
+                                        <span class="text-muted">ID: {{ repair.district_member.district_member_id }}</span>
+                                    {% endif %}
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ repair.district_member.get_district_member_grade_display }}
+                                        · {{ repair.district_member.district_member_building }}
+                                    </small>
+                                {% else %}
+                                    <span class="text-muted">N/A</span>
+                                {% endif %}
                             </td>
                             
                             <td>
