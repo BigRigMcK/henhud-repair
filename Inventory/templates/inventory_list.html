@@ -3,26 +3,121 @@
 {% block title %}Inventory List{% endblock %}
 
 {% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
 
 <div class="container">
     <div class="container-buttons d-flex justify-content-between">
-    <a href="{% url 'home' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back Home </a>
-    <a href="{% url 'inventory_add_new_devcie' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Add New Device </a>
+        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back Home </a>
+        <a href="{% url 'inventory_add_new_devcie' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Add New Device </a>
     </div>
 
-{% if devices %}
+    <h1><center> All Inventory </center></h1>
+
+    {# ─────────────────────────────────────────────────────────────── #}
+    {# Search + Filter Card                                            #}
+    {# Single <form> wraps all controls so they submit together.       #}
+    {# method="get" keeps state in the URL (bookmarkable / shareable). #}
+    {# ─────────────────────────────────────────────────────────────── #}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+
+                {# Search bar #}
+                <div class="col-12">
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Search Asset ID, Serial Number, or Asset Name..."
+                           value="{{ search_query }}">
+                </div>
+
+                {# ─── Model Type multi-select ─── #}
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Model Type</label>
+                    <select name="model_type"
+                            class="form-select filter-choices"
+                            multiple
+                            data-placeholder="Select model types...">
+                        {% for m in model_types %}
+                            <option value="{{ m.pk }}"
+                                {% if m.pk|stringformat:"s" in model_filter %}selected{% endif %}>
+                                {{ m.Model_Type }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# ─── Current Status multi-select ─── #}
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Current Status</label>
+                    <select name="current_status"
+                            class="form-select filter-choices"
+                            multiple
+                            data-placeholder="Select statuses...">
+                        {% for s in statuses %}
+                            <option value="{{ s.pk }}"
+                                {% if s.pk|stringformat:"s" in status_filter %}selected{% endif %}>
+                                {{ s.Status }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# ─── Location multi-select ─── #}
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Location</label>
+                    <select name="location"
+                            class="form-select filter-choices"
+                            multiple
+                            data-placeholder="Select locations...">
+                        {% for loc in locations %}
+                            <option value="{{ loc.pk }}"
+                                {% if loc.pk|stringformat:"s" in location_filter %}selected{% endif %}>
+                                {{ loc.school }} - {{ loc.room }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# ─── Department multi-select ─── #}
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Department</label>
+                    <select name="department"
+                            class="form-select filter-choices"
+                            multiple
+                            data-placeholder="Select departments...">
+                        {% for d in departments %}
+                            <option value="{{ d.pk }}"
+                                {% if d.pk|stringformat:"s" in department_filter %}selected{% endif %}>
+                                {{ d.department }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Buttons row #}
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'inventory_list' %}" class="btn btn-outline-secondary">Clear All</a>
+                    <a href="{% url 'inventory_export_csv' %}?{{ request.GET.urlencode }}" class="btn btn-success"><i class="bi bi-download"></i> Export CSV </a>
+                    <small class="text-muted align-self-center ms-2">
+                        Click a filter to add values. Click an × on a tag to remove it.
+                    </small>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if devices %}
     <div class="card">
-            <h1><center> All Inventory </center></h1>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-
                             <th> Asset ID </th>
                             <th> Serial Number </th>
                             <th> Asset Name </th>
+                            <th> District Member </th>
                             <th> Model Type </th>
                             <th> Current Status </th>
                             <th> Location </th>
@@ -32,15 +127,22 @@
                     <tbody>
                         {% for device in devices %}
                         <tr>
-
                             <td><a href="{% url 'inventory_detail' device.pk %}"> {{ device.asset_id }}</a></td>
-                            <td> {{device.serial_number}} </td>
-                            <td> {{device.asset_name}} </td>
-                            <td> {{device.model_type}} </td>
-                            <td> {{device.current_status}} </td>
-                            <td> {{device.location}} </td>
-                            <td> {{device.department}} </td>
-                                    
+                            <td> {{ device.serial_number }} </td>
+                            <td> {{ device.asset_name }} </td>
+
+                            <td>
+                                {% for assignment in device.student_assignments.all %}
+                                    {% if not assignment.returned_date %}
+                                        Member #{{ assignment.district_member.district_member_id }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+
+                            <td> {{ device.model_type }} </td>
+                            <td> {{ device.current_status }} </td>
+                            <td> {{ device.location }} </td>
+                            <td> {{ device.department }} </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -48,6 +150,67 @@
             </div>
         </div>
     </div>
-{% endif %}
+
+    {# ─────────────────────────────────────────────────────────────── #}
+    {# Pagination — preserve all current GET params on next/prev links #}
+    {# request.GET.urlencode rebuilds the querystring; we use a regex  #}
+    {# replace to strip out any existing 'page=' so we don't double it #}
+    {# ─────────────────────────────────────────────────────────────── #}
+    {% if is_paginated %}
+    <nav aria-label="Inventory pagination" class="mt-3">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+        <div class="alert alert-info">
+            No devices match your current filters.
+            <a href="{% url 'inventory_list' %}">Clear filters</a>
+        </div>
+    {% endif %}
 </div>
+
+
+<!-- Script -->
+<!--<script>
+// ─────────────────────────────────────────────────────────────────
+// Initialize Choices.js on every <select class="filter-choices">
+// We loop because there are four of them. querySelectorAll returns
+// a NodeList; .forEach() iterates over each <select> element.
+// ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    const filterSelects = document.querySelectorAll('.filter-choices');
+
+    filterSelects.forEach(function (selectEl) {
+        new Choices(selectEl, {
+            removeItemButton: true,    // shows the × on each tag
+            shouldSort: false,         // keep our DB ordering (Django already sorted)
+            searchEnabled: true,       // type to filter the dropdown
+            searchPlaceholderValue: 'Type to filter...',
+            placeholder: true,
+            placeholderValue: selectEl.dataset.placeholder || 'Select...',
+            allowHTML: false,          // safer — escapes any HTML in options
+        });
+    });
+});
+</script> -->
+
 {% endblock %}

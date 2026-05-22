@@ -19,8 +19,8 @@ class Device_Model(models.Model):
 
 class District_Device_Inventory(models.Model):
     asset_name = models.CharField(max_length=50)
-    asset_id = models.IntegerField(validators=[MinValueValidator(0)])
-    serial_number = models.CharField(max_length=30)
+    asset_id = models.IntegerField(validators=[MinValueValidator(0)],unique=True, null=True)
+    serial_number = models.CharField(max_length=30, unique=True, null=True)
     
     # Corrected ForeignKey logic
     # Note: default=1 assumes a record with ID 1 exists. 

@@ -13,6 +13,7 @@
           rel="stylesheet" 
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
           crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
 
     <!-- Your custom CSS (optional) -->
     {% block extra_css %}{% endblock %}
@@ -107,6 +108,32 @@
 })();
 </script>
 
+<!-- Multi-select-combo_box -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+
+
+<script>
+// ─────────────────────────────────────────────────────────────────
+// Initialize Choices.js on every <select class="filter-choices">
+// We loop because there are four of them. querySelectorAll returns
+// a NodeList; .forEach() iterates over each <select> element.
+// ─────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    const filterSelects = document.querySelectorAll('.filter-choices');
+
+    filterSelects.forEach(function (selectEl) {
+        new Choices(selectEl, {
+            removeItemButton: true,    // shows the × on each tag
+            shouldSort: false,         // keep our DB ordering (Django already sorted)
+            searchEnabled: true,       // type to filter the dropdown
+            searchPlaceholderValue: 'Type to filter...',
+            placeholder: true,
+            placeholderValue: selectEl.dataset.placeholder || 'Select...',
+            allowHTML: false,          // safer — escapes any HTML in options
+        });
+    });
+});
+</script>
 
 
 {% include 'footer.html' %}
