@@ -2,6 +2,8 @@
 
 {% block content %}
 {% load static %}
+
+
 <div class="container">
     <div style="margin-left: 100px; margin-right: 100px">
 
@@ -99,11 +101,45 @@
     <div class="card mb-3">
         <div class="card-header">Repair Details</div>
         <div class="card-body">
-            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Service Now INC:</strong> {{ repair.service_now_inc_number}}
+            <p style='border-bottom: 1px solid #ADADAD; margin-right: 700px; padding: 2px;'><strong>Service Now INC :</strong>  {{ repair.service_now_inc_number}}</p>     
         
-        
-            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Device Issue:</strong></p>
+            <p style='border-bottom: 1px solid #ADADAD; marign-right: 100px; padding: 2px;'><strong>Device Issue:</strong></p>
             <p>{{ repair.issue_description|linebreaks }}</p>
+            <div class="card mb-3">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <strong>Work Notes ({{ repair.notes.count }})</strong>
+  </div>
+  <div class="card-body">
+    <!-- Quick add form -->
+    <form method="post" action="{% url 'add_repair_note' repair.pk %}" class="mb-3">
+      {% csrf_token %}
+      <div class="row g-2">
+        <div class="col-md-3">
+          {{ note_form.note_type }}
+        </div>
+        <div class="col-md-7">
+          {{ note_form.note }}
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-primary w-100">Add Note</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Timeline -->
+    {% for n in repair.notes.all %}
+      <div class="border-start border-3 border-primary ps-3 mb-2">
+        <small class="text-muted">
+          <span class="badge bg-secondary">{{ n.get_note_type_display }}</span>
+          {{ n.created_at|date:"m/d/Y g:i A" }} — {{ n.created_by.username|default:"system" }}
+        </small>
+        <div>{{ n.note|linebreaksbr }}</div>
+      </div>
+    {% empty %}
+      <p class="text-muted small mb-0">No notes yet. Add one above as you work.</p>
+    {% endfor %}
+  </div>
+</div>
             
             {% if repair.resolution_notes %}
             <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Resolution:</strong></p>
@@ -130,6 +166,13 @@
 
         </div>
     </div>
+
+    <!-- Add this block to your repair_detail.html -->
+
+
+
+
+
 </div>
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Repair
+from .models import Repair, RepairNote
 from django.contrib.auth.forms import AuthenticationForm
 
 #'student_name', 'student_id', 'student_grade','student_email','student_school',
@@ -18,41 +18,46 @@ class RepairForm(forms.ModelForm):
             'vineetha_checked', 'vineetha_repair_comments','vineetha_closed',
         ]
         widgets = {
-            'service_now_inc_number' : forms.Textarea(attrs={
-                'class' : 'form-control',
-                'rows' : 1,
-                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
-                }),
-             'submitted_under' : forms.Textarea(attrs={
-                'class' : 'form-control',
-                'rows' : 1,
-                'style' : 'width : 300px; display: inline-block; vertical-align: middle;',
-                }),
+            'service_now_inc_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g. INC0012345',
+            }),
+            'submitted_under': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Requesting account',
+            }),
             'dell_service_number': forms.TextInput(attrs={
                 'class': 'form-control',
-                'style': 'width: 300px;',
                 'placeholder': 'e.g. SVC-ABC123',
-                }),
+            }),
             'issue_description': forms.Textarea(attrs={
-                'class': 'form-control', 
-                'rows': 4,  # This sets the height by number of lines
-                }),
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Describe the issue in detail…',
+            }),
             'resolution_notes': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows' : 4,
-                }),
-            # 'student_email': forms.Textarea(attrs={
-            #     'class': 'form-control',
-            #     'rows' : 1,
-            #     'style' : 'width: 400px',
-
-            #     }),
+                'rows': 4,
+                'placeholder': 'What was done to resolve?',
+            }),
             'vineetha_repair_comments': forms.Textarea(attrs={
-                'class': 'form-conrtol',
-                'rows' : 1,
-                'style': 'width: 500px',
-                }),
+                'class': 'form-control',   # fixed typo: was 'form-conrtol'
+                'rows': 2,
+            }),
+            'device_name':   forms.TextInput(attrs={'class': 'form-control'}),
+            'device_DAM_ID': forms.TextInput(attrs={'class': 'form-control'}),
+            'device_serial': forms.TextInput(attrs={'class': 'form-control'}),
+            'status':        forms.Select(attrs={'class': 'form-select'}),
+            'assigned_to':   forms.Select(attrs={'class': 'form-select'}),
+            'loaner':        forms.Select(attrs={'class': 'form-select'}),
+            'vineetha_checked':      forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'vineetha_closed':       forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'sent_to_dell_check':    forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'contains_student_data': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'third_party_access':    forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'consent_on_file':       forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+        
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -84,3 +89,16 @@ class LoginForm(AuthenticationForm):
         'placeholder': 'Password',
         'id' : 'password',
     }))
+
+class RepairNoteForm(forms.ModelForm):
+    class Meta:
+        model = RepairNote
+        fields = ['note_type', 'note']
+        widgets = {
+            'note_type': forms.Select(attrs={'class': 'form-select'}),
+            'note': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'What did you do? What did you find?',
+            }),
+        }

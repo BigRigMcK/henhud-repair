@@ -388,3 +388,42 @@ class LoanerCheckoutHistory(models.Model):
     def get_audit_representation(self):
         """Safe representation for audit logs (no PII)"""
         return f"Checkout #{self.id} - {self.loaner.device_name}"
+
+class RepairNote(models.Model):
+    """
+    Append-only work notes for a repair ticket.
+    Each note is its own row — preserves full history of what was tried,
+    when, and by whom. Never edited after creation (immutable audit trail).
+    """
+    NOTE_TYPE_CHOICES = [
+        ('work',     'Work Performed'),
+        ('part',     'Part Ordered/Received'),
+        ('contact',  'Parent/Student Contact'),
+        ('status',   'Status Change'),
+        ('general',  'General Note'),
+    ]
+
+    repair = models.ForeignKey(
+        'Repair',
+        on_delete=models.CASCADE,
+        related_name='notes',  # repair.notes.all()
+    )
+    note_type = models.CharField(
+        max_length=20,
+        choices=NOTE_TYPE_CHOICES,
+        default='work',
+    )
+    note = models.TextField()
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='repair_notes_created',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']  # newest first by default
+
+    def __str__(self):
+        return f"Note on Repair #{self.repair_id} by {self.created_by} @ {self.created_at:%m/%d %H:%M}"

@@ -13,5 +13,7 @@ urlpatterns = [
     path('<int:pk>/edit/', views.edit_repair, name='edit_repair'),
     path('<int:pk>/print/', views.repair_print, name='repair_print'),
     path('<int:pk>/pdf/',   pdf_views.repair_pdf, name='repair_pdf'),
+    path('<int:pk>/notes/add/', views.add_repair_note, name='add_repair_note'),
+
 
 ]

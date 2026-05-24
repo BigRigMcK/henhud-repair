@@ -4,12 +4,16 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .forms import RepairForm 
-from .models import Repair
+from django.db.models import Q
 from django.utils import timezone
-
-
-
+from django.http import JsonResponse
+from .forms import RepairForm, RepairNoteForm 
+from .models import Repair
+from Inventory.models import District_Device_Inventory
+from District_Member_Information.models import (
+    District_Member,
+    District_Member_DeviceAssignment,
+)
 
 def inputloaner(requests):
 	return render(requests, 'inputloaner.html')
@@ -18,6 +22,98 @@ def inputloaner(requests):
 def tickets(requests):
 
 	return render(requests, 'Tickets/tickets.html')
+
+
+@login_required
+def device_lookup_api(request):
+    """
+    Look up a device by DAM ID or Serial Number and return:
+      - the device's canonical fields
+      - the currently assigned district member (if any)
+
+    Query params (exactly one required):
+        ?dam_id=12345
+        ?serial=ABC123XYZ
+
+    Response shape:
+        {
+          "found": true|false,
+          "reason": "ok" | "no_device_match" | "no_active_assignment" | "bad_request",
+          "device": {device_name, device_DAM_ID, device_serial} | null,
+          "active_member": {pk, district_member_id, name, grade, email} | null
+        }
+    """
+    dam_id = request.GET.get('dam_id', '').strip()
+    serial = request.GET.get('serial', '').strip()
+
+    # Validate: need exactly one query param
+    if not dam_id and not serial:
+        return JsonResponse({
+            'found': False,
+            'reason': 'bad_request',
+            'device': None,
+            'active_member': None,
+        }, status=400)
+
+    # Build the filter — DAM ID is exact-match on asset_id, serial is case-insensitive
+    if dam_id:
+        device_qs = District_Device_Inventory.objects.filter(asset_id=dam_id)
+    else:
+        device_qs = District_Device_Inventory.objects.filter(serial_number__iexact=serial)
+
+    device = device_qs.first()
+
+    if not device:
+        return JsonResponse({
+            'found': False,
+            'reason': 'no_device_match',
+            'device': None,
+            'active_member': None,
+        })
+
+    # Device payload — these field names match the repair form's inputs
+    device_data = {
+        'device_name': device.asset_name or '',
+        'device_DAM_ID': device.asset_id or '',
+        'device_serial': device.serial_number or '',
+    }
+
+    # Find the active assignment (returned_date IS NULL means still checked out)
+    active_assignment = (
+        District_Member_DeviceAssignment.objects
+        .filter(device=device, returned_date__isnull=True)
+        .select_related('district_member')
+        .order_by('-assigned_date')
+        .first()
+    )
+
+    if not active_assignment:
+        return JsonResponse({
+            'found': True,
+            'reason': 'no_active_assignment',
+            'device': device_data,
+            'active_member': None,
+        })
+
+    # Build member payload — respect PII permissions
+    member = active_assignment.district_member
+    can_view_pii = request.user.has_perm('District_Member_Information.view_student_pii')
+
+    active_member = {
+        'pk': member.pk,
+        'district_member_id': member.district_member_id or '',
+        'grade': member.get_district_member_grade_display() if member.district_member_grade else '',
+        'building': getattr(member, 'district_member_building', '') or '',
+        'name':  member.district_member_name  if can_view_pii else None,
+        'email': member.district_member_email if can_view_pii else None,
+    }
+
+    return JsonResponse({
+        'found': True,
+        'reason': 'ok',
+        'device': device_data,
+        'active_member': active_member,
+    })
 
 
 #Repair Ticket
@@ -84,6 +180,7 @@ def repair_detail(request, pk):
         'repair': repair,
         'can_view_student_info': can_view_student_info,
         'is_technician': is_technician,
+        'note_form' : RepairNoteForm(),
     }
     
     return render(request, 'repair_detail.html', context)
@@ -177,3 +274,18 @@ def repair_print(request, pk):
         'can_view_student_info': can_view_student_info,
         'now': timezone.now(),
     })
+@login_required
+def add_repair_note(request, pk):
+    repair = get_object_or_404(Repair, pk=pk)
+
+    if request.method == 'POST':
+        form = RepairNoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.repair = repair
+            note.created_by = request.user
+            note.save()
+            messages.success(request, 'Note added.')
+            return redirect('repair_detail', pk=repair.pk)
+    # If GET or invalid, fall back to detail page
+    return redirect('repair_detail', pk=repair.pk)
