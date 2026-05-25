@@ -61,6 +61,20 @@ class Repair(models.Model):
         ('tech_completed', 'Tech Completed'),
         ('vineetha_completed', 'Vineetha Completed'),
     ], default='pending')
+    @property
+    def status_badge_class(self):
+        """Bootstrap badge class for the current status — used in repair_list."""
+        return {
+            'pending':            'bg-warning text-dark',
+            'waiting_on_box':     'bg-warning text-dark',
+            'sent_to_dell':       'bg-info',
+            'on_site_repair':     'bg-danger',
+            'awaiting_parts':     'bg-secondary',
+            'returned_from_dell': 'bg-success',
+            'fixed_by_tech':      'bg-success',
+            'returned':           'bg-success',
+            'completed':          'bg-success',
+        }.get(self.status, 'bg-secondary')
 
 
 

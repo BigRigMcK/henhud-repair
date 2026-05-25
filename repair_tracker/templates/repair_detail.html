@@ -1,180 +1,395 @@
 {% extends 'base.html' %}
-
-{% block content %}
 {% load static %}
 
+{% block title %}Repair #{{ repair.id }}{% endblock %}
 
-<div class="container">
-    <div style="margin-left: 100px; margin-right: 100px">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Repair #{{ repair.id }}</h2>
-        <div>
-            <a href="{% url 'repair_print' repair.pk %}" class="btn btn-lg btn-outline-dark" style="margin:5px;">Print</a>
-            <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-lg btn-primary">Edit</a>
-            <a href="{% url 'repair_list' %}" class="btn btn-lg btn-secondary">Back to List</a>
-        </div>
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-success: #198754;
+    --hh-danger: #dc3545;
+    --hh-muted: #6c757d;
+    --soft-border: #e5e7eb;
+    --card-radius: 10px;
+  }
+
+  .detail-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Branded page header */
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .page-header h2 { margin: 0; font-weight: 700; }
+  .page-header .ticket-num { color: var(--hh-accent); }
+
+  /* Section cards */
+  .info-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1rem;
+    height: 100%;
+  }
+  .info-card .card-header {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .info-card .card-header .header-sub {
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .info-card.vineetha { border-left: 4px solid var(--hh-navy); }
+  .info-card.dell     { border-left: 4px solid var(--hh-accent); }
+
+  /* Label/value rows replace the <p><strong>X:</strong> Y</p> pattern */
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--soft-border);
+    gap: 1rem;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .label {
+    font-weight: 600;
+    color: var(--hh-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .detail-row .value {
+    color: #212529;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  /* Branded status pill */
+  .status-pill {
+    background: var(--hh-accent);
+    color: #1a1a1a;
+    border-radius: 20px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-block;
+  }
+
+  /* Inline status icons — replaces .png checkmark images */
+  .status-icon {
+    width: 1.1em;
+    height: 1.1em;
+    vertical-align: -0.15em;
+    margin: 0 0.15rem;
+  }
+  .status-icon.ok { color: var(--hh-success); }
+  .status-icon.no { color: var(--hh-danger); }
+
+  /* Subsection header inside a card (replaces nested cards) */
+  .subsection-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--hh-navy);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1.25rem 0 0.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid var(--soft-border);
+  }
+  .subsection-title:first-child { margin-top: 0; }
+
+  /* Issue / resolution prose blocks */
+  .prose-block {
+    background: #f8f9fb;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    border-left: 3px solid var(--hh-navy);
+    color: #212529;
+  }
+  .prose-block.resolution { border-left-color: var(--hh-success); }
+
+  /* Note timeline */
+  .note-add-form { background: #f8f9fb; padding: 0.85rem; border-radius: 6px; margin-bottom: 1rem; }
+
+  .note-item {
+    border-left: 3px solid var(--hh-navy);
+    padding: 0.5rem 0.85rem;
+    margin-bottom: 0.6rem;
+    background: #f8f9fb;
+    border-radius: 0 6px 6px 0;
+  }
+  .note-item.is-resolution { border-left-color: var(--hh-success); }
+  .note-item.is-customer   { border-left-color: var(--hh-accent); }
+  .note-item .note-meta {
+    color: var(--hh-muted);
+    font-size: 0.78rem;
+  }
+  .note-item .note-body { margin-top: 0.3rem; }
+
+  /* Action buttons in the page header */
+  .header-actions .btn { margin-left: 0.4rem; }
+
+  /* Unassigned tag (re-used from the form) */
+  .unassigned-tag {
+    background: var(--hh-muted);
+    color: white;
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="detail-wrap">
+
+  {# ───────── Page header ───────── #}
+  <div class="page-header">
+    <h2>Repair <span class="ticket-num">#{{ repair.id }}</span></h2>
+    <div class="header-actions">
+      <a href="{% url 'repair_print' repair.pk %}" class="btn btn-outline-light btn-sm">Print</a>
+      <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-warning btn-sm">Edit</a>
+      <a href="{% url 'repair_list' %}" class="btn btn-light btn-sm">← Back to List</a>
     </div>
-
- <!-- Start of cards -->   
-    <div class="row g-2">
-
-
-        <!-- Vineetha Checked -->
-        <div class="col-md-12">
-            <div class="card mb-6">
-                <div class="card-header">Vineetha </div>
-                <div class="card-body">
-                    <p><strong>Vineetha Checked:</strong>
-                        {% if repair.vineetha_checked %} 
-                        <img src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" alt="True"> {% else %} 
-                        <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> {% endif %}
-                    
-                        <strong> Vineetha Closed: </strong>
-                        {% if repair.vineetha_closed %}
-                        <img src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" alt="True"> {% else %} 
-                        <img src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" alt="False"> {% endif %}
-                    </p>
-                
-                    <p><strong> Vineetha Comments: </strong></p>
-                    <p> {{ repair.vineetha_repair_comments }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Status & Assignment -->
-        <div class="row g-2">
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">Status & Assignment</div>
-                <div class="card-body">
-                    <p><strong>Status:</strong> 
-                        <span class="badge bg-info">{{ repair.get_status_display }}</span>
-                    </p>
-                    <p><strong>Assigned To:</strong> {{ repair.assigned_to|default:"Unassigned" }}</p>
-                    <p><strong>Loaner:</strong> {{ repair.loaner|default:"None" }}</p>
-                    <p><strong>Created:</strong> {{ repair.created_at }}</p>
-                    <p><strong>Updated:</strong> {{ repair.updated_at }}</p>
-                </div>
-            </div>
-        </div>
-        
-
-    
-    <!-- Device Information -->
-        
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-header">Device Information</div>
-                <div class="card-body">
-                    <p><strong>Device Name: </strong>{{repair.device_name}}</p>
-                    <p><strong>DAM ID / Serial:</strong> {{ repair.device_DAM_ID|default:"N/A" }} / {{ repair.device_serial }}</p>
-                    
-                </div>
-
-            </div>
-        </div>
-    
-    
-    <!-- Student Information (conditional) -->
-        
-        <div class="col-md-4">
-        {% if is_technician or can_view_student_info %}
-            <div class="card mb-4">
-                <div class="card-header">Student Information</div>
-                <div class="card-body">
-                    {% if repair.district_member %}
-                        <p><strong>Name:</strong> {{ repair.district_member.district_member_name }}</p>
-                        <p><strong>Grade:</strong> {{ repair.district_member.get_district_member_grade_display }}
-                           &nbsp <strong>ID:</strong> {{ repair.district_member.district_member_id }}</p>
-                        <p><strong>Email:</strong> {{ repair.district_member.district_member_email }}</p>
-                    {% else %}
-                        <p class="text-muted">No student linked to this repair.</p>
-                    {% endif %}
-                </div>
-            </div>
-            {% endif %}
-        </div>
-                        
-        
-    <!-- Repair Details -->
-    <div class="card mb-3">
-        <div class="card-header">Repair Details</div>
-        <div class="card-body">
-            <p style='border-bottom: 1px solid #ADADAD; margin-right: 700px; padding: 2px;'><strong>Service Now INC :</strong>  {{ repair.service_now_inc_number}}</p>     
-        
-            <p style='border-bottom: 1px solid #ADADAD; marign-right: 100px; padding: 2px;'><strong>Device Issue:</strong></p>
-            <p>{{ repair.issue_description|linebreaks }}</p>
-            <div class="card mb-3">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <strong>Work Notes ({{ repair.notes.count }})</strong>
   </div>
-  <div class="card-body">
-    <!-- Quick add form -->
-    <form method="post" action="{% url 'add_repair_note' repair.pk %}" class="mb-3">
-      {% csrf_token %}
-      <div class="row g-2">
+
+  {# ───────── Vineetha Review (full width) ───────── #}
+  <div class="card info-card vineetha">
+    <div class="card-header">
+      Vineetha Review
+      <span class="header-sub">Admin acknowledgments</span>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
         <div class="col-md-3">
-          {{ note_form.note_type }}
+          <div class="detail-row">
+            <span class="label">Checked</span>
+            <span class="value">
+              {% include '_includes/status_icon.html' with ok=repair.vineetha_checked %}
+            </span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Closed</span>
+            <span class="value">
+              {% include '_includes/status_icon.html' with ok=repair.vineetha_closed %}
+            </span>
+          </div>
         </div>
-        <div class="col-md-7">
-          {{ note_form.note }}
-        </div>
-        <div class="col-md-2">
-          <button type="submit" class="btn btn-primary w-100">Add Note</button>
+        <div class="col-md-9">
+          <div class="label" style="margin-bottom: 0.4rem;">Comments</div>
+          <div class="prose-block">
+            {{ repair.vineetha_repair_comments|linebreaks|default:"<em class='text-muted'>No comments.</em>" }}
+          </div>
         </div>
       </div>
-    </form>
-
-    <!-- Timeline -->
-    {% for n in repair.notes.all %}
-      <div class="border-start border-3 border-primary ps-3 mb-2">
-        <small class="text-muted">
-          <span class="badge bg-secondary">{{ n.get_note_type_display }}</span>
-          {{ n.created_at|date:"m/d/Y g:i A" }} — {{ n.created_by.username|default:"system" }}
-        </small>
-        <div>{{ n.note|linebreaksbr }}</div>
-      </div>
-    {% empty %}
-      <p class="text-muted small mb-0">No notes yet. Add one above as you work.</p>
-    {% endfor %}
+    </div>
   </div>
-</div>
-            
-            {% if repair.resolution_notes %}
-            <p style='border-bottom: 1px solid #ADADAD; padding: 2px;'><strong>Resolution:</strong></p>
-            <p>{{ repair.resolution_notes|linebreaks }}</p>
-            {% endif %}
-        
-        </div>
-    </div>
-    
-    <!-- Dell Repair Information -->
 
-    <div class="card mb-3">
-        <div class="card-header"> Dell Repair Shipment <strong> Sent: </strong>{% if repair.sent_to_dell_check %} 
-                <img alt="Shipped" src="{% static 'green_checkmark.png'%}" style="height: 20px; width: 20px;" > {% else %} 
-                <img alt="Not Shipped" src="{% static 'red_x.png'%}" style="height: 20px; width: 20px;" > Not Sent{% endif %} </div>
-        
+  {# ───────── Three-card info row: Status / Device / Member ───────── #}
+  <div class="row g-3 mb-1">
+
+    {# Status & Assignment #}
+    <div class="col-lg-4">
+      <div class="card info-card">
+        <div class="card-header">Status &amp; Assignment</div>
         <div class="card-body">
-            
-            
-            <p><strong> Dell Service Number: </strong> <a href="">{{repair.dell_service_number}}</a></p>
-            <p><strong> Dell Request Account: </strong> {{repair.submitted_under}} </p>
-            
-
-
+          <div class="detail-row">
+            <span class="label">Status</span>
+            <span class="value"><span class="status-pill">{{ repair.get_status_display }}</span></span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Technician Assigned</span>
+            <span class="value">{{ repair.assigned_to|default:"Unassigned" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Loaner</span>
+            <span class="value">{{ repair.loaner|default:"None" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Created</span>
+            <span class="value">{{ repair.created_at|date:"m/d/Y g:i A" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Updated</span>
+            <span class="value">{{ repair.updated_at|date:"m/d/Y g:i A" }}</span>
+          </div>
         </div>
+      </div>
     </div>
 
-    <!-- Add this block to your repair_detail.html -->
+    {# Device Information #}
+    <div class="col-lg-4">
+      <div class="card info-card">
+        <div class="card-header">Device Information</div>
+        <div class="card-body">
+          <div class="detail-row">
+            <span class="label">Device Name</span>
+            <span class="value">{{ repair.device_name|default:"—" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">DAM ID</span>
+            <span class="value">{{ repair.device_DAM_ID|default:"N/A" }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Serial</span>
+            <span class="value">{{ repair.device_serial|default:"—" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    {# District Member (conditional) #}
+    <div class="col-lg-4">
+      {% if is_technician or can_view_student_info %}
+      <div class="card info-card">
+        <div class="card-header">
+          District Member
+          <span class="header-sub">FERPA Protected</span>
+        </div>
+        <div class="card-body">
+          {% if repair.district_member %}
+            <div class="detail-row">
+              <span class="label">Name</span>
+              <span class="value">{{ repair.district_member.district_member_name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Member ID</span>
+              <span class="value">{{ repair.district_member.district_member_id }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Grade</span>
+              <span class="value">{{ repair.district_member.get_district_member_grade_display }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email</span>
+              <span class="value">{{ repair.district_member.district_member_email }}</span>
+            </div>
+          {% else %}
+            <p class="text-center mb-0 pt-3">
+              <span class="unassigned-tag">Unassigned</span>
+            </p>
+            <p class="text-muted small text-center mt-2 mb-0">
+              No district member linked to this repair.
+            </p>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
 
+  </div>
 
+  {# ───────── Repair Details (one card, subsections inside) ───────── #}
+  <div class="card info-card">
+    <div class="card-header">Repair Details</div>
+    <div class="card-body">
 
+      <div class="detail-row">
+        <span class="label">Service Now INC</span>
+        <span class="value">{{ repair.service_now_inc_number|default:"—" }}</span>
+      </div>
+
+      <div class="subsection-title">Device Issue</div>
+      <div class="prose-block">
+        {{ repair.issue_description|linebreaks|default:"<em class='text-muted'>No issue description provided.</em>" }}
+      </div>
+
+      {% if repair.resolution_notes %}
+        <div class="subsection-title">Resolution</div>
+        <div class="prose-block resolution">
+          {{ repair.resolution_notes|linebreaks }}
+        </div>
+      {% endif %}
+
+      {# Work Notes timeline #}
+      <div class="subsection-title">
+        Work Notes
+        <span class="text-muted" style="font-weight: 400; text-transform: none; letter-spacing: 0;">
+          ({{ repair.notes.count }})
+        </span>
+      </div>
+
+      <form method="post" action="{% url 'add_repair_note' repair.pk %}" class="note-add-form">
+        {% csrf_token %}
+        <div class="row g-2 align-items-end">
+          <div class="col-md-3">{{ note_form.note_type }}</div>
+          <div class="col-md-7">{{ note_form.note }}</div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Add Note</button>
+          </div>
+        </div>
+      </form>
+
+      {% for n in repair.notes.all %}
+        <div class="note-item {{ n.css_modifier|default:'' }}">
+          <div class="note-meta">
+            <span class="badge bg-secondary">{{ n.get_note_type_display }}</span>
+            {{ n.created_at|date:"m/d/Y g:i A" }} — {{ n.created_by.username|default:"system" }}
+          </div>
+          <div class="note-body">{{ n.note|linebreaksbr }}</div>
+        </div>
+      {% empty %}
+        <p class="text-muted small mb-0">No notes yet. Add one above as you work.</p>
+      {% endfor %}
+
+    </div>
+  </div>
+
+  {# ───────── Dell Repair Shipment ───────── #}
+  <div class="card info-card dell">
+    <div class="card-header">
+      Dell Repair Shipment
+      <span class="header-sub">
+        {% if repair.sent_to_dell_check %}
+          {% include '_includes/status_icon.html' with ok=True %} Shipped
+        {% else %}
+          {% include '_includes/status_icon.html' with ok=False %} Not Sent
+        {% endif %}
+      </span>
+    </div>
+    <div class="card-body">
+      <div class="detail-row">
+        <span class="label">Dell Service Number</span>
+        <span class="value">{{ repair.dell_service_number|default:"—" }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Dell Request Account</span>
+        <span class="value">{{ repair.submitted_under|default:"—" }}</span>
+      </div>
+    </div>
+  </div>
 
 </div>
-
-
-
 {% endblock %}

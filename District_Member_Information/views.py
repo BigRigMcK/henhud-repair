@@ -322,3 +322,43 @@ def member_search_api(request):
         results.append(entry)
 
     return JsonResponse({'results': results})
+
+@login_required
+def assignment_by_device_api(request):
+    """
+    Given a device PK, return the currently active assignment's member (if any).
+
+    Query params:
+        ?device_pk=42
+
+    Response shape:
+        { "active_member": {pk, district_member_id, name, grade, building, email} | null }
+    """
+    device_pk = request.GET.get('device_pk', '').strip()
+    if not device_pk:
+        return JsonResponse({'active_member': None}, status=400)
+
+    active = (
+        District_Member_DeviceAssignment.objects
+        .filter(device_id=device_pk, returned_date__isnull=True)
+        .select_related('district_member')
+        .order_by('-assigned_date')
+        .first()
+    )
+
+    if not active:
+        return JsonResponse({'active_member': None})
+
+    member = active.district_member
+    can_view_pii = request.user.has_perm('District_Member_Information.view_student_pii')
+
+    return JsonResponse({
+        'active_member': {
+            'pk': member.pk,
+            'district_member_id': member.district_member_id or '',
+            'grade': member.get_district_member_grade_display() if member.district_member_grade else '',
+            'building': member.district_member_building or '',
+            'name':  member.district_member_name  if can_view_pii else None,
+            'email': member.district_member_email if can_view_pii else None,
+        }
+    })

@@ -1,260 +1,523 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load url_tools %}
+
+{% block title %}Repair Tickets{% endblock %}
+
+
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-success: #198754;
+    --hh-danger: #dc3545;
+    --hh-muted: #6c757d;
+    --soft-border: #e5e7eb;
+    --card-radius: 10px;
+  }
+
+  .list-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Branded page header */
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .page-header h2 { margin: 0; font-weight: 700; }
+  .page-header .header-actions .btn { margin-left: 0.4rem; }
+
+  /* Status filter tabs */
+  .status-tabs {
+    border-bottom: 2px solid var(--soft-border);
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .status-tabs .tab {
+    padding: 0.65rem 1.25rem;
+    color: var(--hh-muted);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s, border-color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .status-tabs .tab:hover { color: var(--hh-navy); }
+  .status-tabs .tab.active {
+    color: var(--hh-navy);
+    border-bottom-color: var(--hh-accent);
+  }
+  .status-tabs .tab .count {
+    background: var(--soft-border);
+    color: var(--hh-muted);
+    padding: 0.05rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .status-tabs .tab.active .count {
+    background: var(--hh-accent);
+    color: #1a1a1a;
+  }
+
+  /* Filter card */
+  .filter-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1rem;
+    background: #f8f9fb;
+  }
+
+  /* Data card / table */
+  .data-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+  }
+  .data-card .table {
+    margin-bottom: 0;
+  }
+  .data-card thead {
+    background-color: var(--hh-navy);
+    color: white;
+  }
+  .data-card thead th {
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: none;
+    padding: 0.75rem;
+    background-color: var(--hh-navy);
+    color: white;
+  }
+  .data-card thead th a {
+    color: white;
+    background-color: var(--hh-navy);
+    text-decoration: none;
+  }
+  .data-card thead th a:hover {
+    color: var(--hh-accent);
+  }
+  .data-card tbody tr {
+    border-bottom: 1px solid var(--soft-border);
+  }
+  .data-card tbody tr:hover {
+    background-color: #fafbfc;
+  }
+  .data-card tbody td {
+    padding: 0.7rem 0.75rem;
+    vertical-align: middle;
+  }
+
+  /* Repair ID column */
+  .repair-id-link {
+    font-weight: 700;
+    color: var(--hh-navy);
+    text-decoration: none;
+  }
+  .repair-id-link:hover {
+    color: var(--hh-accent);
+    text-decoration: underline;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    border: 2px dashed var(--soft-border);
+    border-radius: var(--card-radius);
+    background: #f8f9fb;
+  }
+  .empty-state-icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Pagination tweaks */
+  .pagination .page-link {
+    color: var(--hh-navy);
+  }
+  .pagination .page-item.active .page-link {
+    background-color: var(--hh-navy);
+    border-color: var(--hh-navy);
+    color: white;
+  }
+
+  /* Building filter — collapsible details panel */
+.building-filter > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--hh-navy);
+  padding: 0.4rem 0;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.building-filter > summary::before {
+  content: "▸";
+  display: inline-block;
+  transition: transform 0.15s ease;
+  font-size: 0.8em;
+}
+.building-filter[open] > summary::before {
+  transform: rotate(90deg);
+}
+.building-filter .building-count {
+  background: var(--hh-accent);
+  color: #1a1a1a;
+  padding: 0.1rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* Checkbox grid */
+.building-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.4rem 1rem;
+  padding: 0.5rem 0;
+}
+.building-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--soft-border);
+  border-radius: 6px;
+  background: white;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.building-chip:hover {
+  border-color: var(--hh-navy);
+  background: #f8f9fb;
+}
+.building-chip input[type="checkbox"] {
+  cursor: pointer;
+  margin: 0;
+}
+.building-chip:has(input:checked) {
+  border-color: var(--hh-navy);
+  background: #f0f5fb;
+  font-weight: 600;
+}
+
+/* Building pill in the table */
+.building-pill {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  background: #e8eef5;
+  color: var(--hh-navy);
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+
+/* Search & filter inputs — make placeholders clearly readable */
+.filter-card .form-control::placeholder,
+.filter-card .form-select::placeholder {
+  color: var(--hh-muted);
+  opacity: 0.85;
+  font-style: italic;
+}
+
+/* Webkit-specific fallback for older Safari */
+.filter-card .form-control::-webkit-input-placeholder {
+  color: var(--hh-muted);
+  opacity: 0.85;
+}
+
+/* Firefox fallback */
+.filter-card .form-control::-moz-placeholder {
+  color: var(--hh-muted);
+  opacity: 0.85;
+}
+
+
+
+
+</style>
+{% endblock %}
+
 
 {% block content %}
-<div class="container">
+<div class="list-wrap">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <a href="{% url 'home' %}" class="btn btn-outline-primary" style="margin:20px;"> Back Home </a>
-        <h2>Repair Tickets</h2>
-        <a href="{% url 'create_repair' %}" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Create New Repair
-        </a>
+  {# ───────── Page header ───────── #}
+  <div class="page-header">
+    <h2>Repair Tickets</h2>
+    <div class="header-actions">
+      <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">← Home</a>
+      <a href="{% url 'create_repair' %}" class="btn btn-warning btn-sm">+ New Repair</a>
     </div>
-    
-    <!-- Filter/Status Tabs -->
-    
-    <ul class="nav nav-tabs mb-4">
-        <li class="nav-item">
-            <a class="nav-link {% if not status_filter %}active{% endif %}" 
-               href="{% url 'repair_list' %}">
-                Current Repairs
-                <span class="badge bg-secondary">{{ current_count }}</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if status_filter == 'sent_to_dell' %}active{% endif %}" 
-               href="{% url 'repair_list' %}?status=sent_to_dell">
-                Sent To Dell
-                <span class="badge bg-warning text-dark">{{ sent_to_dell_count }}</span>
-            </a>
-        </li>
+  </div>
 
-        <li class="nav-item">
-        </li>
-            
-        
-        <li class="nav-item">
-            <a class="nav-link {% if status_filter == 'completed' %}active{% endif %}" 
-               href="{% url 'repair_list' %}?status=completed">
-                Completed
-                <span class="badge bg-success">{{ completed_count }}</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {% if status_filter == '' %}active{% endif %}" 
-               href="{% url 'repair_list' %}?status=">
-                Total Repairs
-                <span class="badge bg-secondary">{{ total_count }}</span>
-            </a>
-        </li>
-    </ul>
-    
-    <!-- Search Bar -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-4">
-                    <input type="text" 
-                           name="search" 
-                           class="form-control" 
-                           placeholder="Search device name, serial, DAM ID..." 
-                           value="{{ search_query }}">
-                </div>
-                <div class="col-md-3">
-                    <select name="status" class="form-select">
-                        <option value="">All Statuses</option>
-                        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
-                        <option value="sent_to_dell" {% if status_filter == 'sent_to_dell' %}selected{% endif %}>Sent To Dell</option>
-                        <option value="on_site_repair" {% if status_filter == 'on_site_repair' %}selected{% endif %}>On Site Repair</option>
-                        <option value="awaiting_parts" {% if status_filter == 'awaiting_parts' %}selected{% endif %}>Awaiting Parts</option>
-                        <option value="returned_from_dell" {% if status_filter == 'returned_from_dell' %}selected{% endif %}>Returned From Dell</option>
-                        <option value="fixed_by_tech" {% if status_filter == 'fixed_by_tech' %}selected{% endif %}>Fixed By Tech</option>
-                        <option value="returned" {% if status_filter == 'returned' %}selected{% endif %}>Returned to Student</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select name="assigned" class="form-select">
-                        <option value="">All Assignments</option>
-                        <option value="unassigned" {% if assigned_filter == 'unassigned' %}selected{% endif %}>Unassigned</option>
-                        <option value="me" {% if assigned_filter == 'me' %}selected{% endif %}>Assigned to Me</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Repairs Table -->
-    {% if repairs %}
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Device Name</th>
-                            <th>
-                                {% if sort_by == 'device_serial' %}
-                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=-device_serial">
-                                        Serial/DAM ID ▲
-                                    </a>
-                                {% elif sort_by == '-device_serial' %}
-                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
-                                        Serial/DAM ID ▼
-                                    </a>
-                                {% else %}
-                                    <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
-                                        Serial/DAM ID
-                                    </a>
-                                {% endif %}
-                            </th>
-                            <!--<th>Serial/DAM ID</th>-->
-                            
-                            <th>District Member</th>
-                            
-                            <th>Issue</th>
-                            <th>Status</th>
-                            <th>Assigned To</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for repair in repairs %}
-                        <tr>
-                            <td><a href="{% url 'repair_detail' repair.pk %}">#{{ repair.id }}</a></td>
-                            <td>{{ repair.device_name }}</td>
-                            <td>
-                                <small>
-                                    {% if repair.device_serial %}
-                                        S/N: <a href="?search={{repair.device_serial}}&status=&assigned=">{{ repair.device_serial }}</a><br>
-                                    {% endif %}
-                                    {% if repair.device_DAM_ID %}
-                                        DAM: <a href="?search={{repair.device_DAM_ID}}&status=&assigned=">{{ repair.device_DAM_ID }}
-                                    {% endif %}
-                                </small>
-                            </td>
-                            
-                            <td>
-                                {% if repair.district_member %}
-                                    {% if can_view_pii %}
-                                        <span class="fw-semibold">{{ repair.district_member.district_member_name|default:"—" }}</span><br>
-                                        <small class="text-muted">ID: {{ repair.district_member.district_member_id }}</small>
-                                    {% else %}
-                                        <span class="text-muted">ID: {{ repair.district_member.district_member_id }}</span>
-                                    {% endif %}
-                                    <br>
-                                    <small class="text-muted">
-                                        {{ repair.district_member.get_district_member_grade_display }}
-                                        · {{ repair.district_member.district_member_building }}
-                                    </small>
-                                {% else %}
-                                    <span class="text-muted">N/A</span>
-                                {% endif %}
-                            </td>
-                            
-                            <td>
-                                <small>{{ repair.issue_description|truncatewords:10 }}</small>
-                            </td>
-                            <td>
-                                {% if repair.status == 'pending' %}
-                                    <span class="badge bg-warning text-dark">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'waiting_on_box' %}
-                                    <span class="badge bg-warning">{{ repair.get_status_display}} </span>
-                                {% elif repair.status == 'sent_to_dell' %}
-                                    <span class="badge bg-info">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'on_site_repair' %}
-                                    <span class="badge bg-danger">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'awaiting_parts' %}
-                                    <span class="badge bg-secondary">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'returned_from_dell' %}
-                                    <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'fixed_by_tech' %}
-                                    <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'returned' %}
-                                    <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                {% elif repair.status == 'completed' %}
-                                    <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <small>{{ repair.assigned_to.username|default:"Unassigned" }}</small>
-                            </td>
-                            <td>
-                                <small>{{ repair.created_at|date:"m/d/Y" }}</small>
-                            </td>
-                            <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="{% url 'repair_detail' repair.pk %}" 
-                                       class="btn btn-outline-primary" 
-                                       title="View"> Details
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a href="{% url 'edit_repair' repair.pk %}" 
-                                       class="btn btn-outline-secondary" 
-                                       title="Edit"> Edit
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+  {# ───────── Status filter tabs ───────── #}
+  <nav class="status-tabs" aria-label="Filter by status">
+    <a class="tab {% if not status_filter and not show_all %}active{% endif %}"
+       href="{% url 'repair_list' %}">
+      Current
+      <span class="count">{{ current_count }}</span>
+    </a>
+    <a class="tab {% if status_filter == 'sent_to_dell' %}active{% endif %}"
+       href="{% url 'repair_list' %}?status=sent_to_dell">
+      Sent To Dell
+      <span class="count">{{ sent_to_dell_count }}</span>
+    </a>
+    <a class="tab {% if status_filter == 'completed' %}active{% endif %}"
+       href="{% url 'repair_list' %}?status=completed">
+      Completed
+      <span class="count">{{ completed_count }}</span>
+    </a>
+    <a class="tab {% if show_all %}active{% endif %}"
+       href="{% url 'repair_list' %}?show_all=1">
+      All Repairs
+      <span class="count">{{ total_count }}</span>
+    </a>
+  </nav>
+
+  {# ───────── Search & filter form ───────── #}
+  <div class="card filter-card">
+    <div class="card-body">
+      <form method="get">
+          <div class="row g-2">
+            <div class="col-md-4">
+              <input type="text"
+                     name="search"
+                     class="form-control"
+                     placeholder="Search device name, serial, DAM ID…"
+                     value="{{ search_query }}">
             </div>
-        </div>
+            <div class="col-md-3">
+              <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="pending"            {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="waiting_on_box"     {% if status_filter == 'waiting_on_box' %}selected{% endif %}>Waiting on Box</option>
+                <option value="sent_to_dell"       {% if status_filter == 'sent_to_dell' %}selected{% endif %}>Sent To Dell</option>
+                <option value="on_site_repair"     {% if status_filter == 'on_site_repair' %}selected{% endif %}>On Site Repair</option>
+                <option value="awaiting_parts"     {% if status_filter == 'awaiting_parts' %}selected{% endif %}>Awaiting Parts</option>
+                <option value="returned_from_dell" {% if status_filter == 'returned_from_dell' %}selected{% endif %}>Returned From Dell</option>
+                <option value="fixed_by_tech"      {% if status_filter == 'fixed_by_tech' %}selected{% endif %}>Fixed By Tech</option>
+                <option value="returned"           {% if status_filter == 'returned' %}selected{% endif %}>Returned to Student</option>
+                <option value="completed"          {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select name="assigned" class="form-select">
+                <option value="">All Assignments</option>
+                <option value="unassigned" {% if assigned_filter == 'unassigned' %}selected{% endif %}>Unassigned</option>
+                <option value="me"         {% if assigned_filter == 'me' %}selected{% endif %}>Assigned to Me</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+          </div>
+
+          {# Building multi-select — collapsible to keep the filter card lean #}
+          <details class="building-filter mt-2" {% if building_filter %}open{% endif %}>
+            <summary>
+              Filter by Building
+              {% if building_filter %}
+                <span class="building-count">{{ building_filter|length }} selected</span>
+              {% endif %}
+            </summary>
+            <div class="building-grid mt-2">
+              {% for building in all_buildings %}
+                <label class="building-chip">
+                  <input type="checkbox"
+                         name="building"
+                         value="{{ building }}"
+                         {% if building in building_filter %}checked{% endif %}>
+                  <span>{{ building }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </details>
+        </form>
     </div>
-    
-    <!-- Pagination -->
-    {% if is_paginated %}
-    <nav aria-label="Page navigation" class="mt-4">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">First</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-            </li>
-            {% endif %}
-            
-            <li class="page-item active">
-                <span class="page-link">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                </span>
-            </li>
-            
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
-    
-    {% else %}
-    <!-- No Repairs Found -->
-    <div class="card">
-        <div class="card-body text-center py-5">
-            <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
-            <h5 class="mt-3">No repairs found</h5>
-            <p class="text-muted">
-                {% if search_query or status_filter %}
-                    Try adjusting your filters or search terms.
+  </div>
+
+  {# ───────── Repairs table ───────── #}
+  {% if repairs %}
+    <div class="data-card">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Device Name</th>
+              <th>
+                {% if sort_by == 'device_serial' %}
+                  <a href="?{% url_replace sort='-device_serial' %}">Serial / DAM ID ▲</a>
+                {% elif sort_by == '-device_serial' %}
+                  <a href="?{% url_replace sort='device_serial' %}">Serial / DAM ID ▼</a>
                 {% else %}
-                    Get started by creating your first repair ticket.
+                  <a href="?{% url_replace sort='device_serial' %}">Serial / DAM ID</a>
                 {% endif %}
-            </p>
-            <a href="{% url 'create_repair' %}" class="btn btn-primary">Create New Repair</a>
-        </div>
+              </th>
+              <th>District Member</th>
+              <th>
+                {% if sort_by == 'building' %}
+                  <a href="?{% url_replace sort='-building' %}">Building ▲</a>
+                {% elif sort_by == '-building' %}
+                  <a href="?{% url_replace sort='building' %}">Building ▼</a>
+                {% else %}
+                  <a href="?{% url_replace sort='building' %}">Building</a>
+                {% endif %}
+              </th>
+              <th>Issue</th>
+              <th>Status</th>
+              <th>Assigned To</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for repair in repairs %}
+              <tr>
+                <td>
+                  <a href="{% url 'repair_detail' repair.pk %}" class="repair-id-link">
+                    #{{ repair.id }}
+                  </a>
+                </td>
+                <td>{{ repair.device_name|default:"—" }}</td>
+                <td>
+                  <small>
+                    {% if repair.device_serial %}
+                      S/N:
+                      <a href="?{% url_replace search=repair.device_serial status='' assigned='' %}">
+                        {{ repair.device_serial }}
+                      </a>
+                      <br>
+                    {% endif %}
+                    {% if repair.device_DAM_ID %}
+                      DAM:
+                      <a href="?{% url_replace search=repair.device_DAM_ID status='' assigned='' %}">
+                        {{ repair.device_DAM_ID }}
+                      </a>
+                    {% endif %}
+                  </small>
+                </td>
+                <td>
+                  {% if repair.district_member %}
+                    {% if can_view_pii %}
+                      <span class="fw-semibold">{{ repair.district_member.district_member_name|default:"—" }}</span><br>
+                      <small class="text-muted">ID: {{ repair.district_member.district_member_id }}</small>
+                    {% else %}
+                      <span class="text-muted">ID: {{ repair.district_member.district_member_id }}</span>
+                    {% endif %}
+                    <br>
+                    <small class="text-muted">
+                      </small>
+                  {% else %}
+                    <span class="text-muted">—</span>
+                      {{ repair.district_member.get_district_member_grade_display }}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if repair.district_member.district_member_building %}
+                    <span class="building-pill">{{ repair.district_member.district_member_building }} - {{ repair.district_member.get_district_member_grade_display }}</span>
+                  {% else %}
+                    <span class="text-muted">— </span>
+                  {% endif %}
+                </td>
+                <td><small>{{ repair.issue_description|truncatewords:10 }}</small></td>
+                <td>
+                  <span class="badge {{ repair.status_badge_class }}">
+                    {{ repair.get_status_display }}
+                  </span>
+                </td>
+                <td><small>{{ repair.assigned_to.username|default:"Unassigned" }}</small></td>
+                <td><small>{{ repair.created_at|date:"m/d/Y" }}</small></td>
+                <td>
+                  <div class="btn-group btn-group-sm" role="group">
+                    <a href="{% url 'repair_detail' repair.pk %}" class="btn btn-outline-primary">View</a>
+                    <a href="{% url 'edit_repair' repair.pk %}" class="btn btn-outline-secondary">Edit</a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
+
+    {# ───────── Pagination ───────── #}
+    {% if is_paginated %}
+      <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?{% url_replace page=1 %}">First</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?{% url_replace page=page_obj.previous_page_number %}">Previous</a>
+            </li>
+          {% endif %}
+
+          <li class="page-item active">
+            <span class="page-link">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+          </li>
+
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?{% url_replace page=page_obj.next_page_number %}">Next</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="?{% url_replace page=page_obj.paginator.num_pages %}">Last</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
     {% endif %}
+
+  {% else %}
+    {# ───────── Empty state ───────── #}
+    <div class="empty-state">
+      <div class="empty-state-icon">📭</div>
+      <h5 class="mt-2">No repairs found</h5>
+      <p class="text-muted">
+        {% if search_query or status_filter or assigned_filter %}
+          Try adjusting your filters or search terms.
+        {% else %}
+          Get started by creating your first repair ticket.
+        {% endif %}
+      </p>
+      <a href="{% url 'create_repair' %}" class="btn btn-primary mt-2">Create New Repair</a>
+    </div>
+  {% endif %}
+
 </div>
 {% endblock %}

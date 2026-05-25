@@ -79,7 +79,8 @@ class District_Member_DeviceAssignment(models.Model):
     district_member = models.ForeignKey(
         District_Member,
         on_delete=models.PROTECT,
-        related_name='device_assignments'
+        related_name='device_assignments',
+        default='Unassigned'
     )
     device = models.ForeignKey(
         'Inventory.District_Device_Inventory',

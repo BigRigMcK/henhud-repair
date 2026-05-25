@@ -226,6 +226,41 @@ def repair_list(request):
         sort_by = '-created_at'
     repairs = repairs.order_by(sort_by)
 
+
+    # NEW — multi-select building filter
+    building_filter = request.GET.getlist('building')   # returns []  or  ['HHS', 'BMS', ...]
+    
+    if building_filter:
+        repairs = repairs.filter(
+            district_member__district_member_building__in=building_filter
+        )
+
+    # NEW — building sort handling (extends your existing sort logic)
+    sort_by = request.GET.get('sort', '')
+    valid_sorts = {
+        'device_serial', '-device_serial',
+        'building', '-building',
+        # ... whatever else you allow ...
+    }
+    if sort_by in valid_sorts:
+        # Map "building" sort to the actual FK path
+        sort_map = {
+            'building':  'district_member__district_member_building',
+            '-building': '-district_member__district_member_building',
+        }
+        repairs = repairs.order_by(sort_map.get(sort_by, sort_by))
+
+    # NEW — list of buildings for the checkbox panel
+    # Use the model's choices if you have them, or DISTINCT values from the DB
+    all_buildings = (
+        District_Member.objects
+        .exclude(district_member_building__isnull=True)
+        .exclude(district_member_building='')
+        .values_list('district_member_building', flat=True)
+        .distinct()
+        .order_by('district_member_building')
+    )
+
     # Get counts for badges
     current_count = Repair.objects.exclude(status__in=['completed', 'vineetha_completed']).count()
     sent_to_dell_count = Repair.objects.filter(status='sent_to_dell').count()
@@ -259,7 +294,9 @@ def repair_list(request):
         'completed_count': completed_count,
         'total_count' : total_count,
         'sort_by' : sort_by,
-    }
+        'building_filter': building_filter,
+        'all_buildings':   all_buildings,
+        }
     
     return render(request, 'repair_list.html', context)
 

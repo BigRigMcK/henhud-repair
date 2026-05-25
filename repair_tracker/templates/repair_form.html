@@ -3,6 +3,7 @@
 
 {% block title %}{{ action }} Repair{% endblock %}
 
+
 {% block extra_css %}
 <style>
   :root {
@@ -22,7 +23,7 @@
     padding: 0 1rem;
   }
 
-  /* Branded page header — matches assignment_list.html */
+  /* Branded page header */
   .page-header {
     background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
     color: white;
@@ -42,7 +43,7 @@
   .form-card {
     border: 1px solid var(--soft-border);
     border-radius: var(--card-radius);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     margin-bottom: 1rem;
   }
   .form-card .card-header {
@@ -59,25 +60,12 @@
   .form-card .card-header .header-sub {
     font-size: 0.78rem;
     font-weight: 400;
-    color: rgba(255,255,255,0.75);
+    color: rgba(255, 255, 255, 0.75);
   }
+  .form-card.privacy  { border-left: 4px solid var(--hh-accent); }
+  .form-card.vineetha { border-left: 4px solid var(--hh-navy); }
 
-  /* Special-case cards */
-  .form-card.privacy   { border-left: 4px solid var(--hh-accent); }
-  .form-card.vineetha  { border-left: 4px solid var(--hh-navy); }
-
-  /* Form field labels */
-  .form-card label.form-label,
-  .form-card label:not(.form-check-label) {
-    font-weight: 600;
-    color: var(--hh-muted);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin-bottom: 0.35rem;
-  }
-
-  /* Action bar at the bottom */
+  /* Action bar */
   .form-actions {
     background: #f8f9fb;
     border: 1px solid var(--soft-border);
@@ -110,8 +98,35 @@
     color: #842029;
     border-radius: 6px;
   }
+
+  /* Lookup hint badges (DAM / Serial auto-lookup feedback) */
+  .lookup-hint {
+    display: inline-block;
+    margin-top: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+  .lookup-hint.ok      { background: #d1e7dd; color: #0a5c36; }
+  .lookup-hint.warn    { background: #fff3cd; color: #856404; }
+  .lookup-hint.error   { background: #f8d7da; color: #842029; }
+  .lookup-hint.loading { background: #e7e9ec; color: #495057; }
+
+  /* "Unassigned" pill shown in the selected-member box */
+  .unassigned-tag {
+    background: var(--hh-muted);
+    color: white;
+    padding: 0.15rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
 </style>
 {% endblock %}
+
 
 {% block content %}
 <div class="form-wrap">
@@ -161,13 +176,13 @@
                 Vineetha Checked
               </label>
             </div>
-            {% if form.vineetha_closed %}
-            <div class="form-check mt-2">
-              {{ form.vineetha_closed }}
-              <label class="form-check-label" for="{{ form.vineetha_closed.id_for_label }}">
-                Vineetha Closed
-              </label>
-            </div>
+            {% if 'vineetha_closed' in form.fields %}
+              <div class="form-check mt-2">
+                {{ form.vineetha_closed }}
+                <label class="form-check-label" for="{{ form.vineetha_closed.id_for_label }}">
+                  Vineetha Closed
+                </label>
+              </div>
             {% endif %}
           </div>
           <div class="col-md-9">
@@ -184,6 +199,46 @@
 
     {# ───────── Status & Device (side-by-side) ───────── #}
     <div class="row g-3">
+
+        {# Device Information #}
+      <div class="col-lg-6">
+        <div class="card form-card h-100">
+          <div class="card-header">
+            Device Information
+            <span class="header-sub">DAM ID or Serial auto-fills</span>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              
+              <div class="col-md-4">
+                {{ form.device_DAM_ID.label_tag }}
+                {{ form.device_DAM_ID }}
+                <div id="damLookupHint" class="lookup-hint" style="display:none;"></div>
+                {% if form.device_DAM_ID.errors %}
+                  <div class="text-danger small">{{ form.device_DAM_ID.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4">
+                {{ form.device_serial.label_tag }}
+                {{ form.device_serial }}
+                <div id="serialLookupHint" class="lookup-hint" style="display:none;"></div>
+                {% if form.device_serial.errors %}
+                  <div class="text-danger small">{{ form.device_serial.errors }}</div>
+                {% endif %}
+                </div>
+                <div class="col-md-4">
+                {{ form.device_name.label_tag }}
+                {{ form.device_name }}
+                {% if form.device_name.errors %}
+                  <div class="text-danger small">{{ form.device_name.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# Status & Assignment #}
       <div class="col-lg-6">
         <div class="card form-card h-100">
           <div class="card-header">Status &amp; Assignment</div>
@@ -215,40 +270,12 @@
         </div>
       </div>
 
-      <div class="col-lg-6">
-        <div class="card form-card h-100">
-          <div class="card-header">Device Information</div>
-          <div class="card-body">
-            <div class="row g-3">
-              <div class="col-md-4">
-                {{ form.device_name.label_tag }}
-                {{ form.device_name }}
-                {% if form.device_name.errors %}
-                  <div class="text-danger small">{{ form.device_name.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-4">
-                {{ form.device_DAM_ID.label_tag }}
-                {{ form.device_DAM_ID }}
-                {% if form.device_DAM_ID.errors %}
-                  <div class="text-danger small">{{ form.device_DAM_ID.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-4">
-                {{ form.device_serial.label_tag }}
-                {{ form.device_serial }}
-                {% if form.device_serial.errors %}
-                  <div class="text-danger small">{{ form.device_serial.errors }}</div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
+
     </div>
 
     {# ───────── District Member Search ───────── #}
-    {# Hidden FK field set by JS when a result card is clicked #}
+    {# Hidden FK field — set by JS when a search result or device lookup picks a member #}
     {{ form.district_member }}
 
     <div class="card form-card">
@@ -258,7 +285,7 @@
       </div>
       <div class="card-body">
 
-        <div class="position-relative mb-2" style="max-width: 420px;">
+        <div id="memberSearchWrap" class="position-relative mb-2" style="max-width: 420px;">
           <input type="text"
                  id="memberSearchInput"
                  class="form-control"
@@ -276,12 +303,12 @@
 
         <div id="memberSelected"
              class="alert alert-success d-flex justify-content-between align-items-start mb-0"
-             style="display:none !important;">
+             style="display:none;">
           <div>
             <strong id="selectedMemberTitle"></strong>
             <div id="selectedMemberMeta" class="small text-muted mt-1"></div>
           </div>
-          <button type="button" class="btn btn-sm btn-outline-danger ms-3" onclick="clearMember()">
+          <button type="button" id="clearMemberBtn" class="btn btn-sm btn-outline-danger ms-3">
             ✕ Clear
           </button>
         </div>
@@ -413,43 +440,195 @@
 (function () {
   'use strict';
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Element cache
+  // ─────────────────────────────────────────────────────────────────────────
   const els = {
+    // Member search UI
+    searchWrap:    document.getElementById('memberSearchWrap'),
     search:        document.getElementById('memberSearchInput'),
     spinner:       document.getElementById('memberSpinner'),
     cardResults:   document.getElementById('memberCardResults'),
     selectedBox:   document.getElementById('memberSelected'),
     selectedTitle: document.getElementById('selectedMemberTitle'),
     selectedMeta:  document.getElementById('selectedMemberMeta'),
+    clearBtn:      document.getElementById('clearMemberBtn'),
     fk:            document.getElementById('id_district_member'),
+
+    // Device fields + lookup hints
     devName:       document.getElementById('id_device_name'),
     devDAM:        document.getElementById('id_device_DAM_ID'),
     devSerial:     document.getElementById('id_device_serial'),
+    damHint:       document.getElementById('damLookupHint'),
+    serialHint:    document.getElementById('serialLookupHint'),
   };
 
-  // Bail out if the search input isn't on this page (e.g. perms removed it)
+  // XSS-safe escape for any string interpolated into innerHTML
+  const escapeHtml = (s) => String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Hint helpers
+  // ─────────────────────────────────────────────────────────────────────────
+  function showHint(el, kind, message) {
+    if (!el) return;
+    el.className = `lookup-hint ${kind}`;
+    el.textContent = message;
+    el.style.display = 'inline-block';
+  }
+  function clearHint(el) {
+    if (!el) return;
+    el.style.display = 'none';
+    el.textContent = '';
+  }
+  
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chained device lookup
+  //   STEP 1: /members/api/device-search/?q=<value>             → list of devices
+  //   STEP 2: /members/api/assignment-by-device/?device_pk=<pk> → active member
+  // ─────────────────────────────────────────────────────────────────────────
+  function lookupDevice(kind, value, hintEl) {
+    value = (value || '').trim();
+    if (!value) { clearHint(hintEl); return; }
+
+    showHint(hintEl, 'loading', 'Looking up…');
+
+    fetch(`/members/api/device-search/?q=${encodeURIComponent(value)}`)
+      .then(r => {
+        if (!r.ok) throw new Error(`device-search HTTP ${r.status}`);
+        return r.json();
+      })
+      .then(data => {
+        const device = pickExactMatch(data.results || [], kind, value);
+        if (!device) {
+          showHint(hintEl, 'error', 'No device found.');
+          return;
+        }
+
+        // Fill device fields from the matched record
+        if (els.devName)   els.devName.value   = device.asset_name || '';
+        if (els.devDAM)    els.devDAM.value    = device.asset_id || '';
+        if (els.devSerial) els.devSerial.value = device.serial_number === '—'
+          ? ''
+          : (device.serial_number || '');
+
+        // Chain into assignment lookup — must `return` so errors propagate to .catch
+        return fetch(`/members/api/assignment-by-device/?device_pk=${encodeURIComponent(device.pk)}`)
+          .then(r => {
+            if (!r.ok) throw new Error(`assignment-by-device HTTP ${r.status}`);
+            return r.json();
+          })
+          .then(assignmentData => {
+            const member = assignmentData.active_member;
+            if (member) {
+              applyMemberToForm(member);
+              showHint(hintEl, 'ok',
+                `Device found · Assigned to member #${member.district_member_id}`);
+            } else {
+              applyUnassignedToForm();
+              showHint(hintEl, 'warn', 'Device found · Unassigned');
+            }
+          });
+      })
+      .catch(err => {
+        console.error('Device lookup failed:', err);
+        showHint(hintEl, 'error', 'Lookup failed. Try again.');
+      });
+  }
+
+  /**
+   * device_search_api uses `icontains` fuzzy matching, but we want EXACT.
+   * Filter results client-side so partial typing doesn't snap to the wrong device.
+   */
+  function pickExactMatch(results, kind, value) {
+    const v = value.toLowerCase();
+    if (kind === 'dam_id') {
+      return results.find(d => String(d.asset_id).toLowerCase() === v);
+    }
+    return results.find(d => String(d.serial_number || '').toLowerCase() === v);
+  }
+
+  function applyMemberToForm(m) {
+    els.fk.value = m.pk;
+    if (els.search) els.search.value = m.district_member_id; 
+    els.selectedTitle.textContent = `Member ID: ${m.district_member_id}`;
+    const namePart = m.name ? ` · ${m.name}` : '';
+    els.selectedMeta.textContent = `${m.grade} · ${m.building}${namePart}`;
+    els.selectedBox.style.display = 'flex';
+    els.selectedBox.classList.remove('alert-secondary');
+    els.selectedBox.classList.add('alert-success');
+
+  }
+
+  function applyUnassignedToForm() {
+    els.fk.value = '';
+    if (els.search) els.search.value = '';
+    els.selectedTitle.innerHTML = `<span class="unassigned-tag">Unassigned</span>`;
+    els.selectedMeta.textContent = 'This device has no active district member assignment.';
+    els.selectedBox.style.display = 'flex';
+    els.selectedBox.classList.remove('alert-success');
+    els.selectedBox.classList.add('alert-secondary');
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Debounced typing — independent timers per field via closure
+  // ─────────────────────────────────────────────────────────────────────────
+  function makeDebouncedLookup(kind, hintEl) {
+    let timer = null;
+    return function (event) {
+      const value = event.target.value;
+      clearTimeout(timer);
+
+      if (!value.trim()) {
+        clearHint(hintEl);
+        return;
+      }
+
+      timer = setTimeout(() => lookupDevice(kind, value, hintEl), 400);
+    };
+  }
+
+  if (els.devDAM && els.damHint) {
+    els.devDAM.addEventListener('input', makeDebouncedLookup('dam_id', els.damHint));
+  }
+  if (els.devSerial && els.serialHint) {
+    els.devSerial.addEventListener('input', makeDebouncedLookup('serial', els.serialHint));
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Clear button — wired up via addEventListener (consistent with the rest)
+  // ─────────────────────────────────────────────────────────────────────────
+  if (els.clearBtn) {
+    els.clearBtn.addEventListener('click', () => clearMember());
+  }
+
+  function clearMember() {
+    els.fk.value = '';
+    if (els.search) els.search.value = ''; 
+    if (els.devName)   els.devName.value   = '';
+    if (els.devDAM)    els.devDAM.value    = '';
+    if (els.devSerial) els.devSerial.value = '';
+    els.selectedBox.style.display = 'none';
+    clearHint(els.damHint);
+    clearHint(els.serialHint);
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Existing member search (unchanged behavior)
+  // ─────────────────────────────────────────────────────────────────────────
   if (!els.search) return;
 
-  // XSS-safe HTML escape for any string injected via innerHTML
-  const escapeHtml = (str) => String(str ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-
-  let debounceTimer = null;
+  let memberSearchTimer = null;
 
   els.search.addEventListener('input', function () {
     const q = this.value.trim();
-    clearTimeout(debounceTimer);
-
-    if (q.length < 2) {
-      hideResults();
-      return;
-    }
+    clearTimeout(memberSearchTimer);
+    if (q.length < 2) { hideResults(); return; }
 
     els.spinner.style.display = 'block';
-    debounceTimer = setTimeout(() => {
+    memberSearchTimer = setTimeout(() => {
       fetch(`/members/api/member-search/?q=${encodeURIComponent(q)}`)
         .then(r => {
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
@@ -488,8 +667,7 @@
       const emailRow = m.email ? `<div class="small text-muted">${escapeHtml(m.email)}</div>` : '';
 
       col.innerHTML = `
-        <div class="card h-100 member-result-card"
-             data-member='${escapeHtml(JSON.stringify(m))}'>
+        <div class="card h-100 member-result-card">
           <div class="card-body p-2">
             <div class="fw-bold text-primary mb-1">ID: ${escapeHtml(m.district_member_id)}</div>
             ${nameRow}
@@ -500,17 +678,15 @@
           </div>
         </div>`;
 
-      // Safer than inline onclick — attach the listener directly
-      const cardEl = col.querySelector('.member-result-card');
-      cardEl.addEventListener('click', () => selectMember(m));
-
+      col.querySelector('.member-result-card')
+         .addEventListener('click', () => selectMember(m));
       els.cardResults.appendChild(col);
     });
 
     els.cardResults.style.display = 'flex';
   }
 
-  window.selectMember = function (m) {
+  function selectMember(m) {
     els.fk.value = m.pk;
 
     if (m.active_device) {
@@ -527,17 +703,11 @@
     els.selectedMeta.textContent = `${m.grade} · ${m.building}${namePart}${deviceInfo}`;
 
     els.selectedBox.style.display = 'flex';
+    els.selectedBox.classList.remove('alert-secondary');
+    els.selectedBox.classList.add('alert-success');
     hideResults();
     els.search.value = '';
-  };
-
-  window.clearMember = function () {
-    els.fk.value = '';
-    if (els.devName)   els.devName.value   = '';
-    if (els.devDAM)    els.devDAM.value    = '';
-    if (els.devSerial) els.devSerial.value = '';
-    els.selectedBox.style.display = 'none';
-  };
+  }
 
   function hideResults() {
     els.cardResults.style.display = 'none';

@@ -1,0 +1,12 @@
+{% comment %}
+  Usage: {% include '_includes/status_icon.html' with ok=some_boolean %}
+{% endcomment %}
+{% if ok %}
+  <svg class="status-icon ok" viewBox="0 0 16 16" fill="currentColor" aria-label="Yes" role="img">
+    <path d="M13.485 1.929a1 1 0 0 1 1.415 1.414L6.414 11.83 1.1 6.515a1 1 0 1 1 1.414-1.414l3.9 3.9z"/>
+  </svg>
+{% else %}
+  <svg class="status-icon no" viewBox="0 0 16 16" fill="currentColor" aria-label="No" role="img">
+    <path d="M2.146 2.854a.708.708 0 1 1 1-1L8 6.707l4.854-4.853a.708.708 0 0 1 1 1L9 7.707l4.854 4.853a.708.708 0 1 1-1 1L8 8.707l-4.854 4.853a.708.708 0 0 1-1-1L7 7.707z"/>
+  </svg>
+{% endif %}
