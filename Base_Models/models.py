@@ -32,10 +32,18 @@ class District_Department(models.Model):
 
 
 class Current_Status(models.Model):
-	Status= models.CharField(max_length=50)
-	class Meta:
-		verbose_name_plural = "Device Statuses"
-		ordering = ['Status']
+    Status_Choices = {
+    ('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
+    ('DISPOSED-END OF LIFE','Disposed-End of Life'),('LOST/STOLEN-PENDING PAYMENT','Lost/Stolen-Pending Payment'),
+    ('LOST/STOLEN-PAID', 'Lost/Stolen-Paid'),
 
-	def __str__(self):
-		return f"{self.Status}"
+    }
+
+    Status = models.CharField(max_length=20, default="Assign Status", choices=Status_Choices),
+	
+    class Meta:
+        verbose_name_plural = "Device Statuses"
+        # ordering = ['Status']
+
+    def __str__(self):
+        return f"{self.Status}"
