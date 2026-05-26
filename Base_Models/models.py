@@ -32,14 +32,9 @@ class District_Department(models.Model):
 
 
 class Current_Device_Status(models.Model):
-    Status_Choices = [
-    ('','Assign Device Status'),('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
-    ('DISPOSED-END OF LIFE','Disposed-End of Life'),('LOST/STOLEN-PENDING PAYMENT','Lost/Stolen-Pending Payment'),
-    ('LOST/STOLEN-PAID', 'Lost/Stolen-Paid'),
 
-    ]
-
-    Status = models.CharField(max_length=30, choices=Status_Choices, default="Assign Device Status")
+    Status = models.CharField(max_length=30, choices=[('','Assign Device Status'),('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
+    ('DISPOSED-END OF LIFE','Disposed-End of Life'),('LOST/STOLEN-PENDING PAYMENT','Lost/Stolen-Pending Payment'),('LOST/STOLEN-PAID', 'Lost/Stolen-Paid'),])
 	
     class Meta:
         verbose_name_plural = "Device Statuses"

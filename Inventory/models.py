@@ -27,8 +27,7 @@ class District_Device_Inventory(models.Model):
     # If not sure, use on_delete=models.SET_NULL and null=True.
     current_status = models.ForeignKey(
         'Base_Models.Current_Device_Status', 
-        on_delete=models.SET_DEFAULT,
-        default=0,
+        on_delete=models.SET_NULL,
         null=True, 
     )
     location = models.ForeignKey(
