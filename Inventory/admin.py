@@ -177,8 +177,23 @@ class AssetHistoryAdmin(admin.ModelAdmin):
 # ============================================================================
 
 @admin.register(Current_Device_Status)
-class Device_Current_StatusAdmin(admin.ModelAdmin):
-    list_display = ['Status']
+class Current_Device_StatusAdmin(admin.ModelAdmin):
+    list_display = ['status_label', 'status_key', 'device_count']
+    ordering = ['Status']
+
+    def status_label(self, obj):
+        return obj.get_Status_display()
+    status_label.short_description = 'Status'
+    status_label.admin_order_field = 'Status'
+
+    def status_key(self, obj):
+        return obj.Status
+    status_key.short_description = 'Internal Code'
+
+    def device_count(self, obj):
+        # reverse relation from District_Device_Inventory.current_status
+        return obj.district_device_inventory_set.count()
+    device_count.short_description = '# Devices'
 
 # ==================================================
 # Classroom Device Purposes

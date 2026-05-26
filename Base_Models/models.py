@@ -31,14 +31,31 @@ class District_Department(models.Model):
         return self.department
 
 
+# Base_Models/models.py — better pattern
 class Current_Device_Status(models.Model):
 
-    Status = models.CharField(max_length=30, choices=[('','Assign Device Status'),('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
-    ('DISPOSED-END OF LIFE','Disposed-End of Life'),('LOST/STOLEN-PENDING PAYMENT','Lost/Stolen-Pending Payment'),('LOST/STOLEN-PAID', 'Lost/Stolen-Paid'),])
-	
+    class StatusChoices(models.TextChoices):
+        ASSIGN = 'ASSIGN', 'Assign Device Status'
+        IN_USE = 'IN_USE', 'In Use'
+        IN_STORAGE = 'IN_STORAGE', 'In Storage'
+        MISSING = 'MISSING', 'Missing'
+        BEING_REPAIRED = 'BEING_REPAIRED', 'Being Repaired'
+        DISPOSED = 'DISPOSED', 'Disposed-End of Life'
+        LOST_PENDING = 'LOST_PENDING', 'Lost/Stolen-Pending Payment'
+        LOST_PAID = 'LOST_PAID', 'Lost/Stolen-Paid'
+
+    Status = models.CharField(
+        max_length=40,
+        choices=StatusChoices.choices,
+        
+        unique=True,
+    )
     class Meta:
+        verbose_name = "Device Status"
         verbose_name_plural = "Device Statuses"
-        # ordering = ['Status']
+        ordering = ['Status']
 
     def __str__(self):
-        return f"{self.Status}"
+        # get_Status_display() returns the human label ("In Use")
+        # rather than the stored key ("IN_USE").
+        return self.get_Status_display()
