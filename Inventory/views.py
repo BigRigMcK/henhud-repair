@@ -10,7 +10,7 @@ from django.db.models.functions import Cast
 from django.db.models import CharField
 from .forms import District_Device_Inventory_Form
 from .models import District_Device_Inventory, Device_Model
-from Base_Models.models import Current_Status, District_Location, District_Department
+from Base_Models.models import Current_Device_Status, District_Location, District_Department
 from repair_tracker.models import Repair
 
 
@@ -160,7 +160,7 @@ def inventory_list(request):
 
 		# Lookup options for the dropdowns
 		'model_types': Device_Model.objects.all().order_by('Model_Type'),
-		'statuses': Current_Status.objects.all().order_by('Status'),
+		'statuses': Current_Device_Status.objects.all().order_by('Status'),
 		'locations': District_Location.objects.all().order_by('school', 'room'),
 		'departments': District_Department.objects.all().order_by('department'),
 	}

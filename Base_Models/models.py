@@ -31,15 +31,15 @@ class District_Department(models.Model):
         return self.department
 
 
-class Current_Status(models.Model):
-    Status_Choices = {
-    ('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
+class Current_Device_Status(models.Model):
+    Status_Choices = [
+    ('','Assign Device Status'),('IN USE','In Use'), ('IN STORAGE','In Storage'),('MISSING','Missing'),('BEING REPAIRED','Being Repaired'),
     ('DISPOSED-END OF LIFE','Disposed-End of Life'),('LOST/STOLEN-PENDING PAYMENT','Lost/Stolen-Pending Payment'),
     ('LOST/STOLEN-PAID', 'Lost/Stolen-Paid'),
 
-    }
+    ]
 
-    Status = models.CharField(max_length=20, default="Assign Status", choices=Status_Choices),
+    Status = models.CharField(max_length=30, choices=Status_Choices, default="Assign Device Status")
 	
     class Meta:
         verbose_name_plural = "Device Statuses"

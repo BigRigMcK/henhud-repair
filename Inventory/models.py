@@ -26,7 +26,7 @@ class District_Device_Inventory(models.Model):
     # Note: default=1 assumes a record with ID 1 exists. 
     # If not sure, use on_delete=models.SET_NULL and null=True.
     current_status = models.ForeignKey(
-        'Base_Models.Current_Status', 
+        'Base_Models.Current_Device_Status', 
         on_delete=models.SET_DEFAULT,
         default=0,
         null=True, 

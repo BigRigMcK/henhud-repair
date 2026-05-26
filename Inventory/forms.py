@@ -56,6 +56,29 @@ class District_Device_Inventory_Form(forms.ModelForm):
 	def __init__(self, *args, user=None, **kwargs):
 		super().__init__(*args, **kwargs)
 
+		# ------------------------------------------------------------------
+		# Fix for: InvalidCursorName "_django_curs_..._sync_X" does not exist
+		# ------------------------------------------------------------------
+		# Each ForeignKey field on a ModelForm becomes a ModelChoiceField,
+		# whose .queryset is LAZY. The template renders <option> tags by
+		# iterating that queryset, and on Postgres that iteration can use
+		# a server-side cursor. If the connection/transaction closes before
+		# the template finishes iterating (middleware, CONN_MAX_AGE, etc.),
+		# the cursor disappears mid-render and you get InvalidCursorName.
+		#
+		# Forcing the queryset to a list here evaluates it ONCE, right now,
+		# inside the view's normal request flow — no cursor left dangling.
+		# The trade-off: we hold all rows in memory for the request. For
+		# dropdowns (locations, statuses, models, departments) that's tiny.
+		# ------------------------------------------------------------------
+		fk_fields = ['model_type', 'current_status', 'location', 'department']
+		for name in fk_fields:
+			if name in self.fields:
+				# list(qs) forces immediate evaluation. After this, iteration
+				# in the template hits Python memory, not the DB.
+				self.fields[name].queryset = self.fields[name].queryset.all()
+				self.fields[name].choices = list(self.fields[name].choices)
+
 		
 
 # class Device_Inventory_Form(forms.ModelForm):

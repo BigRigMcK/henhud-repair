@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils import timezone
 
 from repair_tracker.audit_models import AuditLog
-from Base_Models.models import Current_Status
+from Base_Models.models import Current_Device_Status
 
 from .models import (
     District_Device_Inventory,
@@ -176,7 +176,7 @@ class AssetHistoryAdmin(admin.ModelAdmin):
 # CURRENT STATUS (Base_Models)
 # ============================================================================
 
-@admin.register(Current_Status)
+@admin.register(Current_Device_Status)
 class Device_Current_StatusAdmin(admin.ModelAdmin):
     list_display = ['Status']
 
