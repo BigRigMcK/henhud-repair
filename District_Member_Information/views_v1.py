@@ -123,11 +123,9 @@ def assignment_checkout(request):
             'member': member.get_audit_representation(),
         })
 
-        # FIX: Protect backend indexing sequence from being exposed in public UI text 
-        # by matching your display scheme and outputting district_member_id instead of raw pk.
         messages.success(
             request,
-            f'Device "{device.asset_name}" successfully checked out to Member #{member.district_member_id}.'
+            f'Device "{device.asset_name}" successfully checked out to Member #{member.pk}.'
         )
         return redirect('assignment_list')
 
@@ -206,11 +204,10 @@ def device_search_api(request):
     results = []
 
     if len(q) >= 1:
-        filters = Q(serial_number__icontains=q) | Q(asset_name__icontains=q) | Q(asset_id__icontains=q)
+        filters = Q(serial_number__icontains=q) | Q(asset_name__icontains=q)
+        if q.isdigit():
+            filters |= Q(asset_id=q)
 
-
-        # CHANGE: Altered the queryset slice limit parameter here from [:8] to [:5]
-        # to ensure the backend only targets and structuralizes the top 5 relevant devices.
         devices = District_Device_Inventory.objects.filter(filters).select_related(
             'model_type', 'current_status'
         )[:8]
@@ -261,7 +258,7 @@ def member_search_api(request):
     except Exception:
         pass
 
-  # 2. Search by full name
+    # 2. Search by full name
     try:
         name_hash = _hash_for_search(q, django_settings.SEARCH_D_M_NME_HASH_KEY)
         for m in District_Member.objects.filter(district_member_name_index=name_hash):
@@ -290,7 +287,6 @@ def member_search_api(request):
         to_attr='active_assignments_list',
     )
 
-    # Note: Currently set to [:4] on database evaluation. Leave as-is or shift to [:5] if needed.
     members_qs = District_Member.objects.filter(
         pk__in=found.keys()
     ).prefetch_related(active_assignment_prefetch)[:4]

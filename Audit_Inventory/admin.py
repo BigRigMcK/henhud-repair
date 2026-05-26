@@ -65,6 +65,8 @@ class District_Device_AuditAdmin(admin.ModelAdmin):
         'started_at',
         'location__school',   # group filter by school name
         'auditor',
+        'is_complete',
+
     ]
     search_fields = [
         'location__school',
@@ -77,7 +79,7 @@ class District_Device_AuditAdmin(admin.ModelAdmin):
         'started_at',
         'completed_at',
         'is_complete',
-        'progress_display',
+        
     ]
     ordering = ['-started_at']
     inlines = [IndividualAuditDeviceInline]

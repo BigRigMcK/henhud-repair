@@ -98,7 +98,7 @@ class RepairNoteForm(forms.ModelForm):
             'note_type': forms.Select(attrs={'class': 'form-select'}),
             'note': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows': 3,
+                'rows': 1,
                 'placeholder': 'What did you do? What did you find?',
             }),
         }

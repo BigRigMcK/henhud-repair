@@ -279,7 +279,7 @@
       deviceResults.classList.add('show');
       return;
     }
-    deviceResults.innerHTML = results.map(d => {
+    deviceResults.innerHTML = results.slice(0,5).map(d => {
       const out = d.is_checked_out;
       return `<div class="result-item ${out ? 'checked-out' : ''}"
                    data-pk="${d.pk}"

@@ -47,6 +47,12 @@ class Repair(models.Model):
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='repair_ticket_created_by',
+    )
     
     # Status
     status = models.CharField(max_length=20, choices=[
@@ -206,6 +212,7 @@ class LongTermLoaner(models.Model):
     # Audit fields
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
     
     class Meta:
         permissions = [
