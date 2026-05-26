@@ -46,13 +46,18 @@ class Repair(models.Model):
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         related_name='repair_ticket_created_by',
     )
+    updated_at = models.DateTimeField(auto_now=True)
+    update_by = models.ForeignKey(
+        User,
+        on_delete=mode.SET_NULL,
+        null=True,
+        related_name='repair_ticket_updated_by',)
     
     # Status
     status = models.CharField(max_length=20, choices=[
