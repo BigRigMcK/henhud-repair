@@ -1,141 +1,504 @@
 {% extends 'base.html' %}
 
-{% block title %}Add New Device{% endblock %}
+{% block title %}
+    {% if device.pk %}Edit Device #{{ device.asset_id }}{% else %}Add New Device{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-success: #198754;
+    --hh-danger: #dc3545;
+    --hh-info: #0dcaf0;
+    --hh-muted: #6c757d;
+    --soft-border: #e5e7eb;
+    --soft-bg: #f8f9fb;
+    --card-radius: 10px;
+  }
+
+  .form-wrap {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Branded page header */
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .page-header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .page-header .btn-outline-light:hover {
+    background-color: var(--hh-accent);
+    border-color: var(--hh-accent);
+    color: var(--hh-navy);
+  }
+
+  /* Cards */
+  .form-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    background: white;
+    height: 100%;             /* equal heights when in a row */
+    display: flex;
+    flex-direction: column;
+  }
+  .form-card .card-header {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .form-card .card-body {
+    padding: 1.25rem;
+    flex: 1;                  /* fill the remaining height */
+  }
+
+  /* Accent stripes */
+  .form-card.identification { border-left: 4px solid var(--hh-navy); }
+  .form-card.location       { border-left: 4px solid var(--hh-accent); }
+  .form-card.hardware       { border-left: 4px solid var(--hh-info); }
+  .form-card.financial      { border-left: 4px solid var(--hh-success); }
+  .form-card.notes          { border-left: 4px solid var(--hh-muted); }
+  .form-card.student        { border-left: 4px solid var(--hh-danger); }
+
+  /* ────────────────────────────────────────────────────────────── */
+  /*  FIELD GRID — this is the heart of the layout fix              */
+  /*  Auto-fills 2 columns on wide screens, 1 column on narrow.     */
+  /*  Each field cell sizes naturally to its content.               */
+  /* ────────────────────────────────────────────────────────────── */
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem 1.25rem;
+  }
+  .field-grid .field-row.full {
+    grid-column: 1 / -1;       /* span every column for wide fields */
+  }
+
+  .field-row label {
+    font-weight: 600;
+    color: var(--hh-navy);
+    font-size: 0.82rem;
+    margin-bottom: 0.25rem;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .field-row .required-marker {
+    color: var(--hh-danger);
+    margin-left: 0.15rem;
+  }
+
+  /* ────────────────────────────────────────────────────────────── */
+  /*  WIDGET NORMALIZATION                                          */
+  /*  Forces every form input to a consistent size and style,       */
+  /*  regardless of what Django renders — even if the form          */
+  /*  accidentally used a Textarea for a single-line field.         */
+  /* ────────────────────────────────────────────────────────────── */
+  .field-row input[type="text"],
+  .field-row input[type="number"],
+  .field-row input[type="email"],
+  .field-row input[type="date"],
+  .field-row input[type="url"],
+  .field-row select,
+  .field-row textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--soft-border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: white;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+  }
+  .field-row input:focus,
+  .field-row select:focus,
+  .field-row textarea:focus {
+    border-color: var(--hh-accent);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(232, 160, 32, 0.15);
+  }
+
+  /* Force single-line height on text inputs even if the form
+     rendered them as <textarea> by accident — common Django form bug */
+  .field-row.single-line textarea {
+    min-height: auto;
+    height: 2.5rem;
+    resize: none;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  /* Real multi-line textareas (notes) */
+  .field-row textarea {
+    min-height: 7rem;
+    resize: vertical;
+  }
+
+  .field-row .helptext {
+    font-size: 0.78rem;
+    color: var(--hh-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* Per-field error display */
+  .field-row.has-error input,
+  .field-row.has-error select,
+  .field-row.has-error textarea {
+    border-color: var(--hh-danger);
+  }
+  .field-row .field-error {
+    color: var(--hh-danger);
+    font-size: 0.78rem;
+    margin-top: 0.25rem;
+  }
+
+  /* Prefix for currency fields */
+  .input-prefix {
+    position: relative;
+  }
+  .input-prefix::before {
+    content: "$";
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--hh-muted);
+    pointer-events: none;
+    font-weight: 600;
+  }
+  .input-prefix input { padding-left: 1.75rem; }
+
+  /* FERPA banner */
+  .ferpa-banner {
+    background: #fff4e6;
+    border: 1px solid var(--hh-accent);
+    color: #7a4a00;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Sticky action bar */
+  .form-actions {
+    background: white;
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    padding: 1rem 1.25rem;
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 10;
+  }
+  .form-actions .actions-left { color: var(--hh-muted); font-size: 0.85rem; }
+  .form-actions .actions-right { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .form-actions .btn { min-width: 130px; }
+
+  /* Error summary at top */
+  .errors-summary {
+    border: 1px solid var(--hh-danger);
+    background: #fdecec;
+    border-left: 4px solid var(--hh-danger);
+    border-radius: var(--card-radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .errors-summary h6 {
+    color: var(--hh-danger);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .errors-summary ul { margin: 0; padding-left: 1.25rem; }
+
+  /* Section dividers between rows */
+  .section-row { margin-bottom: 0;}
+
+  @media (max-width: 768px) {
+    .form-actions { position: static; box-shadow: none; }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
-<div style="text-align: center; margin-top: 50px;">
-    <div class="container">
-        <div class="container-buttons d-flex justify-content-between align-items-center">
-            <a href="{% url 'home' %}" class="btn btn-lg btn-outline-primary"> Back Home </a>
-            <h1> Add A New Device To The Fleet </h1>
-            <div style="width: 135px;"></div>
-        </div>
+
+{# ── Decide once where "back" should go — used in header AND cancel ── #}
+{% if device.pk %}
+    {% url 'inventory_detail' device.pk as back_url %}
+{% else %}
+    {% url 'inventory_list' as back_url %}
+{% endif %}
+
+<div class="form-wrap">
+
+    {# ─── Branded page header ─── #}
+    <div class="page-header">
+        <a href="{{ back_url }}" class="btn btn-outline-light btn-sm">
+            &larr; Back
+        </a>
+
+        <h1>
+            <i class="bi bi-{% if device.pk %}pencil-square{% else %}plus-circle{% endif %}"></i>
+            {% if device.pk %}
+                Edit Device #{{ device.asset_id }}
+            {% else %}
+                Add A New Device To The Fleet
+            {% endif %}
+        </h1>
+
+        <a href="{% url 'inventory_list' %}" class="btn btn-outline-light btn-sm">
+            View Inventory &rarr;
+        </a>
     </div>
-    
 
+    {# ─── Validation summary ─── #}
+    {% if form.errors %}
+    <div class="errors-summary" role="alert">
+        <h6><i class="bi bi-exclamation-triangle"></i> Please fix the following errors:</h6>
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
-<div class="container" style="text-align:center;">
+    <form method="post" novalidate>
+        {% csrf_token %}
 
-            <form method="post" navalidate>
-            {% csrf_token %}
-
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                <strong> Please Fix The Following Errors:</strong>
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li> <strong> {{ field.label }}: </strong> {{ error }} </li>
-                        {% endfor %}
-                    {% endfor %}
-                    {% for error in form.non_field_errors %}
-                        <li>{{ error }} </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-<!-- Start of Cards -->
-<div class="row">
-    <!-- Device Information -->
-    <div class="col-md-6 ">
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-light">Device Information & Status</div>
-            <div class="card-body">
-                <div class="row">
-                    {% with "asset_name asset_id serial_number model_type current_status" as fields_to_show %}
-                        {% for field in form %}
-                            {% if field.name in fields_to_show %}
-                                
-                                <div class="col-md-6">
-                                    
-                                    <div class="row mb-2 align-items-center">
-                                        <label class="col-sm-4 col-form-label text-nowrap">
-                                            {{ field.label }}
-                                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-                                        </label>
-                                        <div class="col-sm-8">
+        {# ─────────────────────────────────────────────────────────── #}
+        {# ROW 1: Identification (full width, 2-col field grid inside) #}
+        {# ─────────────────────────────────────────────────────────── #}
+        <div class="row section-row">
+            <div class="col-12">
+                <div class="form-card identification">
+                    <div class="card-header">
+                        <i class="bi bi-tag-fill"></i> Device Identification &amp; Status
+                    </div>
+                    <div class="card-body">
+                        <div class="field-grid">
+                            {% for field_name in "asset_name,asset_id,serial_number,model_type,current_status"|cut:" " %}{% endfor %}
+                            {% with id_fields="asset_name asset_id serial_number model_type current_status" %}
+                                {% for field in form %}
+                                    {% if field.name in id_fields %}
+                                        <div class="field-row single-line {% if field.errors %}has-error{% endif %}">
+                                            <label for="{{ field.id_for_label }}">
+                                                {{ field.label }}
+                                                {% if field.field.required %}<span class="required-marker" aria-label="required">*</span>{% endif %}
+                                            </label>
                                             {{ field }}
+                                            {% if field.help_text %}
+                                                <div class="helptext">{{ field.help_text }}</div>
+                                            {% endif %}
+                                            {% for error in field.errors %}
+                                                <div class="field-error">{{ error }}</div>
+                                            {% endfor %}
                                         </div>
-                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                </div>
-                                
+        {# ─────────────────────────────────────────────────────────── #}
+        {# ROW 2: Location/Department  +  FERPA Student Info           #}
+        {# ─────────────────────────────────────────────────────────── #}
+        <div class="row section-row">
+            <div class="col-md-6">
+                <div class="form-card location">
+                    <div class="card-header">
+                        <i class="bi bi-geo-alt-fill"></i> Location &amp; Department
+                    </div>
+                    <div class="card-body">
+                        <div class="field-grid">
+                            {% with loc_fields="location department" %}
+                                {% for field in form %}
+                                    {% if field.name in loc_fields %}
+                                        <div class="field-row {% if field.errors %}has-error{% endif %}">
+                                            <label for="{{ field.id_for_label }}">
+                                                {{ field.label }}
+                                                {% if field.field.required %}<span class="required-marker">*</span>{% endif %}
+                                            </label>
+                                            {{ field }}
+                                            {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+                                            {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if form.student_id_number_encrypted %}
+            <div class="col-md-6">
+                <div class="form-card student">
+                    <div class="card-header">
+                        <i class="bi bi-person-badge-fill"></i> Student Information
+                    </div>
+                    <div class="card-body">
+                        <div class="ferpa-banner">
+                            <strong>FERPA Protected:</strong>
+                            Student data is encrypted at rest. All access is logged.
+                        </div>
+                        <div class="field-row {% if form.student_id_number_encrypted.errors %}has-error{% endif %}">
+                            <label for="{{ form.student_id_number_encrypted.id_for_label }}">
+                                {{ form.student_id_number_encrypted.label }}
+                            </label>
+                            {{ form.student_id_number_encrypted }}
+                            {% if form.student_id_number_encrypted.help_text %}
+                                <div class="helptext">{{ form.student_id_number_encrypted.help_text }}</div>
                             {% endif %}
-                        {% endfor %}
-                    {% endwith %}
+                            {% for error in form.student_id_number_encrypted.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {# ─────────────────────────────────────────────────────────── #}
+        {# ROW 3: Hardware Specs  +  Financial & Admin (logical split) #}
+        {# ─────────────────────────────────────────────────────────── #}
+        <div class="row section-row">
+            <div class="col-md-6">
+                <div class="form-card hardware">
+                    <div class="card-header">
+                        <i class="bi bi-cpu-fill"></i> Hardware Specs
+                    </div>
+                    <div class="card-body">
+                        <div class="field-grid">
+                            {% with hw_fields="manufacture_make capacity_hard_drive_size mac_address" %}
+                                {% for field in form %}
+                                    {% if field.name in hw_fields %}
+                                        <div class="field-row {% if field.errors %}has-error{% endif %}">
+                                            <label for="{{ field.id_for_label }}">
+                                                {{ field.label }}
+                                                {% if field.field.required %}<span class="required-marker">*</span>{% endif %}
+                                            </label>
+                                            {{ field }}
+                                            {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+                                            {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-card financial">
+                    <div class="card-header">
+                        <i class="bi bi-cash-stack"></i> Purchase &amp; Funding
+                    </div>
+                    <div class="card-body">
+                        <div class="field-grid">
+                            {% with fin_fields="vendor po_order purchase_value source_of_funding" %}
+                                {% for field in form %}
+                                    {% if field.name in fin_fields %}
+                                        <div class="field-row {% if field.name == 'purchase_value' %}input-prefix{% endif %} {% if field.errors %}has-error{% endif %}">
+                                            <label for="{{ field.id_for_label }}">
+                                                {{ field.label }}
+                                                {% if field.field.required %}<span class="required-marker">*</span>{% endif %}
+                                            </label>
+                                            {{ field }}
+                                            {% if field.help_text %}<div class="helptext">{{ field.help_text }}</div>{% endif %}
+                                            {% for error in field.errors %}<div class="field-error">{{ error }}</div>{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-<!-- Departemnt -->
-
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">Department & Location</div>
-            <div class="card-body">
-                {% with "location department" as fields %}
-                {% for field in form %}
-                        {% if field.name in fields %}
-
-                <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label">{{ field.label_tag }}{% if field.field.required %}
-                        <span class="text-danger">*</span>
-                        {% endif %}
-                        </label>
-                        <div class="col-sm-8">{{ field }}</div>
+        {# ─────────────────────────────────────────────────────────── #}
+        {# ROW 4: Notes (full width, takes as much space as it needs)  #}
+        {# ─────────────────────────────────────────────────────────── #}
+        <div class="row section-row">
+            <div class="col-12">
+                <div class="form-card notes">
+                    <div class="card-header">
+                        <i class="bi bi-journal-text"></i> Notes
                     </div>
-                        {% endif %}
-                {% endfor %}
-                {% endwith %}
-            </div>
-        </div>
-
-<!-- Student Information -->
-        <div class="card mb-3">
-            <div class="card-header">Student Information</div>
-            <div class="card-body">
-                <div class="row mb-2">
-                    <label class="col-sm-4 col-form-label">{{ form.student_id_number_encrypted.label_tag }}</label>
-                    <div class="col-sm-8">{{ form.student_id_number_encrypted }}</div>
+                    <div class="card-body">
+                        <div class="field-row {% if form.notes.errors %}has-error{% endif %}">
+                            <label for="{{ form.notes.id_for_label }}">
+                                {{ form.notes.label|default:"Notes" }}
+                            </label>
+                            {{ form.notes }}
+                            {% if form.notes.help_text %}
+                                <div class="helptext">{{ form.notes.help_text }}</div>
+                            {% endif %}
+                            {% for error in form.notes.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    
 
-
-<div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">Notes</div>
-            <div class="card-body">
-                <div style="margin:20px">{{form.notes}} </div>
-                
-
-
-</div></div></div>
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">Status & Assignment</div>
-            <div class="card-body">
-                {% with "manufacture_make vendor po_order purchase_value source_of_funding mac_address capacity_hard_drive_size " as extra_fields %}
-                {% for field in form %}
-                    {% if field.name in extra_fields %}
-                    <div class="row mb-2">
-                        <label class="col-sm-4 col-form-label">{{ field.label_tag }}</label>
-                        <div class="col-sm-8">{{ field }}</div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-                {% endwith %}
+        {# ─── Sticky action bar ─── #}
+        <div class="form-actions">
+            <div class="actions-left">
+                <span class="required-marker">*</span> Required fields
+            </div>
+            <div class="actions-right">
+                <a href="{{ back_url }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+                <button type="submit" class="btn btn-warning">
+                    <i class="bi bi-save"></i>
+                    {% if device.pk %}Save Changes{% else %}Add Device{% endif %}
+                </button>
             </div>
         </div>
-    </div>
+    </form>
+
 </div>
-    <div class="container_buttons d-flex gap-2 justify-content-center">
-            <button type="submit" class="btn btn-primary">Save Device</button>
-            <a href="{% url 'repair_list' %}" class="btn btn-secondary">Cancel</a>
-    </div>
-
 {% endblock %}

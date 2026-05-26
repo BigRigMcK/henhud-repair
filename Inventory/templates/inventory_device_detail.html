@@ -1,143 +1,397 @@
 {% extends 'base.html' %}
-
-{% block title %}Inventory Details For {{device.asset_id}} {% endblock %}
-
-{% block content %}
-    <!-- Add forms or lists for repairs in future expansions -->
 {% load static %}
 
-<div class="container">
-<div style="margin-left: 50px; margin-right: 50px">
-<!-- Device Header -->
-    <div class="container">
-    <div class="container-buttons d-flex justify-content-between align-items-center" style="padding: 15px;">
-        
-        <a href="{% url 'inventory_list' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back to Inventory List </a>
-        
-        <h1> Device #{{ device.asset_id }}</h1>
-            <!-- QR Code Creation -->
-        <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-            <div id="qrcode" class="mt-2"></div>
-        <script>
-          new QRCode(document.getElementById("qrcode"), {
-            text: "{{ device.asset_id }}",
-            width: 128, height: 128
-          });
-        </script>
+{% block title %}Device #{{ device.asset_id }} — Inventory Details{% endblock %}
 
-        
-        <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-lg btn-primary" style="margin:5px;">Edit</a>
-        
+{# ─────────────────────────────────────────────────────────────── #}
+{# Scoped page styles — same brand tokens as inventory_list.html.   #}
+{# In a follow-up, move :root vars into a shared _brand_tokens.html #}
+{# include so they live in ONE place across the whole project.      #}
+{# ─────────────────────────────────────────────────────────────── #}
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-success: #198754;
+    --hh-danger: #dc3545;
+    --hh-warning: #ffc107;
+    --hh-info: #0dcaf0;
+    --hh-muted: #6c757d;
+    --soft-border: #e5e7eb;
+    --soft-bg: #f8f9fb;
+    --card-radius: 10px;
+  }
+
+  .detail-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Branded page header — gradient, with QR code on the right */
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+  }
+  .page-header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .page-header .asset-pill {
+    color: var(--hh-accent);
+  }
+  .page-header .qr-box {
+    background: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    line-height: 0;            /* removes phantom space under QR canvas */
+  }
+  .page-header .btn-outline-light:hover {
+    background-color: var(--hh-accent);
+    border-color: var(--hh-accent);
+    color: var(--hh-navy);
+  }
+
+  /* Reusable info card */
+  .info-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    background: white;
+  }
+  .info-card .card-header {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .info-card .card-body { padding: 1.25rem; }
+
+  /* Accent stripes on the left to visually group categories */
+  .info-card.asset    { border-left: 4px solid var(--hh-navy); }
+  .info-card.location { border-left: 4px solid var(--hh-accent); }
+  .info-card.extras   { border-left: 4px solid var(--hh-info); }
+  .info-card.notes    { border-left: 4px solid var(--hh-muted); }
+  .info-card.student  { border-left: 4px solid var(--hh-danger); }
+  .info-card.repairs  { border-left: 4px solid var(--hh-success); }
+
+  /* The info-row pattern — replaces the old <p><strong>label:</strong> value</p>.
+     This pattern is much easier to scan visually because every value lines up. */
+  .info-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed var(--soft-border);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label {
+    color: var(--hh-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .info-row .value {
+    color: #1a1a1a;
+    word-break: break-word;
+  }
+  .info-row .value.empty {
+    color: var(--hh-muted);
+    font-style: italic;
+  }
+
+  /* FERPA banner for the student section */
+  .ferpa-banner {
+    background: #fff4e6;
+    border: 1px solid var(--hh-accent);
+    color: #7a4a00;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Notes block — preserves whitespace */
+  .notes-block {
+    background: var(--soft-bg);
+    border: 1px solid var(--soft-border);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    white-space: pre-wrap;        /* respect line breaks from the textarea */
+    color: #1a1a1a;
+    min-height: 5rem;
+  }
+  .notes-block.empty {
+    color: var(--hh-muted);
+    font-style: italic;
+  }
+
+  /* Repair-tickets table — match the inventory list look */
+  .repair-table thead th {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: none;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+  }
+  .repair-table tbody tr { transition: background-color 0.12s ease; }
+  .repair-table tbody tr:hover { background-color: rgba(232, 160, 32, 0.08); }
+  .repair-table tbody td {
+    padding: 0.65rem 1rem;
+    vertical-align: middle;
+    border-color: var(--soft-border);
+  }
+  .repair-table tbody td a {
+    color: var(--hh-navy);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .repair-table tbody td a:hover {
+    color: var(--hh-accent);
+    text-decoration: underline;
+  }
+
+  /* Empty state for the repair-tickets card */
+  .empty-state {
+    text-align: center;
+    color: var(--hh-muted);
+    padding: 1.5rem;
+    background: var(--soft-bg);
+    border-radius: 6px;
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .page-header .qr-box { justify-self: center; }
+    .info-row {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detail-wrap">
+
+    {# ─── Branded page header ─── #}
+    <div class="page-header">
+        <a href="{% url 'inventory_list' %}" class="btn btn-outline-light btn-sm">
+            &larr; Back to List
+        </a>
+
+        <h1>
+            <i class="bi bi-pc-display"></i>
+            Device <span class="asset-pill">#{{ device.asset_id }}</span>
+        </h1>
+
+        {# QR code container — script populates it below #}
+        <div class="qr-box">
+            <div id="qrcode" aria-label="QR code for asset {{ device.asset_id }}"></div>
+        </div>
+
+        <a href="{% url 'inventory_device_edit' device.pk %}" class="btn btn-warning">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
     </div>
-    </div>
-    
 
-<!-- Cards -->
+    {# ─── Row 1: Asset Info + Location/Department ─── #}
+    <div class="row">
 
-<div class="row">
-
-    <!-- Device Card Details -->        
         <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-header" style="text-align: center";> Asset Information</div>
-                    <div class="card-body">
-                        <p><strong> Device Name : </strong>{{device.asset_name}}</p>
-                        <p><strong> Asset ID Number : </strong>{{device.asset_id}} </p>
-                        <p><strong> Device Serial Number : </strong>{{device.serial_number}}</p>
-                    </div>
-            </div>
-        </div>
-
-
-               
-    <!-- Device Location & Department  -->
-    <div class="col-md-6">
-
-        <div class="card mb-3">
-            <div class="card-header" style="text-align: center";> Asset Information</div>
-            <div class="card-body">
-                <p><strong> Location : </strong> {{device.location}}</p>
-                <p><strong> Department : </strong> {{device.department}}</p>
-                <p></p>
-            </div>
-        </div>
-    
-<!-- Student Information -->
-        <div class="card mb-3">
-                <div class="card-header">Student Information</div>
+            <div class="info-card asset">
+                <div class="card-header">
+                    <i class="bi bi-tag"></i> Asset Information
+                </div>
                 <div class="card-body">
-                    <div class="row mb-2">
-                        <label class="col-sm-4 col-form-label">Student ID :</label>
-                        <div class="col-sm-8">{{ device.student_id_number_encrypted }}</div>
+                    <div class="info-row">
+                        <span class="label">Device Name</span>
+                        <span class="value {% if not device.asset_name %}empty{% endif %}">
+                            {{ device.asset_name|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Asset ID</span>
+                        <span class="value">{{ device.asset_id }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Serial Number</span>
+                        <span class="value {% if not device.serial_number %}empty{% endif %}">
+                            {{ device.serial_number|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Model Type</span>
+                        <span class="value {% if not device.model_type %}empty{% endif %}">
+                            {{ device.model_type|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Current Status</span>
+                        <span class="value {% if not device.current_status %}empty{% endif %}">
+                            {{ device.current_status|default:"— not set —" }}
+                        </span>
                     </div>
                 </div>
-        </div>
-
-    </div>
-    
-
-    <!--Extra Details  -->
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">Extra Device Details</div>
-            <div class="card-body">
-                <p><strong> Manufacture Make : </strong>{{manufacture_make}}</p> 
-                <p><strong> Vendor : </strong>{{vendor}}</p>
-                <p><strong> PO Order # : </strong>{{po_order}}</p> 
-                <p><strong> Purchase Value : </strong> {{purchase_value}}</p>
-                <p><strong> Source of Funding : </strong> {{source_of_funding}}</p>
-                <p><strong> Mac Address : </strong> {{mac_address}} </p>
-                <p><strong> Hard Drive Capacity : </strong> {{capacity_hard_drive_size}} </p>
-
             </div>
         </div>
-    </div>
-        <!-- Notes -->
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">Notes</div>
-            <div class="card-body">
-                <div style="margin:20px">{{device.notes}} </div>
-            </div>
-        </div>
-    </div>
 
-
-
-
-        <!-- Repair Tickets -->
-    <div class="col-md-12">
-        <div class="card mb-3">
-            <div class="card-header">repair tickets</div>
-            <div class="card-body">
-                {% if repairs %}
-            <div class="card">
+        <div class="col-md-6">
+            <div class="info-card location">
+                <div class="card-header">
+                    <i class="bi bi-geo-alt"></i> Location &amp; Department
+                </div>
                 <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Location</span>
+                        <span class="value {% if not device.location %}empty{% endif %}">
+                            {{ device.location|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Department</span>
+                        <span class="value {% if not device.department %}empty{% endif %}">
+                            {{ device.department|default:"— not set —" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            {# ─── Student (FERPA-protected) — only render if there IS a value ─── #}
+            {% if device.student_id_number_encrypted %}
+            <div class="info-card student">
+                <div class="card-header">
+                    <i class="bi bi-person-badge"></i> Student Information
+                </div>
+                <div class="card-body">
+                    <div class="ferpa-banner">
+                        <strong>FERPA Protected:</strong>
+                        All access to this section is logged.
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Student ID</span>
+                        <span class="value">{{ device.student_id_number_encrypted }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# ─── Row 2: Extra Details + Notes ─── #}
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="info-card extras">
+                <div class="card-header">
+                    <i class="bi bi-info-circle"></i> Hardware &amp; Purchase Details
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="label">Manufacturer</span>
+                        <span class="value {% if not device.manufacture_make %}empty{% endif %}">
+                            {{ device.manufacture_make|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Vendor</span>
+                        <span class="value {% if not device.vendor %}empty{% endif %}">
+                            {{ device.vendor|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">PO Order #</span>
+                        <span class="value {% if not device.po_order %}empty{% endif %}">
+                            {{ device.po_order|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Purchase Value</span>
+                        <span class="value {% if device.purchase_value is None %}empty{% endif %}">
+                            {% if device.purchase_value is not None %}
+                                ${{ device.purchase_value }}
+                            {% else %}
+                                — not set —
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Funding Source</span>
+                        <span class="value {% if not device.source_of_funding %}empty{% endif %}">
+                            {{ device.source_of_funding|default:"— not set —" }}
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">MAC Address</span>
+                        <span class="value {% if not device.mac_address %}empty{% endif %}">
+                            <code>{{ device.mac_address|default:"— not set —" }}</code>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Hard Drive</span>
+                        <span class="value {% if not device.capacity_hard_drive_size %}empty{% endif %}">
+                            {{ device.capacity_hard_drive_size|default:"— not set —" }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="info-card notes">
+                <div class="card-header">
+                    <i class="bi bi-journal-text"></i> Notes
+                </div>
+                <div class="card-body">
+                    <div class="notes-block {% if not device.notes %}empty{% endif %}">{{ device.notes|default:"— No notes recorded for this device —" }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ─── Row 3: Repair Tickets (full width) ─── #}
+    <div class="row">
+        <div class="col-12">
+            <div class="info-card repairs">
+                <div class="card-header">
+                    <i class="bi bi-tools"></i> Repair Tickets
+                    {% if repairs %}
+                        <span class="badge bg-light text-dark ms-2">{{ repairs|length }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-body p-0">
+                    {% if repairs %}
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table repair-table mb-0">
                             <thead>
                                 <tr>
                                     <th>ID</th>
                                     <th>Device Name</th>
-                                    <th>
-                                        {% if sort_by == 'device_serial' %}
-                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=-device_serial">
-                                                Serial/DAM ID ▲
-                                            </a>
-                                        {% elif sort_by == '-device_serial' %}
-                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
-                                                Serial/DAM ID ▼
-                                            </a>
-                                        {% else %}
-                                            <a href="?status={{ status_filter }}&search={{ search_query }}&assigned={{ assigned_filter }}&sort=device_serial">
-                                                Serial/DAM ID
-                                            </a>
-                                        {% endif %}
-                                    </th>
-                                    <!--<th>Serial/DAM ID</th>-->
-                                    
+                                    <th>Serial / DAM ID</th>
                                     <th>Student</th>
-                                    
                                     <th>Issue</th>
                                     <th>Status</th>
                                     <th>Assigned To</th>
@@ -148,68 +402,53 @@
                             <tbody>
                                 {% for repair in repairs %}
                                 <tr>
-                                    <td><a href="{% url 'repair_detail' repair.pk %}">#{{ repair.id }}</a></td>
-                                    <td>{{ repair.device_name }}</td>
+                                    <td>
+                                        <a href="{% url 'repair_detail' repair.pk %}">
+                                            #{{ repair.id }}
+                                        </a>
+                                    </td>
+                                    <td>{{ repair.device_name|default:"—" }}</td>
                                     <td>
                                         <small>
                                             {% if repair.device_serial %}
-                                                S/N: <a href="?search={{repair.device_serial}}&status=&assigned=">{{ repair.device_serial }}</a><br>
+                                                S/N: <code>{{ repair.device_serial }}</code><br>
                                             {% endif %}
                                             {% if repair.device_DAM_ID %}
-                                                DAM: <a href="?search={{repair.device_DAM_ID}}&status=&assigned=">{{ repair.device_DAM_ID }}
+                                                DAM: <code>{{ repair.device_DAM_ID }}</code>
                                             {% endif %}
                                         </small>
                                     </td>
-                                    
                                     <td>
-                                        {# <!-- {% url 'repair_detail' repair.student_id %} will need to point to list of Student Tickets--> #}
                                         <small>
-                                            <a href="">{{ repair.district_member|default:"N/A" }} </a><br>
-                                            <span class="text-muted">{{ repair.get_student_grade_display }}</span>
+                                            {{ repair.district_member|default:"N/A" }}
+                                            {% if repair.get_student_grade_display %}
+                                                <br><span class="text-muted">{{ repair.get_student_grade_display }}</span>
+                                            {% endif %}
                                         </small>
                                     </td>
-                                    
                                     <td>
                                         <small>{{ repair.issue_description|truncatewords:10 }}</small>
                                     </td>
                                     <td>
-                                        {% if repair.status == 'pending' %}
-                                            <span class="badge bg-warning text-dark">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'waiting_on_box' %}
-                                            <span class="badge bg-warning">{{ repair.get_status_display}} </span>
-                                        {% elif repair.status == 'sent_to_dell' %}
-                                            <span class="badge bg-info">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'on_site_repair' %}
-                                            <span class="badge bg-danger">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'awaiting_parts' %}
-                                            <span class="badge bg-secondary">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'returned_from_dell' %}
-                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'fixed_by_tech' %}
-                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'returned' %}
-                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                        {% elif repair.status == 'completed' %}
-                                            <span class="badge bg-success">{{ repair.get_status_display }}</span>
-                                        {% endif %}
+                                  <!--       {# Single span + dynamic class — much cleaner than the
+                                           original if/elif  ladder. See teaching note #1. #} -->
+                                        <span class="badge bg-{{ repair.status_badge_class|default:'secondary' }}">
+                                            {{ repair.get_status_display }}
+                                        </span>
                                     </td>
-                                    <td>
-                                        <small>{{ repair.assigned_to.username|default:"Unassigned" }}</small>
-                                    </td>
-                                    <td>
-                                        <small>{{ repair.created_at|date:"m/d/Y" }}</small>
-                                    </td>
+                                    <td><small>{{ repair.assigned_to.username|default:"Unassigned" }}</small></td>
+                                    <td><small>{{ repair.created_at|date:"m/d/Y" }}</small></td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="{% url 'repair_detail' repair.pk %}" 
-                                               class="btn btn-outline-primary" 
-                                               title="View"> Details
-                                                <i class="bi bi-eye"></i>
+                                            <a href="{% url 'repair_detail' repair.pk %}"
+                                               class="btn btn-outline-primary"
+                                               title="View details">
+                                                <i class="bi bi-eye"></i> View
                                             </a>
-                                            <a href="{% url 'edit_repair' repair.pk %}" 
-                                               class="btn btn-outline-secondary" 
-                                               title="Edit"> Edit
-                                                <i class="bi bi-pencil"></i>
+                                            <a href="{% url 'edit_repair' repair.pk %}"
+                                               class="btn btn-outline-secondary"
+                                               title="Edit repair">
+                                                <i class="bi bi-pencil"></i> Edit
                                             </a>
                                         </div>
                                     </td>
@@ -218,18 +457,35 @@
                             </tbody>
                         </table>
                     </div>
+                    {% else %}
+                    <div class="empty-state m-3">
+                        <i class="bi bi-clipboard-check" style="font-size:1.8rem;"></i>
+                        <p class="mb-0 mt-2">No repair tickets on record for this device.</p>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-        {% endif %}
+        </div>
+    </div>
 
-
-<!-- END OF CARDS -->    
 </div>
-<!-- END OF CONTAINER -->    
-</div>
-</div>
+{% endblock %}
 
-
-
-
+{# ─────────────────────────────────────────────────────────────── #}
+{# JS — moved to extra_js block so it loads after the body.         #}
+{# Wrapping in DOMContentLoaded guarantees #qrcode exists.          #}
+{# ─────────────────────────────────────────────────────────────── #}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new QRCode(document.getElementById('qrcode'), {
+      text: "{{ device.asset_id|escapejs }}",
+      width: 96,
+      height: 96,
+      colorDark: "#003366",
+      colorLight: "#ffffff",
+    });
+  });
+</script>
 {% endblock %}

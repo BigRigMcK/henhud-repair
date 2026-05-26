@@ -2,37 +2,247 @@
 
 {% block title %}Inventory List{% endblock %}
 
+{# ─────────────────────────────────────────────────────────────── #}
+{# Scoped page styles                                              #}
+{# We keep CSS local to this template via {% block extra_css %}    #}
+{# so it doesn't leak into other pages. The :root vars match the   #}
+{# branding used in repair_form.html — consistency across the app. #}
+{# ─────────────────────────────────────────────────────────────── #}
+{% block extra_css %}
+<style>
+  :root {
+    --hh-navy: #003366;
+    --hh-navy-light: #004488;
+    --hh-accent: #e8a020;
+    --hh-muted: #6c757d;
+    --soft-border: #e5e7eb;
+    --soft-bg: #f8f9fb;
+    --card-radius: 10px;
+  }
+
+  .inventory-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Branded page header — gradient bar with title + action buttons */
+  .page-header {
+    background: linear-gradient(135deg, var(--hh-navy) 0%, var(--hh-navy-light) 100%);
+    color: white;
+    padding: 1.25rem 1.75rem;
+    border-radius: var(--card-radius);
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .page-header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.6rem;
+  }
+  .page-header .header-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  /* Override outline-light buttons so they read on the dark gradient */
+  .page-header .btn-outline-light:hover {
+    background-color: var(--hh-accent);
+    border-color: var(--hh-accent);
+    color: var(--hh-navy);
+  }
+
+  /* Filter card */
+  .filter-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.5rem;
+  }
+  .filter-card .card-header {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+    padding: 0.75rem 1.25rem;
+  }
+  .filter-card .form-label {
+    font-weight: 600;
+    color: var(--hh-navy);
+    margin-bottom: 0.25rem;
+  }
+  .filter-card .search-input {
+    border: 2px solid var(--soft-border);
+    padding: 0.65rem 1rem;
+    font-size: 1rem;
+  }
+  .filter-card .search-input:focus {
+    border-color: var(--hh-accent);
+    box-shadow: 0 0 0 0.2rem rgba(232, 160, 32, 0.15);
+  }
+
+  /* Filter action bar — sticks to the bottom of the filter card */
+  .filter-actions {
+    background: var(--soft-bg);
+    border-top: 1px solid var(--soft-border);
+    padding: 0.85rem 1.25rem;
+    border-radius: 0 0 var(--card-radius) var(--card-radius);
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Results card */
+  .results-card {
+    border: 1px solid var(--soft-border);
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+  }
+  .results-card .results-header {
+    background-color: var(--soft-bg);
+    border-bottom: 1px solid var(--soft-border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .results-card .results-header .count {
+    color: var(--hh-muted);
+    font-size: 0.9rem;
+  }
+  .results-card .results-header .count strong {
+    color: var(--hh-navy);
+  }
+
+  /* Table styling — accent on header, zebra rows, hover glow */
+  .inventory-table {
+    margin-bottom: 0;
+  }
+  .inventory-table thead th {
+    background-color: var(--hh-navy);
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border: none;
+    padding: 0.85rem 1rem;
+    white-space: nowrap;
+  }
+  .inventory-table tbody tr {
+    transition: background-color 0.12s ease;
+  }
+  .inventory-table tbody tr:hover {
+    background-color: rgba(232, 160, 32, 0.08);
+  }
+  .inventory-table tbody td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    border-color: var(--soft-border);
+  }
+  .inventory-table tbody td a {
+    color: var(--hh-navy);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .inventory-table tbody td a:hover {
+    color: var(--hh-accent);
+    text-decoration: underline;
+  }
+
+  /* Empty-state cell content — the "no member assigned" dash */
+  .text-empty {
+    color: var(--hh-muted);
+    font-style: italic;
+    font-size: 0.9rem;
+  }
+
+  /* Pagination — match the brand */
+  .pagination .page-link {
+    color: var(--hh-navy);
+    border-color: var(--soft-border);
+  }
+  .pagination .page-item.active .page-link {
+    background-color: var(--hh-navy);
+    border-color: var(--hh-navy);
+    color: white;
+  }
+  .pagination .page-link:hover {
+    color: var(--hh-accent);
+    background-color: var(--soft-bg);
+  }
+
+  /* Empty alert when no results match filters */
+  .empty-state {
+    border: 1px dashed var(--soft-border);
+    background: var(--soft-bg);
+    border-radius: var(--card-radius);
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    color: var(--hh-muted);
+  }
+  .empty-state h4 {
+    color: var(--hh-navy);
+    margin-bottom: 0.5rem;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .page-header { flex-direction: column; align-items: stretch; text-align: center; }
+    .page-header .header-actions { justify-content: center; }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
+<div class="inventory-wrap">
 
-<div class="container">
-    <div class="container-buttons d-flex justify-content-between">
-        <a href="{% url 'home' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Back Home </a>
-        <a href="{% url 'inventory_add_new_devcie' %}" class="btn btn-lg btn-outline-primary" style="margin:20px;"> Add New Device </a>
+    {# ─── Branded page header ─── #}
+    <div class="page-header">
+        <h1>📋 All Inventory</h1>
+        <div class="header-actions">
+            <a href="{% url 'home' %}" class="btn btn-outline-light">
+                <i class="bi bi-house"></i> Back Home
+            </a>
+            <a href="{% url 'inventory_add_new_devcie' %}" class="btn btn-warning">
+                <i class="bi bi-plus-lg"></i> Add New Device
+            </a>
+        </div>
     </div>
-
-    <h1><center> All Inventory </center></h1>
 
     {# ─────────────────────────────────────────────────────────────── #}
     {# Search + Filter Card                                            #}
     {# Single <form> wraps all controls so they submit together.       #}
     {# method="get" keeps state in the URL (bookmarkable / shareable). #}
     {# ─────────────────────────────────────────────────────────────── #}
-    <div class="card mb-4">
+    <div class="card filter-card">
+        <div class="card-header">
+            <i class="bi bi-funnel"></i> Search & Filter
+        </div>
         <div class="card-body">
-            <form method="get" class="row g-3">
+            <form method="get" class="row g-3" id="filter-form">
 
                 {# Search bar #}
                 <div class="col-12">
+                    <label class="form-label">Search</label>
                     <input type="text"
                            name="search"
-                           class="form-control"
-                           placeholder="Search Asset ID, Serial Number, or Asset Name..."
+                           class="form-control search-input"
+                           placeholder="🔍  Search Asset ID, Serial Number, or Asset Name..."
                            value="{{ search_query }}">
                 </div>
 
                 {# ─── Model Type multi-select ─── #}
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">Model Type</label>
+                    <label class="form-label small">Model Type</label>
                     <select name="model_type"
                             class="form-select filter-choices"
                             multiple
@@ -48,7 +258,7 @@
 
                 {# ─── Current Status multi-select ─── #}
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">Current Status</label>
+                    <label class="form-label small">Current Status</label>
                     <select name="current_status"
                             class="form-select filter-choices"
                             multiple
@@ -64,7 +274,7 @@
 
                 {# ─── Location multi-select ─── #}
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">Location</label>
+                    <label class="form-label small">Location</label>
                     <select name="location"
                             class="form-select filter-choices"
                             multiple
@@ -80,7 +290,7 @@
 
                 {# ─── Department multi-select ─── #}
                 <div class="col-md-3">
-                    <label class="form-label small text-muted">Department</label>
+                    <label class="form-label small">Department</label>
                     <select name="department"
                             class="form-select filter-choices"
                             multiple
@@ -93,61 +303,88 @@
                         {% endfor %}
                     </select>
                 </div>
-
-                {# Buttons row #}
-                <div class="col-12 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    <a href="{% url 'inventory_list' %}" class="btn btn-outline-secondary">Clear All</a>
-                    <a href="{% url 'inventory_export_csv' %}?{{ request.GET.urlencode }}" class="btn btn-success"><i class="bi bi-download"></i> Export CSV </a>
-                    <small class="text-muted align-self-center ms-2">
-                        Click a filter to add values. Click an × on a tag to remove it.
-                    </small>
-                </div>
             </form>
+        </div>
+
+        {# Action bar attached to the bottom of the card #}
+        <div class="filter-actions">
+            <button type="submit" form="filter-form" class="btn btn-primary">
+                <i class="bi bi-search"></i> Apply Filters
+            </button>
+            <a href="{% url 'inventory_list' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Clear All
+            </a>
+            <a href="{% url 'inventory_export_csv' %}?{{ request.GET.urlencode }}"
+               class="btn btn-success">
+                <i class="bi bi-download"></i> Export CSV
+            </a>
+            <small class="text-muted ms-auto">
+                Click a filter to add values. Click an × on a tag to remove it.
+            </small>
         </div>
     </div>
 
     {% if devices %}
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th> Asset ID </th>
-                            <th> Serial Number </th>
-                            <th> Asset Name </th>
-                            <th> District Member </th>
-                            <th> Model Type </th>
-                            <th> Current Status </th>
-                            <th> Location </th>
-                            <th> Department </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for device in devices %}
-                        <tr>
-                            <td><a href="{% url 'inventory_detail' device.pk %}"> {{ device.asset_id }}</a></td>
-                            <td> {{ device.serial_number }} </td>
-                            <td> {{ device.asset_name }} </td>
+    {# ─── Results table card ─── #}
+    <div class="results-card">
+        <div class="results-header">
+            <div>
+                <strong>Inventory Results</strong>
+            </div>
+            <div class="count">
+                Showing <strong>{{ devices|length }}</strong>
+                {% if is_paginated %}
+                    of <strong>{{ page_obj.paginator.count }}</strong>
+                {% endif %}
+                device{{ page_obj.paginator.count|pluralize }}
+            </div>
+        </div>
 
-                            <td>
+        <div class="table-responsive">
+            <table class="table table-hover inventory-table">
+                <thead>
+                    <tr>
+                        <th>Asset ID</th>
+                        <th>Serial Number</th>
+                        <th>Asset Name</th>
+                        <th>District Member</th>
+                        <th>Model Type</th>
+                        <th>Current Status</th>
+                        <th>Location</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for device in devices %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'inventory_detail' device.pk %}">
+                                {{ device.asset_id }}
+                            </a>
+                        </td>
+                        <td>{{ device.serial_number|default:"—" }}</td>
+                        <td>{{ device.asset_name|default:"—" }}</td>
+
+                        <td>
+                            {% with active_assignment=None %}
                                 {% for assignment in device.student_assignments.all %}
                                     {% if not assignment.returned_date %}
                                         Member #{{ assignment.district_member.district_member_id }}
                                     {% endif %}
+                                {% empty %}
+                                    <span class="text-empty">— unassigned —</span>
                                 {% endfor %}
-                            </td>
+                            {% endwith %}
+                        </td>
 
-                            <td> {{ device.model_type }} </td>
-                            <td> {{ device.current_status }} </td>
-                            <td> {{ device.location }} </td>
-                            <td> {{ device.department }} </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                        <td>{{ device.model_type|default:"—" }}</td>
+                        <td>{{ device.current_status|default:"—" }}</td>
+                        <td>{{ device.location|default:"—" }}</td>
+                        <td>{{ device.department|default:"—" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -161,7 +398,10 @@
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a class="page-link"
+                       href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}">
+                        &laquo; Previous
+                    </a>
                 </li>
             {% endif %}
 
@@ -173,7 +413,10 @@
 
             {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next</a>
+                    <a class="page-link"
+                       href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">
+                        Next &raquo;
+                    </a>
                 </li>
             {% endif %}
         </ul>
@@ -181,36 +424,15 @@
     {% endif %}
 
     {% else %}
-        <div class="alert alert-info">
-            No devices match your current filters.
-            <a href="{% url 'inventory_list' %}">Clear filters</a>
-        </div>
+    {# ─── Empty state ─── #}
+    <div class="empty-state">
+        <h4>📭 No devices match your current filters</h4>
+        <p>Try broadening your search or clearing some filters.</p>
+        <a href="{% url 'inventory_list' %}" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-counterclockwise"></i> Clear all filters
+        </a>
+    </div>
     {% endif %}
+
 </div>
-
-
-<!-- Script -->
-<!--<script>
-// ─────────────────────────────────────────────────────────────────
-// Initialize Choices.js on every <select class="filter-choices">
-// We loop because there are four of them. querySelectorAll returns
-// a NodeList; .forEach() iterates over each <select> element.
-// ─────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
-    const filterSelects = document.querySelectorAll('.filter-choices');
-
-    filterSelects.forEach(function (selectEl) {
-        new Choices(selectEl, {
-            removeItemButton: true,    // shows the × on each tag
-            shouldSort: false,         // keep our DB ordering (Django already sorted)
-            searchEnabled: true,       // type to filter the dropdown
-            searchPlaceholderValue: 'Type to filter...',
-            placeholder: true,
-            placeholderValue: selectEl.dataset.placeholder || 'Select...',
-            allowHTML: false,          // safer — escapes any HTML in options
-        });
-    });
-});
-</script> -->
-
 {% endblock %}

@@ -12,40 +12,14 @@ class District_Device_Inventory_Form(forms.ModelForm):
 
 		]
 		widgets ={
-			'model_type': forms.Select(attrs={
-				'class': 'form-control',
-				'style' :  'width: 200px; height: 40px',
+			    'asset_name':     forms.TextInput(attrs={'placeholder': 'e.g. TEST-DEVICE-01'}),
+			    'asset_id':       forms.TextInput(attrs={'placeholder': 'e.g. 9001'}),
+			    'serial_number':  forms.TextInput(attrs={'placeholder': 'e.g. SN-TEST-0001'}),
+			    'mac_address':    forms.TextInput(attrs={'placeholder': '00:1A:2B:3C:4D:5E'}),
+			    'purchase_value': forms.NumberInput(attrs={'step': '0.01', 'placeholder': '0.00'}),
+			    'notes':          forms.Textarea(attrs={'rows': 4, 'placeholder': 'Optional notes...'}),
+			}
 
-				}),
-			'current_status': forms.Select(attrs={
-				'class': 'form-control',
-					'style': 'width: 200px;',
-		}),
-			'notes' : forms.Textarea(attrs={
-					'class': 'form-control',
-		}),
-			'asset_name': forms.Textarea(attrs={
-				'class': 'form-control',
-				'style':   'width: 200px; height: 40px',
-				}),
-			'asset_id': forms.Textarea(attrs={
-				'class': 'form-control',
-				'style':   'width: 200px; height: 40px',
-
-				}),
-			'serial_number': forms.Textarea(attrs={
-				'class': 'form-control',
-				'style':   'width: 200px; height: 40px',
-				}),
-			'student_id_number_encrypted': forms.TextInput(attrs={
-			    'class': 'form-control',
-			    'style': 'width: 200px;',
-			    
-			}),
-
-
-
-		}
 
 		labels = {
 
